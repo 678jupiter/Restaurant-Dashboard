@@ -14,13 +14,7 @@ const NavHeader = ({
 }) => {
   return (
     <View style={styles.navHeaderContainer(borderWidth, borderColor)}>
-      {navGoBack ? (
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          {/* <View style={styles.iconBackContainer}>
-            <IconAngleLeftBig />
-          </View> */}
-        </TouchableOpacity>
-      ) : showSpaceLeft ? (
+      {navGoBack ? null : showSpaceLeft ? (
         <View>
           <Space width={30} height={32} />
         </View>
@@ -45,10 +39,10 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingTop: 10,
     paddingHorizontal: 20,
-    backgroundColor: colors.blurple,
+    backgroundColor: "white",
   }),
   iconBackContainer: {
-    //   backgroundColor: 'red',
+    // backgroundColor: "red",
     left: -10,
   },
   textHeader: {

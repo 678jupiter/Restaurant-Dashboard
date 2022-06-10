@@ -40,12 +40,12 @@ const SettingScreen = ({ navigation }) => {
               backgroundColor: "#dcffee",
             }}
           >
-            <Card.Title>View Edit Items</Card.Title>
+            <Card.Title> Items</Card.Title>
             <View
               style={{
                 position: "relative",
                 alignItems: "center",
-                marginTop: 6,
+                marginTop: 17,
               }}
             >
               <FontAwesome5 name="clipboard-list" size={42} color="black" />
@@ -53,7 +53,7 @@ const SettingScreen = ({ navigation }) => {
           </Card>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate("createNewDish")}>
+        {/* <TouchableOpacity onPress={() => navigation.navigate("createNewDish")}>
           <Card
             containerStyle={{
               width: 150,
@@ -72,11 +72,9 @@ const SettingScreen = ({ navigation }) => {
               <Entypo name="add-to-list" size={42} color="black" />
             </View>
           </Card>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <TouchableOpacity
-          onPress={() => navigation.navigate("createACartegory")}
-        >
+        <TouchableOpacity onPress={() => navigation.navigate("cartegories")}>
           <Card
             containerStyle={{
               width: 150,
@@ -84,9 +82,15 @@ const SettingScreen = ({ navigation }) => {
               backgroundColor: "#dcffee",
             }}
           >
-            <Card.Title>Create Cartegory</Card.Title>
-            <View style={{ position: "relative", alignItems: "center" }}>
-              <MaterialIcons name="post-add" size={42} color="black" />
+            <Card.Title>Cartegories</Card.Title>
+            <View
+              style={{
+                position: "relative",
+                alignItems: "center",
+                marginTop: 12,
+              }}
+            >
+              <MaterialIcons name="post-add" size={45} color="black" />
             </View>
           </Card>
         </TouchableOpacity>
@@ -114,7 +118,7 @@ const SettingScreen = ({ navigation }) => {
           </Card>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate("help")}>
+        {/* <TouchableOpacity onPress={() => navigation.navigate("help")}>
           <Card
             containerStyle={{
               width: 150,
@@ -133,7 +137,7 @@ const SettingScreen = ({ navigation }) => {
               <Entypo name="help" size={42} color="black" />
             </View>
           </Card>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity onPress={() => navigation.navigate("settings")}>
           <Card

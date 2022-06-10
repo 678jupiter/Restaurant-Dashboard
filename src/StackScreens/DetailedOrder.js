@@ -1,7 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { ListItem } from "@rneui/themed";
-import { Button, ButtonGroup, withTheme } from "@rneui/base";
+import { Button, ButtonGroup, Icon, withTheme } from "@rneui/base";
+import { Ionicons } from "@expo/vector-icons";
+
 const dishes = [
   {
     dishName: "Bacon Cheese burger",
@@ -14,7 +16,7 @@ const dishes = [
 
 const DetailedOrder = () => {
   return (
-    <View style={{ backgroundColor: "black", flex: 1 }}>
+    <View style={{ backgroundColor: "white", flex: 1 }}>
       <View>
         <ListItem bottomDivider>
           <ListItem.Content>
@@ -33,7 +35,7 @@ const DetailedOrder = () => {
           </ListItem.Content>
         </ListItem>
       </View>
-      <View style={{ backgroundColor: "white", flex: 1 }}>
+      <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
         {dishes.map((item, i) => (
           <ListItem.Content key={i} style={{}}>
             <View style={{ flexDirection: "row" }}>
@@ -71,8 +73,37 @@ const DetailedOrder = () => {
             </View>
           </ListItem.Content>
         ))}
+      </ScrollView>
+
+      <View
+        style={{
+          alignItems: "flex-start",
+        }}
+      >
+        <Button
+          color="secondary"
+          buttonStyle={{
+            // backgroundColor: "rgba(39, 39, 39, 1)",
+            height: 80,
+          }}
+          containerStyle={{
+            width: 200,
+            marginHorizontal: 30,
+            marginVertical: 10,
+            borderRadius: 10,
+          }}
+          titleStyle={{
+            color: "white",
+            marginHorizontal: 20,
+            fontWeight: "900",
+            fontSize: 19,
+          }}
+        >
+          Message Amanda
+          <Icon name="chat" color="white" size={40} />
+        </Button>
       </View>
-      <View style={{ backgroundColor: "white", flex: 0.4 }}>
+      <View style={{ flex: 0.25 }}>
         <View style={styles.buttonsContainer}>
           <Button
             title="DECLINE"
@@ -137,6 +168,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    marginVertical: 40,
   },
 });

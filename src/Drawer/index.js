@@ -1,6 +1,6 @@
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import NewOrders from "../HomeScreens/NewOrders";
 import OrdersInProgress from "../HomeScreens/OrdersInProgress";
 import SettingScreen from "../HomeScreens/Settings";
@@ -8,12 +8,13 @@ import OrderHistoryScreen from "../HomeScreens/OrderHistory";
 import { createStackNavigator } from "@react-navigation/stack";
 import ReadyForPickUp from "../HomeScreens/ReadyForPickUp";
 import EditName from "../Edit/EditName";
-import { Dimensions, Text, View } from "react-native";
+import { Dimensions, Text, View, TouchableWithoutFeedback } from "react-native";
 import { colors } from "../config";
 import {
   MaterialCommunityIcons,
   Feather,
   FontAwesome5,
+  Ionicons,
   MaterialIcons,
 } from "@expo/vector-icons";
 import DetailedOrder from "../StackScreens/DetailedOrder";
@@ -23,9 +24,11 @@ import CreateNewDish from "../Settings/CreateNewDish";
 import Help from "../Settings/Help";
 import Settings from "../Settings/Settings";
 import SpecialOffers from "../Settings/SpecialOffers";
-import { Ionicons } from "@expo/vector-icons";
 import ItemList from "../Settings/ItemList";
 import Cartegories from "../Settings/Cartegories";
+import CreateNewOffer from "../Settings/CreateNewOffer";
+import ChatScreen from "../Chat";
+import ChartList from "../Chat/ChartList";
 
 function DrawerNav({ navigation }) {
   const windowWidth = Dimensions.get("window").width;
@@ -34,6 +37,20 @@ function DrawerNav({ navigation }) {
     <Drawer.Navigator
       id="LeftDrawer"
       screenOptions={{
+        headerRight: () => (
+          <View style={{ marginRight: 20 }}>
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate("chartList")}
+            >
+              <Ionicons
+                name="ios-chatbubble-ellipses-sharp"
+                size={30}
+                color="black"
+              />
+            </TouchableWithoutFeedback>
+          </View>
+        ),
+
         drawerType: "permanent",
         drawerPosition: "left",
         headerShown: false,
@@ -59,6 +76,7 @@ function DrawerNav({ navigation }) {
     >
       <Drawer.Screen
         options={{
+          headerShown: true,
           title: "",
           drawerIcon: ({ focused }) => (
             <MaterialIcons
@@ -74,6 +92,8 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen
         options={{
           // title: "",
+          headerShown: true,
+
           drawerIcon: ({ focused }) => (
             <MaterialCommunityIcons
               name="progress-clock"
@@ -88,6 +108,8 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen
         options={{
           title: "",
+          headerShown: true,
+
           drawerIcon: ({ focused }) => (
             <MaterialCommunityIcons
               name="food-turkey"
@@ -102,6 +124,8 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen
         options={{
           title: "",
+          headerShown: true,
+
           drawerIcon: ({ focused }) => (
             <FontAwesome5
               name="history"
@@ -116,6 +140,8 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen
         options={{
           title: "",
+          headerShown: true,
+
           drawerIcon: ({ focused }) => (
             <Feather
               name="settings"
@@ -170,10 +196,47 @@ export default function StackNav() {
         <Stack.Screen
           name="cartegories"
           component={Cartegories}
-          options={{
+          options={({ navigation }) => ({
             animationTypeForReplace: "pop",
+            //headerShown: false,
             title: "Cartegories",
-          }}
+            headerRight: () => (
+              <View
+                style={{
+                  alignItems: "stretch",
+                  flexDirection: "row",
+                  backgroundColor: "#dcffee",
+                  marginRight: 16,
+                }}
+              >
+                <Ionicons
+                  name="search"
+                  size={28}
+                  color="black"
+                  style={{
+                    marginRight: 30,
+                    padding: 10,
+                  }}
+                />
+                <TouchableWithoutFeedback
+                  onPress={() => navigation.navigate("createACartegory")}
+                >
+                  <Ionicons
+                    name="add-sharp"
+                    size={40}
+                    color="black"
+                    style={{
+                      justifyContent: "center",
+                      alignContent: "center",
+                      alignItems: "center",
+                      paddingTop: 4,
+                      padding: 8,
+                    }}
+                  />
+                </TouchableWithoutFeedback>
+              </View>
+            ),
+          })}
         />
         <Stack.Screen
           name="createACartegory"
@@ -194,9 +257,10 @@ export default function StackNav() {
         <Stack.Screen
           name="itemList"
           component={ItemList}
-          options={{
+          options={({ navigation }) => ({
             animationTypeForReplace: "pop",
-            title: "Items",
+            //headerShown: false,
+            title: "Cartegories",
             headerRight: () => (
               <View
                 style={{
@@ -215,21 +279,25 @@ export default function StackNav() {
                     padding: 10,
                   }}
                 />
-                <Ionicons
-                  name="add-sharp"
-                  size={40}
-                  color="black"
-                  style={{
-                    justifyContent: "center",
-                    alignContent: "center",
-                    alignItems: "center",
-                    paddingTop: 4,
-                    padding: 8,
-                  }}
-                />
+                <TouchableWithoutFeedback
+                  onPress={() => navigation.navigate("createNewDish")}
+                >
+                  <Ionicons
+                    name="add-sharp"
+                    size={40}
+                    color="black"
+                    style={{
+                      justifyContent: "center",
+                      alignContent: "center",
+                      alignItems: "center",
+                      paddingTop: 4,
+                      padding: 8,
+                    }}
+                  />
+                </TouchableWithoutFeedback>
               </View>
             ),
-          }}
+          })}
         />
         <Stack.Screen
           name="help"
@@ -250,9 +318,71 @@ export default function StackNav() {
         <Stack.Screen
           name="specialOffers"
           component={SpecialOffers}
+          options={({ navigation }) => ({
+            animationTypeForReplace: "pop",
+            //headerShown: false,
+            title: "Special Offers",
+            headerRight: () => (
+              <View
+                style={{
+                  alignItems: "stretch",
+                  flexDirection: "row",
+                  backgroundColor: "#dcffee",
+                  marginRight: 16,
+                }}
+              >
+                <Ionicons
+                  name="search"
+                  size={28}
+                  color="black"
+                  style={{
+                    marginRight: 30,
+                    padding: 10,
+                  }}
+                />
+                <TouchableWithoutFeedback
+                  onPress={() => navigation.navigate("createNewOffer")}
+                >
+                  <Ionicons
+                    name="add-sharp"
+                    size={40}
+                    color="black"
+                    style={{
+                      justifyContent: "center",
+                      alignContent: "center",
+                      alignItems: "center",
+                      paddingTop: 4,
+                      padding: 8,
+                    }}
+                  />
+                </TouchableWithoutFeedback>
+              </View>
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="createNewOffer"
+          component={CreateNewOffer}
           options={{
             animationTypeForReplace: "pop",
-            title: "Special Offers",
+            title: "New Special Offer",
+          }}
+        />
+        <Stack.Screen
+          name="chartList"
+          component={ChartList}
+          options={{
+            headerShown: true,
+            animationTypeForReplace: "pop",
+            title: "Messages",
+          }}
+        />
+        <Stack.Screen
+          name="chatScreen"
+          component={ChatScreen}
+          options={{
+            animationTypeForReplace: "pop",
+            title: "UsernameProps",
           }}
         />
       </Stack.Navigator>
