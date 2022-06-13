@@ -1,47 +1,36 @@
 import { StyleSheet, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ListItem, Avatar } from "@rneui/themed";
 import { Switch } from "@rneui/themed";
-
-const list = [
-  {
-    name: "Amy Farha",
-    avatar_url:
-      "https://images.unsplash.com/photo-1598532213919-078e54dd1f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZGlzaHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-    subtitle: "Vice President",
-  },
-  {
-    name: "Chris Jackson",
-    avatar_url:
-      "https://images.unsplash.com/photo-1571805341302-f857308690e3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8ZGlzaHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-    subtitle: "Vice Chairman",
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCartegories } from "../Redux/cartegoryActions";
+import { BASEURL } from "../config";
 
 const Cartegories = () => {
-  const [checked, setChecked] = useState(false);
-  const SwitchComponent = () => {
-    const [checked, setChecked] = useState(false);
-
-    const toggleSwitch = () => {
-      setChecked(!checked);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    let isCancelled = false;
+    dispatch(fetchCartegories());
+    return () => {
+      isCancelled = true;
     };
-  };
+  }, [dispatch]);
+
+  const cartegoriesList = useSelector(
+    (state) => state.cartegories.restaurantCartegories
+  );
+  console.log(cartegoriesList);
 
   return (
     <View style={{ paddingTop: 20 }}>
       <View>
-        {list.map((l, i) => (
+        {cartegoriesList.data.map((l, i) => (
           <ListItem key={i} bottomDivider>
-            <Avatar source={{ uri: l.avatar_url }} />
+            <Avatar source={{ uri: `${BASEURL}${l.attributes.image}` }} />
             <ListItem.Content>
-              <ListItem.Title>{l.name}</ListItem.Title>
-              <ListItem.Subtitle>{l.subtitle}</ListItem.Subtitle>
+              <ListItem.Title>{l.attributes.name}</ListItem.Title>
+              <ListItem.Subtitle>{l.attributes.description}</ListItem.Subtitle>
             </ListItem.Content>
-            <Switch
-              value={checked}
-              onValueChange={(value) => setChecked(value)}
-            />
           </ListItem>
         ))}
       </View>

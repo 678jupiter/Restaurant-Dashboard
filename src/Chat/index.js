@@ -1,6 +1,24 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { GiftedChat } from "react-native-gifted-chat";
+import { Text, View, Button } from "react-native";
+import axios from "axios";
+import io from "socket.io-client";
+
 const ChatScreen = () => {
+  const [chatMessages, setChatMessages] = useState([]);
+  useEffect(() => {
+    const socket = io("http://localhost:3000");
+    socket.on("chat message", (msg) => {
+      setChatMessages({ chatMessages: [...chatMessages, msg] });
+    });
+  }, []);
+
+  const submit = () => {
+    const socket = io("http://localhost:3000");
+    socket.emit("chat message", "Hello World");
+    // clear chat message state
+  };
+
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
@@ -23,14 +41,12 @@ const ChatScreen = () => {
       GiftedChat.append(previousMessages, messages)
     );
   }, []);
+  console.log(chatMessages);
+
   return (
-    <GiftedChat
-      messages={messages}
-      onSend={(messages) => onSend(messages)}
-      user={{
-        _id: 1,
-      }}
-    />
+    <View style={{ flex: 1, justifyContent: "center" }}>
+      <Button title="Send text" onPress={() => submit()} />
+    </View>
   );
 };
 

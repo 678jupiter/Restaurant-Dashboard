@@ -4,8 +4,22 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import StackNav from "./src/Drawer";
 import { useFonts } from "expo-font";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import store, { persistor } from "./src/Redux/store";
+import { PersistGate } from "redux-persist/es/integration/react";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  useQuery,
+  gql,
+} from "@apollo/client";
 
 export default function App() {
+  const client = new ApolloClient({
+    uri: "http://localhost:1337/graphql",
+    cache: new InMemoryCache(),
+  });
   const [loaded] = useFonts({
     CircularStdBold: require("./assets/fonts/CircularStdBold.ttf"),
     CircularStdBook: require("./assets/fonts/CircularStdBook.ttf"),
@@ -18,7 +32,13 @@ export default function App() {
   return (
     <>
       <SafeAreaProvider>
-        <StackNav />
+        <Provider store={store}>
+          <PersistGate persistor={persistor}>
+            <ApolloProvider client={client}>
+              <StackNav />
+            </ApolloProvider>
+          </PersistGate>
+        </Provider>
         <StatusBar barStyle="light" translucent backgroundColor="white" />
       </SafeAreaProvider>
     </>

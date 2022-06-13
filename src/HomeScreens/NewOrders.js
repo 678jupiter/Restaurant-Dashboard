@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -9,61 +10,62 @@ import {
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ListItem } from "@rneui/themed";
-const list = [
-  {
-    name: "Amy Farha",
-    avatar_url:
-      "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-    subtitle: "AZ12AQW",
-  },
-  {
-    name: "Chris Jackson",
-    avatar_url:
-      "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
-    subtitle: "19HWR5",
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { fetchOrders } from "../Redux/orderActions";
 
 const NewOrders = ({ navigation }) => {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    let isCancelled = false;
+    dispatch(fetchOrders());
+    return () => {
+      isCancelled = true;
+    };
+  }, [dispatch]);
 
-  const getOrders = () => {
-    setLoading(true);
-    axios
-      .get("https://myfoodcms189.herokuapp.com/api/restaurant-orders")
-      .then((res) => {
-        console.log(res.data);
-        setOrders(res.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  //   useEffect(() => {
-  //     getOrders();
-  //   }, []);
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "rgba(39, 39, 39, 1)",
-        paddingTop: 20,
-      }}
-    >
-      <View style={{ marginLeft: 100, marginRight: 100 }}>
-        <Text style={{ color: "white", fontSize: 22, fontWeight: "800" }}>
-          New
-        </Text>
+  const restaurantOrders = useSelector(
+    (state) => state.orders.restaurantOrders
+  );
+  if (restaurantOrders.length === 0) {
+    return (
+      <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
+        <ActivityIndicator size="large" color={colors.colors} />
       </View>
-      <ScrollView style={{ marginTop: 10, marginLeft: 100, marginRight: 100 }}>
-        {list.map((l, i) => (
-          <>
-            <>
+    );
+  }
+  const i = restaurantOrders.data;
+  const result = i.filter((item) => item.attributes.status === "New");
+  console.log(result);
+
+  if (result.length !== 0) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "rgba(39, 39, 39, 1)",
+          paddingTop: 20,
+        }}
+      >
+        <View style={{ marginLeft: 100, marginRight: 100 }}>
+          <Text style={{ color: "white", fontSize: 22, fontWeight: "800" }}>
+            New
+          </Text>
+        </View>
+        <ScrollView
+          style={{ marginTop: 10, marginLeft: 100, marginRight: 100 }}
+        >
+          {result.map((l, i) => (
+            <View key={l.id}>
               <TouchableOpacity
                 style={{ backgroundColor: "#3fff00", flex: 1 }}
-                onPress={() => navigation.navigate("detailedOrder")}
+                onPress={() =>
+                  navigation.navigate("detailedOrder", {
+                    userName: `${l.attributes.userName}`,
+                    dish: l.attributes.dishes,
+                    orderNumber: `${l.attributes.mpesaReceiptNumber}`,
+                    orderId: l.id,
+                  })
+                }
               >
                 <View
                   style={{
@@ -78,9 +80,10 @@ const NewOrders = ({ navigation }) => {
                       fontSize: 20,
                       fontWeight: "bold",
                       marginLeft: 10,
+                      color: "white",
                     }}
                   >
-                    name
+                    {l.attributes.userName}
                   </Text>
                   <Text style={{ marginRight: 10 }}>{l.status}</Text>
                 </View>
@@ -93,19 +96,33 @@ const NewOrders = ({ navigation }) => {
                   }}
                 >
                   <Text style={{ marginLeft: 10, paddingBottom: 10 }}>
-                    AFZSJSD
+                    {l.attributes.mpesaReceiptNumber}
                   </Text>
                 </View>
               </TouchableOpacity>
               <View
                 style={{ margin: 6, backgroundColor: "rgba(39, 39, 39, 1)" }}
               ></View>
-            </>
-          </>
-        ))}
-      </ScrollView>
-    </View>
-  );
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+    );
+  } else {
+    return (
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+          backgroundColor: "rgba(39, 39, 39, 1)",
+          paddingTop: 20,
+        }}
+      >
+        <Text style={{ color: "white", fontSize: 40 }}>No New Orders.</Text>
+      </View>
+    );
+  }
 };
 
 export default NewOrders;

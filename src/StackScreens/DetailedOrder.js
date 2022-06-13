@@ -1,27 +1,63 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { ListItem } from "@rneui/themed";
 import { Button, ButtonGroup, Icon, withTheme } from "@rneui/base";
 import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { fetchOrders } from "../Redux/orderActions";
 
-const dishes = [
-  {
-    dishName: "Bacon Cheese burger",
-    quantity: "1",
-    paid: "10",
-    tax: "0.83",
-    status: "new",
-  },
-];
-
-const DetailedOrder = () => {
+const DetailedOrder = ({ route, navigation }) => {
+  const dispatch = useDispatch();
+  const { userName, dish, orderNumber, orderId } = route.params;
+  console.log(orderId);
+  const [loading1, setLoading1] = useState(false);
+  const [loading2, setLoading2] = useState(false);
+  const Cooking = async () => {
+    setLoading1(true);
+    await axios
+      .put(`http://localhost:1337/api/restaurant-orders/${orderId}`, {
+        data: {
+          status: "Cooking",
+        },
+      })
+      .then(function (response) {
+        dispatch(fetchOrders());
+        setLoading1(false);
+        navigation.navigate("Orders in progress");
+        //  setDeliveryStatus(ORDER_STATUSES.ACCEPTED);
+      })
+      .catch(function (error) {
+        setLoading1(false);
+        console.log(error);
+      });
+  };
+  const ReadyForPickUp = async () => {
+    setLoading2(true);
+    await axios
+      .put(`http://localhost:1337/api/restaurant-orders/${orderId}`, {
+        data: {
+          status: "Ready",
+        },
+      })
+      .then(function (response) {
+        dispatch(fetchOrders());
+        setLoading2(false);
+        navigation.navigate("Order Ready For PickUp");
+        //  setDeliveryStatus(ORDER_STATUSES.ACCEPTED);
+      })
+      .catch(function (error) {
+        setLoading2(false);
+        console.log(error);
+      });
+  };
   return (
     <View style={{ backgroundColor: "white", flex: 1 }}>
       <View>
         <ListItem bottomDivider>
           <ListItem.Content>
-            <ListItem.Title>Amanda</ListItem.Title>
-            <ListItem.Subtitle>FFDEAZL</ListItem.Subtitle>
+            <ListItem.Title>{userName}</ListItem.Title>
+            <ListItem.Subtitle>{orderNumber}</ListItem.Subtitle>
           </ListItem.Content>
           <ListItem.Content>
             <View
@@ -36,14 +72,14 @@ const DetailedOrder = () => {
         </ListItem>
       </View>
       <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
-        {dishes.map((item, i) => (
+        {dish.map((item, i) => (
           <ListItem.Content key={i} style={{}}>
             <View style={{ flexDirection: "row" }}>
               <ListItem.Subtitle style={{ marginLeft: 30 }}>
                 {item.quantity}x
               </ListItem.Subtitle>
               <ListItem.Title style={{ marginLeft: 30 }}>
-                {item.dishName}
+                {item.name}
               </ListItem.Title>
             </View>
 
@@ -52,14 +88,15 @@ const DetailedOrder = () => {
                 <Text style={{ marginRight: 50 }}>Subtotal</Text>
                 <ListItem.Title>
                   Ksh {""}
-                  {item.paid}
+                  {item.price}
                 </ListItem.Title>
               </View>
               <View style={{ flexDirection: "row" }}>
                 <Text style={{ marginRight: 82 }}>Tax</Text>
                 <ListItem.Title>
                   Ksh {""}
-                  {item.tax}
+                  tax
+                  {/* {item.tax} */}
                 </ListItem.Title>
               </View>
 
@@ -67,7 +104,7 @@ const DetailedOrder = () => {
                 <Text style={{ marginRight: 75 }}>Total</Text>
                 <ListItem.Title>
                   Ksh {""}
-                  {item.paid}
+                  {item.price}
                 </ListItem.Title>
               </View>
             </View>
@@ -90,7 +127,6 @@ const DetailedOrder = () => {
             width: 200,
             marginHorizontal: 30,
             marginVertical: 10,
-            borderRadius: 10,
           }}
           titleStyle={{
             color: "white",
@@ -124,6 +160,8 @@ const DetailedOrder = () => {
             }}
           />
           <Button
+            onPress={() => ReadyForPickUp()}
+            loading={loading2}
             title="READY FOR PICKUP"
             buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}
             containerStyle={{
@@ -139,6 +177,8 @@ const DetailedOrder = () => {
             }}
           />
           <Button
+            onPress={() => Cooking()}
+            loading={loading1}
             title="CONFIRM"
             buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}
             containerStyle={{

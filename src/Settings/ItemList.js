@@ -1,25 +1,25 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import { ListItem, Avatar } from "@rneui/themed";
 import { Switch } from "@rneui/themed";
 import { Ionicons } from "@expo/vector-icons";
-
-const list = [
-  {
-    name: "Amy Farha",
-    avatar_url:
-      "https://images.unsplash.com/photo-1598532213919-078e54dd1f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZGlzaHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-    subtitle: "Vice President",
-  },
-  {
-    name: "Chris Jackson",
-    avatar_url:
-      "https://images.unsplash.com/photo-1571805341302-f857308690e3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8ZGlzaHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-    subtitle: "Vice Chairman",
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { fetchItems } from "../Redux/itemsActions";
+import { BASEURL } from "../config";
 
 const ItemList = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    let isCancelled = false;
+    dispatch(fetchItems());
+    return () => {
+      isCancelled = true;
+    };
+  }, [dispatch]);
+
+  const itemsList = useSelector((state) => state.items.restaurantDishes);
+  console.log(itemsList);
+
   const [checked, setChecked] = useState(false);
   const SwitchComponent = () => {
     const [checked, setChecked] = useState(false);
@@ -31,13 +31,13 @@ const ItemList = () => {
 
   return (
     <View>
-      <View>
-        {list.map((l, i) => (
+      <ScrollView>
+        {itemsList.data.map((l, i) => (
           <ListItem key={i} bottomDivider>
-            <Avatar source={{ uri: l.avatar_url }} />
+            <Avatar source={{ uri: `${BASEURL}${l.attributes.image}` }} />
             <ListItem.Content>
-              <ListItem.Title>{l.name}</ListItem.Title>
-              <ListItem.Subtitle>{l.subtitle}</ListItem.Subtitle>
+              <ListItem.Title>{l.attributes.name}</ListItem.Title>
+              <ListItem.Subtitle>{l.attributes.description}</ListItem.Subtitle>
             </ListItem.Content>
             <Switch
               value={checked}
@@ -45,7 +45,7 @@ const ItemList = () => {
             />
           </ListItem>
         ))}
-      </View>
+      </ScrollView>
     </View>
   );
 };

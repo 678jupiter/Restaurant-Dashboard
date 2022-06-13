@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -10,107 +11,116 @@ import {
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ListItem } from "@rneui/themed";
-const list = [
-  {
-    name: "Amy Farha",
-    avatar_url:
-      "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-    subtitle: "AZ12AQW",
-    status: "Cooking",
-  },
-  {
-    name: "Chris Jackson",
-    avatar_url:
-      "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
-    subtitle: "19HWR5",
-    status: "Ready",
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { fetchOrders } from "../Redux/orderActions";
 
 const OrdersInProgress = ({ navigation }) => {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    let isCancelled = false;
+    dispatch(fetchOrders());
+    return () => {
+      isCancelled = true;
+    };
+  }, [dispatch]);
 
-  const getOrders = () => {
-    setLoading(true);
-    axios
-      .get("https://myfoodcms189.herokuapp.com/api/restaurant-orders")
-      .then((res) => {
-        console.log(res.data);
-        setOrders(res.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  //   useEffect(() => {
-  //     getOrders();
-  //   }, []);
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "rgba(39, 39, 39, 1)",
-        paddingTop: 20,
-      }}
-    >
-      <View style={{ marginLeft: 100, marginRight: 100 }}>
-        <Text style={{ color: "white", fontSize: 22, fontWeight: "800" }}>
-          In progress
-        </Text>
+  const restaurantOrders = useSelector(
+    (state) => state.orders.restaurantOrders
+  );
+  if (restaurantOrders.length === 0) {
+    return (
+      <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
+        <ActivityIndicator size="large" color={colors.colors} />
       </View>
-      <ScrollView style={{ marginTop: 10, marginLeft: 100, marginRight: 100 }}>
-        {list.map((l, i) => (
-          <>
-            <TouchableOpacity
-              style={{ backgroundColor: "white", flex: 1 }}
-              onPress={() => navigation.navigate("inProgressDetailed")}
-            >
-              <View
-                style={{
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  flexDirection: "row",
-                  marginTop: 6,
-                }}
+    );
+  }
+  const i = restaurantOrders.data;
+  const result = i.filter((item) => item.attributes.status === "Cooking");
+  console.log(result);
+  if (result.length !== 0) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "rgba(39, 39, 39, 1)",
+          paddingTop: 20,
+        }}
+      >
+        <View style={{ marginLeft: 100, marginRight: 100 }}>
+          <Text style={{ color: "white", fontSize: 22, fontWeight: "800" }}>
+            In progress
+          </Text>
+        </View>
+        <ScrollView
+          style={{ marginTop: 10, marginLeft: 100, marginRight: 100 }}
+        >
+          {result.map((l, i) => (
+            <View key={i}>
+              <TouchableOpacity
+                style={{ backgroundColor: "white", flex: 1 }}
+                onPress={() => navigation.navigate("inProgressDetailed")}
               >
-                <Text
+                <View
                   style={{
-                    color: "black",
-                    fontSize: 20,
-                    fontWeight: "500",
-                    marginLeft: 10,
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    flexDirection: "row",
+                    marginTop: 6,
                   }}
                 >
-                  name
-                </Text>
-                <Text style={{ marginRight: 10 }}>{l.status}</Text>
-              </View>
+                  <Text
+                    style={{
+                      color: "black",
+                      fontSize: 20,
+                      fontWeight: "500",
+                      marginLeft: 10,
+                    }}
+                  >
+                    {l.attributes.userName}
+                  </Text>
+                  <Text style={{ marginRight: 10 }}>{l.attributes.status}</Text>
+                </View>
+                <View
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    flexDirection: "row",
+                    marginTop: 6,
+                  }}
+                >
+                  <Text style={{ marginLeft: 10, paddingBottom: 10 }}>
+                    {l.attributes.mpesaReceiptNumber}
+                  </Text>
+                  <Text style={{ marginRight: 10, paddingBottom: 10 }}>
+                    {l.attributes.publishedAt}
+                  </Text>
+                </View>
+              </TouchableOpacity>
               <View
-                style={{
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  flexDirection: "row",
-                  marginTop: 6,
-                }}
-              >
-                <Text style={{ marginLeft: 10, paddingBottom: 10 }}>
-                  AFZSJSD
-                </Text>
-                <Text style={{ marginRight: 10, paddingBottom: 10 }}>
-                  10:25 AM
-                </Text>
-              </View>
-            </TouchableOpacity>
-            <View
-              style={{ margin: 6, backgroundColor: "rgba(39, 39, 39, 1)" }}
-            ></View>
-          </>
-        ))}
-      </ScrollView>
-    </View>
-  );
+                style={{ margin: 6, backgroundColor: "rgba(39, 39, 39, 1)" }}
+              ></View>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+    );
+  } else {
+    return (
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+          backgroundColor: "rgba(39, 39, 39, 1)",
+          paddingTop: 20,
+        }}
+      >
+        <Text style={{ color: "white", fontSize: 40 }}>
+          No Orders In Progress
+        </Text>
+      </View>
+    );
+  }
 };
 
 export default OrdersInProgress;
