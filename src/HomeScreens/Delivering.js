@@ -13,7 +13,7 @@ import { ListItem } from "@rneui/themed";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "../Redux/orderActions";
 
-const NewOrders = ({ navigation }) => {
+const Delivering = ({ navigation }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     let isCancelled = false;
@@ -34,7 +34,7 @@ const NewOrders = ({ navigation }) => {
     );
   }
   const i = restaurantOrders.data;
-  const result = i.filter((item) => item.attributes.status === "New");
+  const result = i.filter((item) => item.attributes.status === "Delivering");
   //console.log(result);
 
   if (result.length !== 0) {
@@ -48,7 +48,7 @@ const NewOrders = ({ navigation }) => {
       >
         <View style={{ marginLeft: 100, marginRight: 100 }}>
           <Text style={{ color: "white", fontSize: 22, fontWeight: "800" }}>
-            New
+            Delivering
           </Text>
         </View>
         <ScrollView
@@ -57,14 +57,17 @@ const NewOrders = ({ navigation }) => {
           {result.map((l, i) => (
             <View key={l.id}>
               <TouchableOpacity
-                style={{ backgroundColor: "#3fff00", flex: 1 }}
+                style={{ backgroundColor: "white", flex: 1 }}
                 onPress={() =>
-                  navigation.navigate("detailedOrder", {
+                  navigation.navigate("deliveringDetailed", {
                     userName: `${l.attributes.userName}`,
                     dish: l.attributes.dishes,
                     orderNumber: `${l.attributes.mpesaReceiptNumber}`,
                     orderId: l.id,
+                    status: l.attributes.status,
                     customermobilenumber: l.attributes.customermobilenumber,
+                    courierName: l.attributes.courierName,
+                    courierMobileNumber: l.attributes.courierMobileNumber,
                   })
                 }
               >
@@ -81,11 +84,14 @@ const NewOrders = ({ navigation }) => {
                       fontSize: 20,
                       fontWeight: "bold",
                       marginLeft: 10,
+                      color: "black",
                     }}
                   >
                     {l.attributes.userName}
                   </Text>
-                  <Text style={{ marginRight: 10 }}>{l.attributes.status}</Text>
+                  <Text style={{ marginRight: 10, color: "black" }}>
+                    {l.attributes.status}
+                  </Text>
                 </View>
                 <View
                   style={{
@@ -125,6 +131,6 @@ const NewOrders = ({ navigation }) => {
   }
 };
 
-export default NewOrders;
+export default Delivering;
 
 const styles = StyleSheet.create({});

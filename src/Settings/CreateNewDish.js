@@ -6,24 +6,70 @@ import {
   Text,
   Dimensions,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input, Icon } from "@rneui/themed";
 import { Button } from "@rneui/base";
 import { IconText, ModalBottom } from "../../components";
 import * as ImagePicker from "expo-image-picker";
-
+import SelectDropdown from "react-native-select-dropdown";
 import axios from "axios";
 import { Space } from "../../components/atoms";
-const windowWidth = Dimensions.get("window").width;
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
+const windowWidth = Dimensions.get("window").width;
+const countries = ["Egypt", "Canada", "Australia", "Ireland"];
 const CreateNewDish = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+  const [cartegoryId, setCartegoryId] = useState();
   const uploadImage = async () => {};
 
   const captureImage = async () => {};
+  const [cartegories, setCartegories] = useState([]);
+
+  useEffect(() => {
+    let isCancelled = false;
+    const getCartegories = async () => {
+      await axios
+        .get("http://localhost:1337/api/restaurants")
+        .then(function (response) {
+          // console.log(response.data);
+          const { data } = response.data;
+          // console.log(data);
+          setCartegories(data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    };
+    getCartegories();
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
+
+  const onFinish = ({ name, description, price }) => {
+    axios
+      .post("http://localhost:1337/api/dishes", {
+        data: {
+          amount: 1,
+          name: name,
+          description: description,
+          price: price,
+          image: imurl,
+          itemQuantity: 10000,
+          restaurants: cartegoryId,
+        },
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
   return (
     <View
       style={{
@@ -37,12 +83,9 @@ const CreateNewDish = () => {
           flex: 0.9,
           justifyContent: "space-around",
           flexDirection: "row",
-          backgroundColor: "yellow",
         }}
       >
-        <View
-          style={{ backgroundColor: "green", justifyContent: "space-evenly" }}
-        >
+        <View style={{ justifyContent: "space-evenly" }}>
           <View style={{ width: windowWidth / 3 }}>
             <Input placeholder="Item Name" secureTextEntry={true} />
           </View>
@@ -53,12 +96,39 @@ const CreateNewDish = () => {
             <Input placeholder="Item Price" secureTextEntry={true} />
           </View>
           <View style={{ width: windowWidth / 3 }}>
-            <Input placeholder="Item Cartegory" secureTextEntry={true} />
+            <SelectDropdown
+              data={cartegories}
+              // defaultValueByIndex={1}
+              // defaultValue={'Egypt'}
+              onSelect={(selectedItem, index) => {
+                setCartegoryId(selectedItem.id);
+              }}
+              defaultButtonText={"Select cartegory"}
+              buttonTextAfterSelection={(selectedItem, index) => {
+                return selectedItem.attributes.name;
+              }}
+              rowTextForSelection={(item, index) => {
+                return item.attributes.name;
+              }}
+              buttonStyle={styles.dropdown1BtnStyle}
+              buttonTextStyle={styles.dropdown1BtnTxtStyle}
+              renderDropdownIcon={(isOpened) => {
+                return (
+                  <FontAwesome
+                    name={isOpened ? "chevron-up" : "chevron-down"}
+                    color={"#444"}
+                    size={18}
+                  />
+                );
+              }}
+              dropdownIconPosition={"right"}
+              dropdownStyle={styles.dropdown1DropdownStyle}
+              rowStyle={styles.dropdown1RowStyle}
+              rowTextStyle={styles.dropdown1RowTxtStyle}
+            />
           </View>
         </View>
-        <View
-          style={{ backgroundColor: "indigo", justifyContent: "space-evenly" }}
-        >
+        <View style={{ justifyContent: "space-evenly" }}>
           <View style={{ width: windowWidth / 3 }}>
             <Input placeholder="Tax" secureTextEntry={true} />
           </View>
@@ -79,10 +149,11 @@ const CreateNewDish = () => {
               <TouchableOpacity
                 style={{
                   top: 140,
-                  backgroundColor: "black",
+
                   paddingVertical: 13,
                   alignItems: "center",
                   opacity: 0.8,
+                  backgroundColor: "black",
                 }}
                 onPress={toggleModal}
               >
@@ -105,7 +176,6 @@ const CreateNewDish = () => {
       <View
         style={{
           alignItems: "center",
-          backgroundColor: "red",
           flex: 0.2,
           justifyContent: "center",
         }}
@@ -148,7 +218,7 @@ const CreateNewDish = () => {
           fontWeight: "900",
           fontSize: 20,
         }}
-      />
+      />*/}
       <ModalBottom
         onBackdropPress={toggleModal}
         isVisible={isModalVisible}
@@ -163,7 +233,7 @@ const CreateNewDish = () => {
           <IconText icon="🖼" text="Choose From Gallery" />
         </TouchableOpacity>
         <Space height={20} />
-      </ModalBottom> */}
+      </ModalBottom>
     </View>
   );
 };
@@ -182,4 +252,19 @@ const styles = StyleSheet.create({
     height: 180,
     backgroundColor: "grey",
   },
+  dropdown1BtnStyle: {
+    width: windowWidth / 3,
+    height: 50,
+    //backgroundColor: "#FFF",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#444",
+  },
+  dropdown1BtnTxtStyle: { color: "#444", textAlign: "left" },
+  dropdown1DropdownStyle: { backgroundColor: "#EFEFEF" },
+  dropdown1RowStyle: {
+    backgroundColor: "#EFEFEF",
+    borderBottomColor: "#C5C5C5",
+  },
+  dropdown1RowTxtStyle: { color: "#444", textAlign: "left" },
 });

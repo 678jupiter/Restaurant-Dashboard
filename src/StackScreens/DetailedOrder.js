@@ -1,15 +1,17 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { ListItem } from "@rneui/themed";
-import { Button, ButtonGroup, Icon, withTheme } from "@rneui/base";
+import { Button, Icon } from "@rneui/base";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { fetchOrders } from "../Redux/orderActions";
+import { Pressable } from "react-native";
 
 const DetailedOrder = ({ route, navigation }) => {
   const dispatch = useDispatch();
-  const { userName, dish, orderNumber, orderId } = route.params;
+  const { userName, dish, orderNumber, orderId, customermobilenumber } =
+    route.params;
   console.log(orderId);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
@@ -24,7 +26,12 @@ const DetailedOrder = ({ route, navigation }) => {
       .then(function (response) {
         dispatch(fetchOrders());
         setLoading1(false);
-        navigation.navigate("Orders in progress");
+        navigation.navigate("Orders in progress", {
+          userName,
+          dish,
+          orderNumber,
+          orderId,
+        });
         //  setDeliveryStatus(ORDER_STATUSES.ACCEPTED);
       })
       .catch(function (error) {
@@ -43,7 +50,12 @@ const DetailedOrder = ({ route, navigation }) => {
       .then(function (response) {
         dispatch(fetchOrders());
         setLoading2(false);
-        navigation.navigate("Order Ready For PickUp");
+        navigation.navigate("Order Ready For PickUp", {
+          userName,
+          dish,
+          orderNumber,
+          orderId,
+        });
         //  setDeliveryStatus(ORDER_STATUSES.ACCEPTED);
       })
       .catch(function (error) {
@@ -59,6 +71,16 @@ const DetailedOrder = ({ route, navigation }) => {
             <ListItem.Title>{userName}</ListItem.Title>
             <ListItem.Subtitle>{orderNumber}</ListItem.Subtitle>
           </ListItem.Content>
+          <Pressable onPress={() => console.warn("Call")}>
+            <Ionicons
+              name="call-outline"
+              size={28}
+              color="black"
+              style={{ marginRight: 10, padding: 6 }}
+            />
+          </Pressable>
+
+          <Text>{customermobilenumber}</Text>
           <ListItem.Content>
             <View
               style={{
@@ -71,7 +93,7 @@ const DetailedOrder = ({ route, navigation }) => {
           </ListItem.Content>
         </ListItem>
       </View>
-      <ScrollView style={{ backgroundColor: "white", flex: 1 }}>
+      <ScrollView style={{ backgroundColor: "white", flex: 1, marginTop: 20 }}>
         {dish.map((item, i) => (
           <ListItem.Content key={i} style={{}}>
             <View style={{ flexDirection: "row" }}>

@@ -4,6 +4,8 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -28,7 +30,7 @@ const drivers = [
   },
 ];
 
-const ReadyForPickUp = () => {
+const ReadyForPickUp = ({ navigation }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     let isCancelled = false;
@@ -50,10 +52,16 @@ const ReadyForPickUp = () => {
   }
   const i = restaurantOrders.data;
   const result = i.filter((item) => item.attributes.status === "Ready");
-  console.log(result);
+  //console.log(result);
   if (result.length !== 0) {
     return (
-      <View style={{ flex: 1, backgroundColor: "rgba(39, 39, 39, 1)" }}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "rgba(39, 39, 39, 1)",
+          paddingTop: 20,
+        }}
+      >
         <View style={{ marginLeft: 100, marginRight: 100, flex: 0.05 }}>
           <Text style={{ color: "white", fontSize: 22, fontWeight: "800" }}>
             Ready
@@ -70,7 +78,22 @@ const ReadyForPickUp = () => {
           >
             {result.map((l, i) => (
               <View key={i}>
-                <View style={{ backgroundColor: "white", flex: 1 }} key={i}>
+                <TouchableOpacity
+                  style={{ backgroundColor: "white", flex: 1 }}
+                  key={i}
+                  onPress={() =>
+                    navigation.navigate("readyForPickUpDetailed", {
+                      totalPaid: l.attributes.amount,
+                      createdAt: l.attributes.createdAt,
+                      dish: l.attributes.dishes,
+                      orderNumber: l.attributes.mpesaReceiptNumber,
+                      status: l.attributes.status,
+                      userName: l.attributes.userName,
+                      orderId: l.id,
+                    })
+                  }
+                  //onPress={() => console.log(l)}
+                >
                   <View
                     style={{
                       alignItems: "center",
@@ -108,7 +131,7 @@ const ReadyForPickUp = () => {
                       {l.attributes.publishedAt}
                     </Text>
                   </View>
-                </View>
+                </TouchableOpacity>
                 <View
                   style={{ margin: 6, backgroundColor: "rgba(39, 39, 39, 1)" }}
                 ></View>

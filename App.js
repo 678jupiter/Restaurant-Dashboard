@@ -1,12 +1,13 @@
 import "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, StatusBar, View } from "react-native";
 import StackNav from "./src/Drawer";
 import { useFonts } from "expo-font";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import store, { persistor } from "./src/Redux/store";
 import { PersistGate } from "redux-persist/es/integration/react";
+import SocketNav from "./Socket/Nav/navi";
+
 import {
   ApolloClient,
   InMemoryCache,
@@ -14,6 +15,7 @@ import {
   useQuery,
   gql,
 } from "@apollo/client";
+import { colors } from "./config";
 
 export default function App() {
   const client = new ApolloClient({
@@ -36,10 +38,15 @@ export default function App() {
           <PersistGate persistor={persistor}>
             <ApolloProvider client={client}>
               <StackNav />
+              {/* <SocketNav /> */}
             </ApolloProvider>
           </PersistGate>
+          <StatusBar
+            barStyle="dark-content"
+            backgroundColor={colors.light_gray}
+            translucent
+          />
         </Provider>
-        <StatusBar barStyle="light" translucent backgroundColor="white" />
       </SafeAreaProvider>
     </>
   );

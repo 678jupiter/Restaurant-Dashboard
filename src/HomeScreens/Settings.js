@@ -48,7 +48,7 @@ const SettingScreen = ({ navigation }) => {
                 marginTop: 17,
               }}
             >
-              <FontAwesome5 name="clipboard-list" size={42} color="black" />
+              <FontAwesome5 name="clipboard-list" size={42} color="#5cb1ff" />
             </View>
           </Card>
         </TouchableOpacity>
@@ -90,7 +90,7 @@ const SettingScreen = ({ navigation }) => {
                 marginTop: 12,
               }}
             >
-              <MaterialIcons name="post-add" size={45} color="black" />
+              <MaterialIcons name="post-add" size={45} color="#5cb1ff" />
             </View>
           </Card>
         </TouchableOpacity>
@@ -113,7 +113,7 @@ const SettingScreen = ({ navigation }) => {
           >
             <Card.Title>Special Offers</Card.Title>
             <View style={{ position: "relative", alignItems: "center" }}>
-              <MaterialIcons name="local-offer" size={40} color="black" />
+              <MaterialIcons name="local-offer" size={40} color="#5cb1ff" />
             </View>
           </Card>
         </TouchableOpacity>
@@ -147,7 +147,7 @@ const SettingScreen = ({ navigation }) => {
               backgroundColor: "#dcffee",
             }}
           >
-            <Card.Title> settings</Card.Title>
+            <Card.Title>Settings</Card.Title>
             <View
               style={{
                 position: "relative",
@@ -155,7 +155,7 @@ const SettingScreen = ({ navigation }) => {
                 marginTop: 8,
               }}
             >
-              <Ionicons name="ios-settings" size={42} color="black" />
+              <Ionicons name="ios-settings" size={42} color="#5cb1ff" />
             </View>
           </Card>
         </TouchableOpacity>

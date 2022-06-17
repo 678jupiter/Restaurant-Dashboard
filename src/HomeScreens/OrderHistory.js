@@ -1,25 +1,31 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
+import React, { useEffect } from "react";
 import { ListItem, Icon } from "@rneui/themed";
-
-const list = [
-  {
-    icon: "done",
-    status: "completed",
-    customer: "Jane Junior",
-    order: "FDFWQIERU",
-    paid: "12345",
-  },
-  {
-    icon: "done",
-    status: "completed",
-    customer: "Jane",
-    order: "FDFWQIERU",
-    paid: "12345",
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { fetchOrders } from "../Redux/orderActions";
 
 const OrderHistoryScreen = () => {
+  const windowWidth = Dimensions.get("window").width;
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    let isCancelled = false;
+    dispatch(fetchOrders());
+    return () => {
+      isCancelled = true;
+    };
+  }, [dispatch]);
+
+  const restaurantOrders = useSelector(
+    (state) => state.orders.restaurantOrders
+  );
+  if (restaurantOrders.length === 0) {
+    return (
+      <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
+        <ActivityIndicator size="large" color={colors.colors} />
+      </View>
+    );
+  }
   return (
     <View
       style={{
@@ -44,8 +50,8 @@ const OrderHistoryScreen = () => {
 
       <View>
         <ListItem bottomDivider containerStyle={{ backgroundColor: "#edeff0" }}>
-          <ListItem.Title style={{ marginRight: 20, marginLeft: 40 }}>
-            status
+          <ListItem.Title style={{ width: windowWidth / 7 }}>
+            Status
           </ListItem.Title>
           <ListItem.Content
             style={{
@@ -54,24 +60,24 @@ const OrderHistoryScreen = () => {
               flexDirection: "row",
             }}
           >
-            <ListItem.Title style={{ marginLeft: 40 }}>order</ListItem.Title>
+            <ListItem.Title style={{ marginLeft: 40 }}>Order</ListItem.Title>
 
             <ListItem.Title>Customer</ListItem.Title>
-            <ListItem.Title style={{ marginRight: 40 }}>Paid</ListItem.Title>
+            <ListItem.Title style={{ marginRight: 78 }}>Paid</ListItem.Title>
           </ListItem.Content>
         </ListItem>
       </View>
       <View style={{ backgroundColor: "white", flex: 1 }}>
-        {list.map((item, i) => (
+        {restaurantOrders?.data?.map((item, i) => (
           <ListItem key={i} bottomDivider>
-            <Icon
+            {/* <Icon
               color="white"
               size={22}
-              name={item.icon}
+              name="done"
               style={{ backgroundColor: "green", borderRadius: 10 }}
-            />
-            <ListItem.Title style={{ marginRight: 20 }}>
-              {item.status}
+            /> */}
+            <ListItem.Title style={{ marginRight: 20, width: windowWidth / 7 }}>
+              {item.attributes.status}
             </ListItem.Title>
             <ListItem.Content
               style={{
@@ -80,12 +86,16 @@ const OrderHistoryScreen = () => {
                 flexDirection: "row",
               }}
             >
-              <ListItem.Title>{item.order}</ListItem.Title>
+              <ListItem.Title style={{ width: windowWidth / 4 }}>
+                {item.attributes.mpesaReceiptNumber}
+              </ListItem.Title>
 
-              <ListItem.Title>{item.customer}</ListItem.Title>
+              <ListItem.Title style={{ width: windowWidth / 4 }}>
+                {item.attributes.userName}
+              </ListItem.Title>
               <ListItem.Title>
                 Ksh {""}
-                {item.paid}
+                items.
               </ListItem.Title>
             </ListItem.Content>
             <ListItem.Chevron />

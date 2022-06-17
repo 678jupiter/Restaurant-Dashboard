@@ -31,6 +31,9 @@ import ChatScreen from "../Chat";
 import ChartList from "../Chat/ChartList";
 import { useSelector } from "react-redux";
 import Login from "../Auth/Login";
+import ReadyForPickUpDetailed from "../StackScreens/ReadyForPickUpDetailed";
+import Delivering from "../HomeScreens/Delivering";
+import DeliveringDetailed from "../StackScreens/DeliveringDetailed";
 
 function DrawerNav({ navigation }) {
   const windowWidth = Dimensions.get("window").width;
@@ -48,7 +51,7 @@ function DrawerNav({ navigation }) {
               <Ionicons
                 name="ios-chatbubble-ellipses-sharp"
                 size={30}
-                color="black"
+                color="#5cb1ff"
               />
             </TouchableWithoutFeedback>
           </View>
@@ -67,7 +70,7 @@ function DrawerNav({ navigation }) {
         drawerContentStyle: {
           // backgroundColor: "#279eff",
           // backgroundColor: "#6e6eff",
-          backgroundColor: "#1880ff",
+          backgroundColor: "white",
         },
 
         drawerStyle: {
@@ -85,7 +88,7 @@ function DrawerNav({ navigation }) {
             <MaterialIcons
               name="fiber-new"
               size={50}
-              color={focused ? "white" : "rgba(39, 39, 39, 1)"}
+              color={focused ? "#5cb1ff" : "rgba(39, 39, 39, 1)"}
             />
           ),
         }}
@@ -101,7 +104,7 @@ function DrawerNav({ navigation }) {
             <MaterialCommunityIcons
               name="progress-clock"
               size={50}
-              color={focused ? "white" : "rgba(39, 39, 39, 1)"}
+              color={focused ? "#5cb1ff" : "rgba(39, 39, 39, 1)"}
             />
           ),
         }}
@@ -110,14 +113,14 @@ function DrawerNav({ navigation }) {
       />
       <Drawer.Screen
         options={{
-          title: "",
+          title: "Ready For Pickup",
           headerShown: true,
 
           drawerIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="food-turkey"
+            <MaterialIcons
+              name="done-outline"
               size={50}
-              color={focused ? "white" : "rgba(39, 39, 39, 1)"}
+              color={focused ? "#5cb1ff" : "rgba(39, 39, 39, 1)"}
             />
           ),
         }}
@@ -130,10 +133,26 @@ function DrawerNav({ navigation }) {
           headerShown: true,
 
           drawerIcon: ({ focused }) => (
+            <MaterialIcons
+              name="delivery-dining"
+              size={50}
+              color={focused ? "#5cb1ff" : "rgba(39, 39, 39, 1)"}
+            />
+          ),
+        }}
+        name="delivering"
+        component={Delivering}
+      />
+      <Drawer.Screen
+        options={{
+          title: "",
+          headerShown: true,
+
+          drawerIcon: ({ focused }) => (
             <FontAwesome5
               name="history"
               size={50}
-              color={focused ? "white" : "rgba(39, 39, 39, 1)"}
+              color={focused ? "#5cb1ff" : "rgba(39, 39, 39, 1)"}
             />
           ),
         }}
@@ -149,7 +168,7 @@ function DrawerNav({ navigation }) {
             <Feather
               name="settings"
               size={50}
-              color={focused ? "white" : "rgba(39, 39, 39, 1)"}
+              color={focused ? "#5cb1ff" : "rgba(39, 39, 39, 1)"}
             />
           ),
         }}
@@ -197,7 +216,7 @@ export default function StackNav() {
               component={InProgressDetailed}
               options={{
                 animationTypeForReplace: "pop",
-                title: "Ready For Pickup",
+                title: "Orders In Progress",
               }}
             />
             <Stack.Screen
@@ -390,6 +409,22 @@ export default function StackNav() {
               options={{
                 animationTypeForReplace: "pop",
                 title: "UsernameProps",
+              }}
+            />
+            <Stack.Screen
+              name="readyForPickUpDetailed"
+              component={ReadyForPickUpDetailed}
+              options={{
+                animationTypeForReplace: "pop",
+                title: "Ready",
+              }}
+            />
+            <Stack.Screen
+              name="deliveringDetailed"
+              component={DeliveringDetailed}
+              options={{
+                animationTypeForReplace: "pop",
+                title: "Ready",
               }}
             />
           </>

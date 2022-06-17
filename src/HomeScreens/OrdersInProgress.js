@@ -58,7 +58,17 @@ const OrdersInProgress = ({ navigation }) => {
             <View key={i}>
               <TouchableOpacity
                 style={{ backgroundColor: "white", flex: 1 }}
-                onPress={() => navigation.navigate("inProgressDetailed")}
+                onPress={() =>
+                  navigation.navigate("inProgressDetailed", {
+                    username: l.attributes.userName,
+                    orderNumber: l.attributes.mpesaReceiptNumber,
+                    dish: l.attributes.dishes,
+                    orderId: l.id,
+                    status: l.attributes.status,
+                    cteatedAt: l.attributes.createdAt,
+                    customermobilenumber: l.attributes.customermobilenumber,
+                  })
+                }
               >
                 <View
                   style={{

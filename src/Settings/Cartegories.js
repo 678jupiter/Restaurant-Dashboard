@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { ListItem, Avatar } from "@rneui/themed";
 import { Switch } from "@rneui/themed";
@@ -20,22 +20,47 @@ const Cartegories = () => {
     (state) => state.cartegories.restaurantCartegories
   );
   console.log(cartegoriesList);
-
-  return (
-    <View style={{ paddingTop: 20 }}>
-      <View>
-        {cartegoriesList.data.map((l, i) => (
-          <ListItem key={i} bottomDivider>
-            <Avatar source={{ uri: `${BASEURL}${l.attributes.image}` }} />
-            <ListItem.Content>
-              <ListItem.Title>{l.attributes.name}</ListItem.Title>
-              <ListItem.Subtitle>{l.attributes.description}</ListItem.Subtitle>
-            </ListItem.Content>
-          </ListItem>
-        ))}
+  if (cartegoriesList.length === 0) {
+    return (
+      <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
+        <ActivityIndicator size="large" color={colors.colors} />
       </View>
-    </View>
-  );
+    );
+  }
+
+  if (cartegoriesList.length !== 0) {
+    return (
+      <View style={{ paddingTop: 20 }}>
+        <View>
+          {cartegoriesList?.data?.map((l, i) => (
+            <ListItem key={i} bottomDivider>
+              <Avatar source={{ uri: `${BASEURL}${l.attributes.image}` }} />
+              <ListItem.Content>
+                <ListItem.Title>{l.attributes.name}</ListItem.Title>
+                <ListItem.Subtitle>
+                  {l.attributes.description}
+                </ListItem.Subtitle>
+              </ListItem.Content>
+            </ListItem>
+          ))}
+        </View>
+      </View>
+    );
+  } else {
+    return (
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+          backgroundColor: "rgba(39, 39, 39, 1)",
+          paddingTop: 20,
+        }}
+      >
+        <Text style={{ color: "white", fontSize: 40 }}>No Cartegories.</Text>
+      </View>
+    );
+  }
 };
 
 export default Cartegories;
