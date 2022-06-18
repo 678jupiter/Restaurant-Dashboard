@@ -1,11 +1,21 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { ListItem } from "@rneui/themed";
-import { Button, Icon } from "@rneui/base";
+import { Ionicons } from "@expo/vector-icons";
+import { colors } from "../config";
+import call from "react-native-phone-call";
 
 const ReadyForPickUpDetailed = ({ navigation, route }) => {
-  const { totalPaid, createdAt, dish, orderNumber, status, userName, orderId } =
-    route.params;
+  const {
+    totalPaid,
+    createdAt,
+    dish,
+    orderNumber,
+    status,
+    userName,
+    orderId,
+    customermobilenumber,
+  } = route.params;
   return (
     <View style={{ backgroundColor: "white", flex: 1 }}>
       <View>
@@ -67,67 +77,35 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
         ))}
       </ScrollView>
 
-      <View
-        style={{
-          alignItems: "flex-start",
-        }}
-      ></View>
-      <View style={{ flex: 0.25 }}>
-        <View style={styles.buttonsContainer}>
-          {status === "Delivering" ? (
-            <Button
-              title="Track Order"
-              buttonStyle={{
-                backgroundColor: "rgba(39, 39, 39, 1)",
-                height: 80,
-              }}
-              containerStyle={{
-                width: 250,
-                marginHorizontal: 30,
-                marginVertical: 10,
-              }}
-              titleStyle={{
-                color: "white",
-                marginHorizontal: 20,
-                fontWeight: "900",
-                fontSize: 19,
-              }}
-            />
-          ) : null}
-          {/* <Button
-            onPress={() => ReadyForPickUp()}
-            loading={loading2}
-            title="READY FOR PICKUP"
-            buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}
-            containerStyle={{
-              width: 250,
-              marginHorizontal: 30,
-              marginVertical: 10,
-            }}
-            titleStyle={{
-              color: "white",
-              marginHorizontal: 20,
-              fontWeight: "900",
-              fontSize: 19,
-            }}
-          />
-          <Button
-            onPress={() => Cooking()}
-            loading={loading1}
-            title="CONFIRM"
-            buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}
-            containerStyle={{
-              width: 250,
-              marginHorizontal: 30,
-              marginVertical: 10,
-            }}
-            titleStyle={{
-              color: "white",
-              marginHorizontal: 20,
-              fontWeight: "900",
-              fontSize: 20,
-            }}
-          /> */}
+      <View style={{ flex: 0.2 }}>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            width: "100%",
+            alignContent: "center",
+            backgroundColor: colors.light_gray,
+            marginLeft: 10,
+          }}
+        >
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Pressable
+              onPress={() =>
+                call({ number: `${customermobilenumber}`, prompt: false })
+              }
+            >
+              <Ionicons
+                name="call-outline"
+                size={40}
+                color="black"
+                style={{ marginRight: 10, padding: 10 }}
+              />
+            </Pressable>
+            <Text>{userName}</Text>
+          </View>
         </View>
       </View>
     </View>
@@ -137,11 +115,5 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
 export default ReadyForPickUpDetailed;
 
 const styles = StyleSheet.create({
-  buttonsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-  },
+  buttonsContainer: {},
 });

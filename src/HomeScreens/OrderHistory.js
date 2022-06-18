@@ -4,7 +4,7 @@ import { ListItem, Icon } from "@rneui/themed";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "../Redux/orderActions";
 
-const OrderHistoryScreen = () => {
+const OrderHistoryScreen = ({ navigation }) => {
   const windowWidth = Dimensions.get("window").width;
 
   const dispatch = useDispatch();
@@ -69,7 +69,23 @@ const OrderHistoryScreen = () => {
       </View>
       <View style={{ backgroundColor: "white", flex: 1 }}>
         {restaurantOrders?.data?.map((item, i) => (
-          <ListItem key={i} bottomDivider>
+          <ListItem
+            key={i}
+            bottomDivider
+            onPress={() =>
+              navigation.navigate("orderHistory", {
+                address: item.attributes.address,
+                amount: item.attributes.amount,
+                customermobilenumber: item.attributes.customermobilenumber,
+                courierName: item.attributes.courierName,
+                dishes: item.attributes.dishes,
+                mpesaReceiptNumber: item.attributes.mpesaReceiptNumber,
+                status: item.attributes.status,
+                userName: item.attributes.userName,
+                Oid: item.id,
+              })
+            }
+          >
             {/* <Icon
               color="white"
               size={22}

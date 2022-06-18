@@ -90,6 +90,7 @@ const ReadyForPickUp = ({ navigation }) => {
                       status: l.attributes.status,
                       userName: l.attributes.userName,
                       orderId: l.id,
+                      customermobilenumber: l.attributes.customermobilenumber,
                     })
                   }
                   //onPress={() => console.log(l)}

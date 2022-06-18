@@ -35,6 +35,7 @@ import Delivering from "../HomeScreens/Delivering";
 import DeliveringDetailed from "../StackScreens/DeliveringDetailed";
 import EditDish from "../Settings/EditDish";
 import EditCartegory from "../Settings/EditCartegory";
+import OrderHistoryDetailed from "../StackScreens/OrderHistoryDetailed";
 
 function DrawerNav({ navigation }) {
   const windowWidth = Dimensions.get("window").width;
@@ -295,6 +296,14 @@ export default function StackNav() {
               options={{
                 animationTypeForReplace: "pop",
                 title: "Edit Item",
+              }}
+            />
+            <Stack.Screen
+              name="orderHistory"
+              component={OrderHistoryDetailed}
+              options={{
+                animationTypeForReplace: "pop",
+                title: "Order History",
               }}
             />
             <Stack.Screen

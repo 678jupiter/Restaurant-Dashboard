@@ -4,6 +4,7 @@ import MapView from "react-native-maps";
 import { Ionicons } from "@expo/vector-icons";
 import io from "socket.io-client";
 import Arrow from "../../assets/arrow.png";
+import call from "react-native-phone-call";
 
 const DeliveringDetailed = ({ route, navigation }) => {
   const courierCords = [
@@ -171,7 +172,6 @@ const DeliveringDetailed = ({ route, navigation }) => {
           alignItems: "center",
         }}
       >
-        <Text>{courierName}</Text>
         <View
           style={{
             flexDirection: "row",
@@ -181,13 +181,36 @@ const DeliveringDetailed = ({ route, navigation }) => {
         >
           <Pressable onPress={() => console.warn("Call")}>
             <Ionicons
+              onPress={() =>
+                call({ number: `${customermobilenumber}`, prompt: false })
+              }
               name="call-outline"
-              size={28}
+              size={40}
               color="black"
-              style={{ marginRight: 10, padding: 6 }}
+              style={{ marginRight: 10, padding: 10 }}
             />
           </Pressable>
-          <Text>{courierMobileNumber}</Text>
+          <Text>{userName}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+
+            alignItems: "center",
+          }}
+        >
+          <Pressable onPress={() => console.warn("Call")}>
+            <Ionicons
+              onPress={() =>
+                call({ number: `${courierMobileNumber}`, prompt: false })
+              }
+              name="call-outline"
+              size={40}
+              color="black"
+              style={{ marginRight: 10, padding: 10 }}
+            />
+          </Pressable>
+          <Text>{courierName}</Text>
         </View>
       </View>
     </View>

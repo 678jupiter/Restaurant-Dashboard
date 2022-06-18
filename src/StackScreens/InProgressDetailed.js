@@ -7,6 +7,7 @@ import axios from "axios";
 import { fetchOrders } from "../Redux/orderActions";
 import { Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import call from "react-native-phone-call";
 
 const dishes = [
   {
@@ -58,7 +59,11 @@ const InProgressDetailed = ({ navigation, route }) => {
             <ListItem.Title>{username}</ListItem.Title>
             <ListItem.Subtitle>{orderNumber}</ListItem.Subtitle>
           </ListItem.Content>
-          <Pressable onPress={() => console.warn("Call")}>
+          <Pressable
+            onPress={() =>
+              call({ number: `${customermobilenumber}`, prompt: false })
+            }
+          >
             <Ionicons
               name="call-outline"
               size={28}
@@ -67,7 +72,7 @@ const InProgressDetailed = ({ navigation, route }) => {
             />
           </Pressable>
 
-          <Text>{customermobilenumber}</Text>
+          <Text>{`${username}`}</Text>
           <ListItem.Content>
             <View
               style={{

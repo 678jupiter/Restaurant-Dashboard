@@ -1,28 +1,36 @@
-# Deafult values to send if not changed
-
 # View Detailed order History
-
-# Images on all edit pages
 
 # Arriving Courier
 
-# Navigation props on header eg edit which cartegory
-
-# Messaging Socket.io Rest Icon notification
-
-# Push Nortification Socket.io
+# Search
 
 # Setting
+
+# Font Font Family Itallic
 
 # Token Authorization to make requests
 
 # Auth
+
+# Special Offers
+
+# Render Items Alphabetically
+
+# Connect Delivering
+
+by 4:00 PM
+
+# Push Nortification Socket.io
+
+# Messaging Socket.io Rest Icon notification
 
 # Live Api
 
 # Testings
 
 # Spellings
+
+# Images on all edit pages
 
 # CI/CD
 

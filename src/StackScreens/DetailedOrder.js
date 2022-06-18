@@ -7,6 +7,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { fetchOrders } from "../Redux/orderActions";
 import { Pressable } from "react-native";
+import call from "react-native-phone-call";
 
 const DetailedOrder = ({ route, navigation }) => {
   const dispatch = useDispatch();
@@ -71,7 +72,11 @@ const DetailedOrder = ({ route, navigation }) => {
             <ListItem.Title>{userName}</ListItem.Title>
             <ListItem.Subtitle>{orderNumber}</ListItem.Subtitle>
           </ListItem.Content>
-          <Pressable onPress={() => console.warn("Call")}>
+          <Pressable
+            onPress={() =>
+              call({ number: `${customermobilenumber}`, prompt: false })
+            }
+          >
             <Ionicons
               name="call-outline"
               size={28}
