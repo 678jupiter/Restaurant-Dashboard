@@ -180,6 +180,7 @@ const CreateNewDish = () => {
   };
 
   const handleSubmit = async () => {
+    console.log(cartegoryId);
     if (!isFormValid()) {
       return;
     }
@@ -201,6 +202,7 @@ const CreateNewDish = () => {
       })
       .then((res) => {
         setLoading(false);
+        console.log(res.data);
       })
       .catch((error) => {
         setLoading(false);
@@ -226,21 +228,18 @@ const CreateNewDish = () => {
           <View style={{ width: windowWidth / 3 }}>
             <Input
               placeholder="Item Name"
-              secureTextEntry={true}
               onChangeText={(text) => setName(text)}
             />
           </View>
           <View style={{ width: windowWidth / 3 }}>
             <Input
               placeholder="Item Description"
-              secureTextEntry={true}
               onChangeText={(text) => setDescription(text)}
             />
           </View>
           <View style={{ width: windowWidth / 3 }}>
             <Input
               placeholder="Item Price"
-              secureTextEntry={true}
               onChangeText={(text) => setPrice(text)}
             />
           </View>
@@ -259,11 +258,7 @@ const CreateNewDish = () => {
         </View>
         <View style={{ justifyContent: "space-evenly" }}>
           <View style={{ width: windowWidth / 3 }}>
-            <Input
-              placeholder="Tax"
-              secureTextEntry={true}
-              onChangeText={(text) => setTax(text)}
-            />
+            <Input placeholder="Tax" onChangeText={(text) => setTax(text)} />
           </View>
           <View
             style={{
@@ -333,30 +328,7 @@ const CreateNewDish = () => {
           }}
         />
       </View>
-      {/* 
-      <Space height={10} />
-      <View style={{ width: windowWidth / 3 }}>
-        <Input placeholder="Short Description" secureTextEntry={true} />
-      </View>
-      <Space height={10} />
 
-     
-      <Space height={30} />
-      <Button
-        title="Submit"
-        buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}
-        containerStyle={{
-          width: windowWidth / 3,
-          marginHorizontal: 30,
-          marginVertical: 10,
-        }}
-        titleStyle={{
-          color: "white",
-          marginHorizontal: 20,
-          fontWeight: "900",
-          fontSize: 20,
-        }}
-      />*/}
       <ModalBottom
         onBackdropPress={toggleModal}
         isVisible={isModalVisible}

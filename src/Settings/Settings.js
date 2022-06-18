@@ -249,6 +249,7 @@ const Settings = () => {
           </View>
         </View>
       </Modal>
+
       <Modal
         animationType="slide"
         transparent={true}

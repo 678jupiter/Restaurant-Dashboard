@@ -172,7 +172,6 @@ const CreateACartegory = () => {
       <View style={{ width: windowWidth / 3 }}>
         <Input
           placeholder="Name a Cartegory"
-          secureTextEntry={true}
           onChangeText={(text) => setName(text)}
         />
       </View>

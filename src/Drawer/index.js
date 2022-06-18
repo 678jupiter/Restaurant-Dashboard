@@ -34,6 +34,7 @@ import Login from "../Auth/Login";
 import ReadyForPickUpDetailed from "../StackScreens/ReadyForPickUpDetailed";
 import Delivering from "../HomeScreens/Delivering";
 import DeliveringDetailed from "../StackScreens/DeliveringDetailed";
+import EditDish from "../Settings/EditDish";
 
 function DrawerNav({ navigation }) {
   const windowWidth = Dimensions.get("window").width;
@@ -278,6 +279,14 @@ export default function StackNav() {
               options={{
                 animationTypeForReplace: "pop",
                 title: "New Item",
+              }}
+            />
+            <Stack.Screen
+              name="editDish"
+              component={EditDish}
+              options={{
+                animationTypeForReplace: "pop",
+                title: "Edit Item",
               }}
             />
             <Stack.Screen
