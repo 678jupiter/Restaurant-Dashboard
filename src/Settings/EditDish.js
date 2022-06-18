@@ -19,6 +19,7 @@ import { Border, Space } from "../../components/atoms";
 import { Picker } from "@react-native-picker/picker";
 import { Feather } from "@expo/vector-icons";
 import mime from "mime";
+import { showMessage } from "react-native-flash-message";
 import { colors } from "../../config";
 const CARTEGORY_ID = gql`
   query ($id: ID!) {
@@ -42,6 +43,8 @@ const CARTEGORY_ID = gql`
 const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 const EditDish = ({ route }) => {
+  const { Pname, Pprice, Pimage, Ptax, dId, Pdescription } = route.params;
+
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -49,10 +52,10 @@ const EditDish = ({ route }) => {
   const [cartegoryId, setCartegoryId] = useState("");
   const [image, setImage] = useState(null);
   const [imgUrl, setImageUrl] = useState("");
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [name, setName] = useState(Pname);
+  const [description, setDescription] = useState(Pdescription);
   const [tax, setTax] = useState("");
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(Pprice);
   const [cartegories, setCartegories] = useState([]);
   const [loading2, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -61,16 +64,11 @@ const EditDish = ({ route }) => {
   const [selectedLanguage, setSelectedLanguage] = useState();
   const [cartegoryName, setCartegoryName] = useState("");
 
-  const { Pname, Pprice, Pimage, Ptax, dId, Pdescription } = route.params;
   const angile = JSON.stringify(Pprice);
-  console.log(angile);
   const handleMessage = (message, type = "FAILED") => {
     setMessage(message);
     setMessageType(type);
   };
-  useEffect(() => {
-    console.log(cartegoryName);
-  });
 
   useEffect(() => {
     let isCancelled = false;
@@ -139,14 +137,15 @@ const EditDish = ({ route }) => {
         .catch((error) => {
           setLoading(false);
 
-          console.log(error);
+          setMessage(() => (
+            <Text>There was an error while uploading the image. </Text>
+          ));
         });
     }
   };
   const captureImage = async () => {
     setLoading(true);
     setMessage("");
-    console.log(uid);
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -189,14 +188,15 @@ const EditDish = ({ route }) => {
         })
         .catch((error) => {
           setLoading(false);
-          console.log("2" + error);
+          setMessage(() => (
+            <Text>There was an error while uploading the image. </Text>
+          ));
         });
     }
   };
 
   const isFormValid = () => {
     if (
-      cartegoryId === "" ||
       imgUrl === "" ||
       name === "" ||
       description === "" ||
@@ -210,40 +210,13 @@ const EditDish = ({ route }) => {
 
     return true;
   };
-  const handleSubmit = async () => {
-    if (!isFormValid()) {
-      return;
-    }
-    setLoading(true);
-    setMessage("");
-
-    await axios
-      .put(`http://localhost:1337/api/dishes/${dId}`, {
-        data: {
-          name: name,
-          description: description,
-          price: price,
-          image: imgUrl,
-          itemQuantity: 10000,
-          restaurants: cartegoryId,
-          dishVisibility: true,
-          Tax: tax,
-        },
-      })
-      .then((res) => {
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-      });
-  };
 
   var id = dId;
   const { loading, error, data, refetch } = useQuery(CARTEGORY_ID, {
     variables: { id },
   });
 
-  if (loading) return null;
+  if (loading) return <Text>Loading...</Text>;
   if (error) return `Error! ${error}`;
 
   if (data) {
@@ -259,6 +232,54 @@ const EditDish = ({ route }) => {
         },
       },
     } = data;
+
+    const handleSubmit = async () => {
+      if (!isFormValid()) {
+        return;
+      }
+      setLoading(true);
+      setMessage("");
+
+      await axios
+        .put(`http://localhost:1337/api/dishes/${dId}`, {
+          data: {
+            name: name,
+            description: description,
+            price: price,
+            image: imgUrl,
+            itemQuantity: 10000,
+            restaurants: id.id,
+            dishVisibility: true,
+            Tax: tax,
+          },
+        })
+        .then((res) => {
+          setLoading(false);
+          showMessage({
+            message: "Saved.",
+            // description: "All fields are required",
+            type: "success",
+            backgroundColor: "orange",
+            color: "#fff",
+            icon: "success",
+            //position: "right",
+            statusBarHeight: "34",
+          });
+        })
+        .catch((error) => {
+          setLoading(false);
+          showMessage({
+            message: "Edit failed, try again.",
+            // description: "All fields are required",
+            type: "warning",
+            backgroundColor: "orange",
+            color: "#fff",
+            icon: "warning",
+            //position: "right",
+            statusBarHeight: "34",
+          });
+        });
+    };
 
     return (
       <View
@@ -344,8 +365,6 @@ const EditDish = ({ route }) => {
             <View
               style={{
                 alignItems: "center",
-                borderColor: "red",
-                borderWidth: 2,
               }}
             >
               <ImageBackground

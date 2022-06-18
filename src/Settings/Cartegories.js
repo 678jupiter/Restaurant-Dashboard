@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCartegories } from "../Redux/cartegoryActions";
 import { BASEURL } from "../config";
 
-const Cartegories = () => {
+const Cartegories = ({ navigation }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     let isCancelled = false;
@@ -19,7 +19,6 @@ const Cartegories = () => {
   const cartegoriesList = useSelector(
     (state) => state.cartegories.restaurantCartegories
   );
-  console.log(cartegoriesList);
   if (cartegoriesList.length === 0) {
     return (
       <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
@@ -33,13 +32,20 @@ const Cartegories = () => {
       <View style={{ paddingTop: 20 }}>
         <View>
           {cartegoriesList?.data?.map((l, i) => (
-            <ListItem key={i} bottomDivider>
+            <ListItem
+              key={i}
+              bottomDivider
+              onPress={() =>
+                navigation.navigate("editCartegory", {
+                  Cname: l.attributes.name,
+                  img: l.attributes.image,
+                  cId: l.id,
+                })
+              }
+            >
               <Avatar source={{ uri: `${BASEURL}${l.attributes.image}` }} />
               <ListItem.Content>
                 <ListItem.Title>{l.attributes.name}</ListItem.Title>
-                <ListItem.Subtitle>
-                  {l.attributes.description}
-                </ListItem.Subtitle>
               </ListItem.Content>
             </ListItem>
           ))}

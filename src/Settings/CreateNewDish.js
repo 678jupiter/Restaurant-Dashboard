@@ -15,6 +15,7 @@ import axios from "axios";
 import { Space } from "../../components/atoms";
 import { Picker } from "@react-native-picker/picker";
 import mime from "mime";
+import { showMessage } from "react-native-flash-message";
 
 const windowWidth = Dimensions.get("window").width;
 const CreateNewDish = () => {
@@ -107,7 +108,9 @@ const CreateNewDish = () => {
         .catch((error) => {
           setLoading(false);
 
-          console.log(error);
+          setMessage(() => (
+            <Text>There was an error while uploading the image. </Text>
+          ));
         });
     }
   };
@@ -157,7 +160,9 @@ const CreateNewDish = () => {
         })
         .catch((error) => {
           setLoading(false);
-          console.log("2" + error);
+          setMessage(() => (
+            <Text>There was an error while uploading the image. </Text>
+          ));
         });
     }
   };
@@ -202,10 +207,29 @@ const CreateNewDish = () => {
       })
       .then((res) => {
         setLoading(false);
-        console.log(res.data);
+        showMessage({
+          message: "Saved.",
+          // description: "All fields are required",
+          type: "success",
+          backgroundColor: "orange",
+          color: "#fff",
+          icon: "success",
+          //position: "right",
+          statusBarHeight: "34",
+        });
       })
       .catch((error) => {
         setLoading(false);
+        showMessage({
+          message: "Update failed, try again.",
+          // description: "All fields are required",
+          type: "warning",
+          backgroundColor: "orange",
+          color: "#fff",
+          icon: "warning",
+          //position: "right",
+          statusBarHeight: "34",
+        });
       });
   };
 
@@ -263,8 +287,6 @@ const CreateNewDish = () => {
           <View
             style={{
               alignItems: "center",
-              borderColor: "red",
-              borderWidth: 2,
             }}
           >
             <ImageBackground

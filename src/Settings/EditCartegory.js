@@ -13,15 +13,17 @@ import { IconText, ModalBottom } from "../../components";
 import * as ImagePicker from "expo-image-picker";
 import mime from "mime";
 import { showMessage } from "react-native-flash-message";
+
 import axios from "axios";
 import { Space } from "../../components/atoms";
 const windowWidth = Dimensions.get("window").width;
 
-const CreateACartegory = () => {
+const EditCartegory = ({ route }) => {
+  const { Cname, cId, img } = route.params;
   const [isModalVisible, setModalVisible] = useState(false);
   const [imgUrl, setImageUrl] = useState("");
   const [image, setImage] = useState(null);
-  const [name, setName] = useState("");
+  const [name, setName] = useState(Cname);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState();
@@ -76,9 +78,6 @@ const CreateACartegory = () => {
         })
         .catch((error) => {
           setLoading(false);
-          setMessage(() => (
-            <Text>There was an error while uploading the image. </Text>
-          ));
 
           console.log(error);
         });
@@ -133,9 +132,7 @@ const CreateACartegory = () => {
         .catch((error) => {
           setLoading(false);
 
-          setMessage(() => (
-            <Text>There was an error while uploading the image. </Text>
-          ));
+          console.log("2" + error);
         });
     }
   };
@@ -156,10 +153,12 @@ const CreateACartegory = () => {
     setMessage("");
     setLoading(true);
 
+    var q = JSON.stringify(name);
+
     await axios
-      .post("http://localhost:1337/api/restaurants", {
+      .put(`http://localhost:1337/api/restaurants/${cId}`, {
         data: {
-          name: name,
+          name: q,
 
           image: imgUrl,
         },
@@ -178,8 +177,9 @@ const CreateACartegory = () => {
         });
       })
       .catch((error) => {
+        setLoading(false);
         showMessage({
-          message: "Update failed, try again.",
+          message: "Edit failed, try again.",
           // description: "All fields are required",
           type: "warning",
           backgroundColor: "orange",
@@ -194,6 +194,7 @@ const CreateACartegory = () => {
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <View style={{ width: windowWidth / 3 }}>
         <Input
+          defaultValue={Cname}
           placeholder="Name a Cartegory"
           onChangeText={(text) => setName(text)}
         />
@@ -269,7 +270,7 @@ const CreateACartegory = () => {
   );
 };
 
-export default CreateACartegory;
+export default EditCartegory;
 
 const styles = StyleSheet.create({
   item: {

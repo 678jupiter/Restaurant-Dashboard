@@ -1,6 +1,6 @@
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import NewOrders from "../HomeScreens/NewOrders";
 import OrdersInProgress from "../HomeScreens/OrdersInProgress";
 import SettingScreen from "../HomeScreens/Settings";
@@ -8,8 +8,7 @@ import OrderHistoryScreen from "../HomeScreens/OrderHistory";
 import { createStackNavigator } from "@react-navigation/stack";
 import ReadyForPickUp from "../HomeScreens/ReadyForPickUp";
 import EditName from "../Edit/EditName";
-import { Dimensions, Text, View, TouchableWithoutFeedback } from "react-native";
-import { colors } from "../config";
+import { Dimensions, View, TouchableWithoutFeedback } from "react-native";
 import {
   MaterialCommunityIcons,
   Feather,
@@ -35,6 +34,7 @@ import ReadyForPickUpDetailed from "../StackScreens/ReadyForPickUpDetailed";
 import Delivering from "../HomeScreens/Delivering";
 import DeliveringDetailed from "../StackScreens/DeliveringDetailed";
 import EditDish from "../Settings/EditDish";
+import EditCartegory from "../Settings/EditCartegory";
 
 function DrawerNav({ navigation }) {
   const windowWidth = Dimensions.get("window").width;
@@ -271,6 +271,14 @@ export default function StackNav() {
               options={{
                 animationTypeForReplace: "pop",
                 title: "New Cartegory",
+              }}
+            />
+            <Stack.Screen
+              name="editCartegory"
+              component={EditCartegory}
+              options={{
+                animationTypeForReplace: "pop",
+                title: "Edit Cartegory",
               }}
             />
             <Stack.Screen

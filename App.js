@@ -7,6 +7,7 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import store, { persistor } from "./src/Redux/store";
 import { PersistGate } from "redux-persist/es/integration/react";
 import SocketNav from "./Socket/Nav/navi";
+import FlashMessage from "react-native-flash-message";
 
 import {
   ApolloClient,
@@ -47,6 +48,7 @@ export default function App() {
             translucent
           />
         </Provider>
+        <FlashMessage position="top" />
       </SafeAreaProvider>
     </>
   );
