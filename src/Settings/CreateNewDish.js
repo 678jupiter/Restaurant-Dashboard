@@ -7,27 +7,38 @@ import {
   Dimensions,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Input, Icon } from "@rneui/themed";
+import { Input } from "@rneui/themed";
 import { Button } from "@rneui/base";
 import { IconText, ModalBottom } from "../../components";
 import * as ImagePicker from "expo-image-picker";
-import SelectDropdown from "react-native-select-dropdown";
 import axios from "axios";
 import { Space } from "../../components/atoms";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { Picker } from "@react-native-picker/picker";
+import mime from "mime";
 
 const windowWidth = Dimensions.get("window").width;
-const countries = ["Egypt", "Canada", "Australia", "Ireland"];
 const CreateNewDish = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
-  const [cartegoryId, setCartegoryId] = useState();
-  const uploadImage = async () => {};
-
-  const captureImage = async () => {};
+  const [cartegoryId, setCartegoryId] = useState("");
+  const [image, setImage] = useState(null);
+  const [imgUrl, setImageUrl] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [tax, setTax] = useState("");
+  const [price, setPrice] = useState("");
   const [cartegories, setCartegories] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState();
+  const [selectedLanguage, setSelectedLanguage] = useState();
+
+  const handleMessage = (message, type = "FAILED") => {
+    setMessage(message);
+    setMessageType(type);
+  };
 
   useEffect(() => {
     let isCancelled = false;
@@ -50,26 +61,152 @@ const CreateNewDish = () => {
     };
   }, []);
 
-  const onFinish = ({ name, description, price }) => {
-    axios
+  const uploadImage = async () => {
+    setMessage("");
+    setLoading(true);
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.cancelled) {
+      setImage(result.uri);
+      //setImageType(result.type);
+      var uuri = result.uri;
+      var utype = result.type;
+      const newImageUri = "file:///" + uuri.split("file:/").join("");
+
+      const formData = new FormData();
+
+      formData.append("files", {
+        uri: newImageUri,
+        type: mime.getType(newImageUri),
+        name: newImageUri.split("/").pop(),
+      });
+
+      axios
+        .post("http://localhost:1337/api/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          const [
+            {
+              formats: {
+                medium: { url },
+              },
+            },
+          ] = res.data;
+          var imageId = url;
+          setImageUrl(imageId);
+          setLoading(false);
+        })
+        .catch((error) => {
+          setLoading(false);
+
+          console.log(error);
+        });
+    }
+  };
+  const captureImage = async () => {
+    setLoading(true);
+    setMessage("");
+    console.log(uid);
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.cancelled) {
+      // setImageUri(result.uri);
+      //setImageType(result.type);
+      var uuri = result.uri;
+      var utype = result.type;
+      const newImageUri = "file:///" + uuri.split("file:/").join("");
+
+      const formData = new FormData();
+
+      formData.append("files", {
+        uri: newImageUri,
+        type: mime.getType(newImageUri),
+        name: newImageUri.split("/").pop(),
+      });
+
+      axios
+        .post("http://localhost:1337/api/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          const [
+            {
+              formats: {
+                medium: { url },
+              },
+            },
+          ] = res.data;
+          var imageId = url;
+          setImageUrl(imageId);
+          setLoading(false);
+        })
+        .catch((error) => {
+          setLoading(false);
+          console.log("2" + error);
+        });
+    }
+  };
+
+  const isFormValid = () => {
+    if (
+      cartegoryId === "" ||
+      imgUrl === "" ||
+      name === "" ||
+      description === "" ||
+      tax === "" ||
+      price === ""
+    ) {
+      setMessage(() => <Text>All fields are required!</Text>);
+      setLoading(false);
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async () => {
+    if (!isFormValid()) {
+      return;
+    }
+    setLoading(true);
+    setMessage("");
+
+    await axios
       .post("http://localhost:1337/api/dishes", {
         data: {
-          amount: 1,
           name: name,
           description: description,
           price: price,
-          image: imurl,
+          image: imgUrl,
           itemQuantity: 10000,
           restaurants: cartegoryId,
+          dishVisibility: true,
+          Tax: tax,
         },
       })
-      .then(function (response) {
-        console.log(response);
+      .then((res) => {
+        setLoading(false);
       })
-      .catch(function (error) {
-        console.log(error);
+      .catch((error) => {
+        setLoading(false);
       });
   };
+
   return (
     <View
       style={{
@@ -87,50 +224,46 @@ const CreateNewDish = () => {
       >
         <View style={{ justifyContent: "space-evenly" }}>
           <View style={{ width: windowWidth / 3 }}>
-            <Input placeholder="Item Name" secureTextEntry={true} />
-          </View>
-          <View style={{ width: windowWidth / 3 }}>
-            <Input placeholder="Item Description" secureTextEntry={true} />
-          </View>
-          <View style={{ width: windowWidth / 3 }}>
-            <Input placeholder="Item Price" secureTextEntry={true} />
-          </View>
-          <View style={{ width: windowWidth / 3 }}>
-            <SelectDropdown
-              data={cartegories}
-              // defaultValueByIndex={1}
-              // defaultValue={'Egypt'}
-              onSelect={(selectedItem, index) => {
-                setCartegoryId(selectedItem.id);
-              }}
-              defaultButtonText={"Select cartegory"}
-              buttonTextAfterSelection={(selectedItem, index) => {
-                return selectedItem.attributes.name;
-              }}
-              rowTextForSelection={(item, index) => {
-                return item.attributes.name;
-              }}
-              buttonStyle={styles.dropdown1BtnStyle}
-              buttonTextStyle={styles.dropdown1BtnTxtStyle}
-              renderDropdownIcon={(isOpened) => {
-                return (
-                  <FontAwesome
-                    name={isOpened ? "chevron-up" : "chevron-down"}
-                    color={"#444"}
-                    size={18}
-                  />
-                );
-              }}
-              dropdownIconPosition={"right"}
-              dropdownStyle={styles.dropdown1DropdownStyle}
-              rowStyle={styles.dropdown1RowStyle}
-              rowTextStyle={styles.dropdown1RowTxtStyle}
+            <Input
+              placeholder="Item Name"
+              secureTextEntry={true}
+              onChangeText={(text) => setName(text)}
             />
+          </View>
+          <View style={{ width: windowWidth / 3 }}>
+            <Input
+              placeholder="Item Description"
+              secureTextEntry={true}
+              onChangeText={(text) => setDescription(text)}
+            />
+          </View>
+          <View style={{ width: windowWidth / 3 }}>
+            <Input
+              placeholder="Item Price"
+              secureTextEntry={true}
+              onChangeText={(text) => setPrice(text)}
+            />
+          </View>
+          <View style={{ width: windowWidth / 3 }}>
+            <Picker
+              selectedValue={selectedLanguage}
+              onValueChange={(itemValue, itemIndex) =>
+                setCartegoryId(itemValue.id)
+              }
+            >
+              {cartegories?.map((i) => (
+                <Picker.Item key={i.id} label={i.attributes.name} value={i} />
+              ))}
+            </Picker>
           </View>
         </View>
         <View style={{ justifyContent: "space-evenly" }}>
           <View style={{ width: windowWidth / 3 }}>
-            <Input placeholder="Tax" secureTextEntry={true} />
+            <Input
+              placeholder="Tax"
+              secureTextEntry={true}
+              onChangeText={(text) => setTax(text)}
+            />
           </View>
           <View
             style={{
@@ -142,7 +275,7 @@ const CreateNewDish = () => {
             <ImageBackground
               source={{
                 //  uri: `${userData.image}`,
-                uri: `https://images.unsplash.com/photo-1654476728696-8344dfc78585?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60`,
+                uri: image,
               }}
               style={styles.avatar}
             >
@@ -180,7 +313,12 @@ const CreateNewDish = () => {
           justifyContent: "center",
         }}
       >
+        <Text style={{ textAlign: "center", fontSize: 13, color: "#EF4444" }}>
+          {message}
+        </Text>
         <Button
+          onPress={() => handleSubmit()}
+          loading={loading}
           title="Submit"
           buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}
           containerStyle={{
@@ -252,19 +390,4 @@ const styles = StyleSheet.create({
     height: 180,
     backgroundColor: "grey",
   },
-  dropdown1BtnStyle: {
-    width: windowWidth / 3,
-    height: 50,
-    //backgroundColor: "#FFF",
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#444",
-  },
-  dropdown1BtnTxtStyle: { color: "#444", textAlign: "left" },
-  dropdown1DropdownStyle: { backgroundColor: "#EFEFEF" },
-  dropdown1RowStyle: {
-    backgroundColor: "#EFEFEF",
-    borderBottomColor: "#C5C5C5",
-  },
-  dropdown1RowTxtStyle: { color: "#444", textAlign: "left" },
 });

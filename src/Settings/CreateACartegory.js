@@ -11,6 +11,7 @@ import { Input, Icon } from "@rneui/themed";
 import { Button } from "@rneui/base";
 import { IconText, ModalBottom } from "../../components";
 import * as ImagePicker from "expo-image-picker";
+import mime from "mime";
 
 import axios from "axios";
 import { Space } from "../../components/atoms";
@@ -18,23 +19,168 @@ const windowWidth = Dimensions.get("window").width;
 
 const CreateACartegory = () => {
   const [isModalVisible, setModalVisible] = useState(false);
+  const [imgUrl, setImageUrl] = useState("");
+  const [image, setImage] = useState(null);
+  const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState();
+
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
-  const uploadImage = async () => {};
+  const uploadImage = async () => {
+    setLoading(true);
+    setMessage("");
 
-  const captureImage = async () => {};
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.cancelled) {
+      setImage(result.uri);
+      //setImageType(result.type);
+      var uuri = result.uri;
+      var utype = result.type;
+      const newImageUri = "file:///" + uuri.split("file:/").join("");
+
+      const formData = new FormData();
+
+      formData.append("files", {
+        uri: newImageUri,
+        type: mime.getType(newImageUri),
+        name: newImageUri.split("/").pop(),
+      });
+
+      axios
+        .post("http://localhost:1337/api/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          setLoading(false);
+
+          const [
+            {
+              formats: {
+                medium: { url },
+              },
+            },
+          ] = res.data;
+          var imageId = url;
+          setImageUrl(imageId);
+        })
+        .catch((error) => {
+          setLoading(false);
+
+          console.log(error);
+        });
+    }
+  };
+  const captureImage = async () => {
+    setLoading(true);
+    setMessage("");
+
+    console.log(uid);
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.cancelled) {
+      // setImageUri(result.uri);
+      //setImageType(result.type);
+      var uuri = result.uri;
+      var utype = result.type;
+      const newImageUri = "file:///" + uuri.split("file:/").join("");
+
+      const formData = new FormData();
+
+      formData.append("files", {
+        uri: newImageUri,
+        type: mime.getType(newImageUri),
+        name: newImageUri.split("/").pop(),
+      });
+
+      axios
+        .post("http://localhost:1337/api/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          setLoading(false);
+
+          const [
+            {
+              formats: {
+                medium: { url },
+              },
+            },
+          ] = res.data;
+          var imageId = url;
+          setImageUrl(imageId);
+        })
+        .catch((error) => {
+          setLoading(false);
+
+          console.log("2" + error);
+        });
+    }
+  };
+  const isFormValid = () => {
+    if (imgUrl === "" || name === "") {
+      setMessage(() => <Text>All fields are required!</Text>);
+      setLoading(false);
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async () => {
+    if (!isFormValid()) {
+      return;
+    }
+    setMessage("");
+    setLoading(true);
+
+    await axios
+      .post("http://localhost:1337/api/restaurants", {
+        data: {
+          name: name,
+
+          image: imgUrl,
+        },
+      })
+      .then((res) => {
+        setLoading(false);
+        console.log(res.data);
+      })
+      .catch((error) => {
+        setLoading(false);
+      });
+  };
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <View style={{ width: windowWidth / 3 }}>
-        <Input placeholder="Name a Cartegory" secureTextEntry={true} />
+        <Input
+          placeholder="Name a Cartegory"
+          secureTextEntry={true}
+          onChangeText={(text) => setName(text)}
+        />
       </View>
       <Space height={30} />
 
       <ImageBackground
         source={{
-          //  uri: `${userData.image}`,
-          uri: `https://images.unsplash.com/photo-1654476728696-8344dfc78585?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60`,
+          uri: image,
         }}
         style={styles.avatar}
       >
@@ -62,7 +208,12 @@ const CreateACartegory = () => {
         </TouchableOpacity>
       </ImageBackground>
       <Space height={30} />
+      <Text style={{ textAlign: "center", fontSize: 13, color: "#EF4444" }}>
+        {message}
+      </Text>
       <Button
+        onPress={() => handleSubmit()}
+        loading={loading}
         title="Submit"
         buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}
         containerStyle={{
