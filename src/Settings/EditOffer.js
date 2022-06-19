@@ -5,35 +5,43 @@ import {
   View,
   Text,
   Dimensions,
+  Modal,
+  Pressable,
 } from "react-native";
+import { gql, useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
-import { Input } from "@rneui/themed";
+import { ButtonGroup, Input } from "@rneui/themed";
 import { Button } from "@rneui/base";
 import { IconText, ModalBottom } from "../../components";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
-import { Space } from "../../components/atoms";
+import { Border, Space } from "../../components/atoms";
 import { Picker } from "@react-native-picker/picker";
+import { Feather } from "@expo/vector-icons";
 import mime from "mime";
 import { showMessage } from "react-native-flash-message";
+import { colors } from "../../config";
 
+const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
-const CreateNewOffer = () => {
+const EditOffer = ({ route }) => {
+  const { Pname, Pprice, Pimage, Ptax, dId, Pdescription } = route.params;
+
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
   const [image, setImage] = useState(null);
   const [imgUrl, setImageUrl] = useState("");
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [name, setName] = useState(Pname);
+  const [description, setDescription] = useState(Pdescription);
   const [tax, setTax] = useState("");
-  const [price, setPrice] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [price, setPrice] = useState(Pprice);
+  const [loading2, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState();
-  const [selectedLanguage, setSelectedLanguage] = useState();
 
+  const angile = JSON.stringify(Pprice);
   const handleMessage = (message, type = "FAILED") => {
     setMessage(message);
     setMessageType(type);
@@ -94,7 +102,6 @@ const CreateNewOffer = () => {
   const captureImage = async () => {
     setLoading(true);
     setMessage("");
-    console.log(uid);
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -160,6 +167,8 @@ const CreateNewOffer = () => {
     return true;
   };
 
+  var id = dId;
+
   const handleSubmit = async () => {
     if (!isFormValid()) {
       return;
@@ -168,13 +177,14 @@ const CreateNewOffer = () => {
     setMessage("");
 
     await axios
-      .post("http://localhost:1337/api/special-offers", {
+      .put(`http://localhost:1337/api/special-offers/${dId}`, {
         data: {
           name: name,
           description: description,
           price: price,
           image: imgUrl,
           itemQuantity: 10000,
+          restaurants: id.id,
           dishVisibility: true,
           Tax: tax,
         },
@@ -195,7 +205,7 @@ const CreateNewOffer = () => {
       .catch((error) => {
         setLoading(false);
         showMessage({
-          message: "Update failed, try again.",
+          message: "Edit failed, try again.",
           // description: "All fields are required",
           type: "warning",
           backgroundColor: "orange",
@@ -226,25 +236,34 @@ const CreateNewOffer = () => {
           <View style={{ width: windowWidth / 3 }}>
             <Input
               placeholder="Item Name"
+              defaultValue={Pname}
               onChangeText={(text) => setName(text)}
             />
           </View>
           <View style={{ width: windowWidth / 3 }}>
             <Input
               placeholder="Item Description"
+              defaultValue={Pdescription}
               onChangeText={(text) => setDescription(text)}
             />
           </View>
           <View style={{ width: windowWidth / 3 }}>
             <Input
+              keyboardType="number-pad"
               placeholder="Item Price"
+              defaultValue={angile}
               onChangeText={(text) => setPrice(text)}
             />
           </View>
         </View>
         <View style={{ justifyContent: "space-evenly" }}>
           <View style={{ width: windowWidth / 3 }}>
-            <Input placeholder="Tax" onChangeText={(text) => setTax(text)} />
+            <Input
+              keyboardType="number-pad"
+              placeholder="Tax"
+              onChangeText={(text) => setTax(text)}
+              defaultValue={Ptax}
+            />
           </View>
           <View
             style={{
@@ -297,7 +316,7 @@ const CreateNewOffer = () => {
         </Text>
         <Button
           onPress={() => handleSubmit()}
-          loading={loading}
+          loading={loading2}
           title="Submit"
           buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}
           containerStyle={{
@@ -332,7 +351,7 @@ const CreateNewOffer = () => {
   );
 };
 
-export default CreateNewOffer;
+export default EditOffer;
 
 const styles = StyleSheet.create({
   item: {
@@ -345,5 +364,28 @@ const styles = StyleSheet.create({
     width: 180,
     height: 180,
     backgroundColor: "grey",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    // marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    // alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    height: "60%",
+    width: windowWidth / 2,
   },
 });

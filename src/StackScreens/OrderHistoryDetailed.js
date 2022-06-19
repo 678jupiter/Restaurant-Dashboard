@@ -1,6 +1,7 @@
 import React from "react";
-import { View, ScrollView, StyleSheet, Image } from "react-native";
-import { Text, Card, Button, Icon } from "@rneui/themed";
+import { View, ScrollView, Pressable, StyleSheet, Image } from "react-native";
+import { Text, Card, Button, Icon, ListItem } from "@rneui/themed";
+import { Ionicons } from "@expo/vector-icons";
 
 const OrderHistoryDetailed = ({ route }) => {
   const {
@@ -11,14 +12,64 @@ const OrderHistoryDetailed = ({ route }) => {
     dishes,
     mpesaReceiptNumber,
     status,
+    createdAt,
     userName,
     Oid,
+    orderNumber,
     totalPaid,
     shipping,
   } = route.params;
   console.log(dishes);
   return (
     <View style={{ flex: 1 }}>
+      <View>
+        <ListItem bottomDivider>
+          <ListItem.Content>
+            <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+              {userName}
+            </ListItem.Title>
+            <ListItem.Subtitle>{orderNumber}</ListItem.Subtitle>
+          </ListItem.Content>
+          <Pressable onPress={() => navigation.navigate("chartList")}>
+            <Icon
+              name="chat"
+              color="black"
+              size={32}
+              style={{ marginRight: 10, padding: 6 }}
+            />
+          </Pressable>
+          <Pressable
+            onPress={() =>
+              call({ number: `${customermobilenumber}`, prompt: false })
+            }
+          >
+            <Ionicons
+              name="call-outline"
+              size={28}
+              color="black"
+              style={{ marginRight: 10, padding: 6 }}
+            />
+          </Pressable>
+
+          <Text style={{ fontFamily: "MontserratSemiBold" }}>
+            {customermobilenumber}
+          </Text>
+          <ListItem.Content>
+            <View
+              style={{
+                alignSelf: "flex-end",
+              }}
+            >
+              <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+                {createdAt}
+              </ListItem.Title>
+              <ListItem.Subtitle style={{ fontFamily: "MontserratSemiBold" }}>
+                {address}
+              </ListItem.Subtitle>
+            </View>
+          </ListItem.Content>
+        </ListItem>
+      </View>
       <View style={{ flex: 0.3 }}>
         <Card>
           {dishes?.map((l, i) => (

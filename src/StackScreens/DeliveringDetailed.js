@@ -38,7 +38,7 @@ const DeliveringDetailed = ({ route, navigation }) => {
   useEffect(() => {
     let isCancelled = false;
     const hookup = async () => {
-      const input = "nico_room";
+      const input = orderId;
       socket.emit("enter_room", input, showRoom);
     };
     hookup();

@@ -36,6 +36,7 @@ import DeliveringDetailed from "../StackScreens/DeliveringDetailed";
 import EditDish from "../Settings/EditDish";
 import EditCartegory from "../Settings/EditCartegory";
 import OrderHistoryDetailed from "../StackScreens/OrderHistoryDetailed";
+import EditOffer from "../Settings/EditOffer";
 
 function DrawerNav({ navigation }) {
   const windowWidth = Dimensions.get("window").width;
@@ -400,6 +401,14 @@ export default function StackNav() {
               options={{
                 animationTypeForReplace: "pop",
                 title: "New Special Offer",
+              }}
+            />
+            <Stack.Screen
+              name="editOffer"
+              component={EditOffer}
+              options={{
+                animationTypeForReplace: "pop",
+                title: "Edit",
               }}
             />
             <Stack.Screen

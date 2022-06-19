@@ -1,61 +1,270 @@
-import { StyleSheet, View } from "react-native";
-import React, { useState } from "react";
-import { ListItem, Avatar } from "@rneui/themed";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  Touchable,
+  View,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import { ListItem, Avatar, SearchBar } from "@rneui/themed";
 import { Switch } from "@rneui/themed";
+import { Ionicons } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchItems } from "../Redux/itemsActions";
+import { BASEURL } from "../config";
+import axios from "axios";
 
-const list = [
-  {
-    name: "Amy Farha",
-    avatar_url:
-      "https://images.unsplash.com/photo-1598532213919-078e54dd1f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZGlzaHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-    subtitle: "Vice President",
-  },
-  {
-    name: "Chris Jackson",
-    avatar_url:
-      "https://images.unsplash.com/photo-1571805341302-f857308690e3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8ZGlzaHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
-    subtitle: "Vice Chairman",
-  },
-];
-
-const SpecialOffers = () => {
-  const [checked, setChecked] = useState(false);
-  const SwitchComponent = () => {
-    const [checked, setChecked] = useState(false);
-
-    const toggleSwitch = () => {
-      setChecked(!checked);
+const SpecialOffers = ({ navigation }) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    let isCancelled = false;
+    dispatch(fetchItems());
+    return () => {
+      isCancelled = true;
     };
+  }, [dispatch]);
+
+  const itemsList = useSelector((state) => state.items.restaurantDishes);
+  //console.log(itemsList);
+  const [search, setSearch] = useState("");
+  const [filteredDataSource, setFilteredDataSource] = useState();
+  const [masterDataSource, setMasterDataSource] = useState();
+  const [selected, SetSelected] = useState();
+  const uri = `http://localhost:1337/api/special-offers/?populate=*`;
+  const result = async () => {
+    await axios
+      .get(uri)
+      .then(function (res) {
+        // handle success
+
+        setFilteredDataSource(res.data);
+        setMasterDataSource(res.data);
+      })
+      .catch(function (error) {
+        // handle error
+        errorHandle13();
+        function errorHandle13() {
+          var about =
+            "Dish Search Screen!" +
+            "/" +
+            "/api/dishes/?populate=*" +
+            "/" +
+            error;
+          appErrors(about);
+        }
+      })
+      .then(function () {
+        // always executed
+      });
+  };
+  useEffect(() => {
+    let isCancelled = false;
+
+    result();
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
+
+  const searchFilterFunction = (text) => {
+    // Check if searched text is not blank
+    if (text) {
+      // Inserted text is not blank
+      // Filter the masterDataSource
+      // Update FilteredDataSource
+      const newData = masterDataSource?.data?.filter(function (dish) {
+        const itemData = dish.attributes.name
+          ? dish.attributes.name.toUpperCase()
+          : "".toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredDataSource(newData);
+      SetSelected(newData);
+      setSearch(text);
+    } else {
+      // Inserted text is blank
+      // Update FilteredDataSource with masterDataSource
+      setFilteredDataSource(masterDataSource);
+      setSearch(text);
+    }
   };
 
-  return (
-    <View style={{ paddingTop: 20 }}>
-      <View>
-        {list.map((l, i) => (
-          <ListItem key={i} bottomDivider>
-            <Avatar source={{ uri: l.avatar_url }} />
-            <ListItem.Content>
-              <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
-                {l.name}
-              </ListItem.Title>
-              <ListItem.Subtitle>{l.subtitle}</ListItem.Subtitle>
-            </ListItem.Content>
-            <Switch
-              value={checked}
-              onValueChange={(value) => setChecked(value)}
-            />
-          </ListItem>
-        ))}
+  if (itemsList.length === 0) {
+    return (
+      <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
+        <ActivityIndicator size="large" color={colors.colors} />
       </View>
-    </View>
-  );
+    );
+  }
+
+  if (itemsList.length !== 0) {
+    return (
+      <View>
+        <SearchBar
+          onChangeText={(text) => searchFilterFunction(text)}
+          onClear={(text) => searchFilterFunction("")}
+          placeholder="Search Here..."
+          value={search}
+          containerStyle={{
+            backgroundColor: "#fff",
+            borderBottomColor: "transparent",
+            borderTopColor: "transparent",
+          }}
+          inputContainerStyle={{ backgroundColor: "#F5F5F5" }}
+          lightTheme={true}
+        />
+        <ScrollView>
+          {filteredDataSource?.data?.map((l, i) => (
+            <ListItem
+              key={i}
+              bottomDivider
+              onPress={() =>
+                navigation.navigate("editOffer", {
+                  Pname: l.attributes.name,
+                  Pdescription: l.attributes.description,
+                  Pprice: l.attributes.price,
+                  Pimage: l.attributes.image,
+                  Ptax: l.attributes.Tax,
+                  dId: l.id,
+                })
+              }
+            >
+              <Avatar source={{ uri: `${BASEURL}${l.attributes.image}` }} />
+              <ListItem.Content>
+                <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+                  {l.attributes.name}
+                </ListItem.Title>
+                <ListItem.Subtitle>
+                  {l.attributes.description}
+                </ListItem.Subtitle>
+              </ListItem.Content>
+              {l.attributes.dishVisibility === false ? (
+                <Switch
+                  value={l.attributes.dishVisibility}
+                  onValueChange={() => {
+                    axios
+                      .put(`http://localhost:1337/api/special-offers/${l.id}`, {
+                        ///api/special-offers/:id
+                        data: {
+                          dishVisibility: true,
+                        },
+                      })
+                      .then(function (response) {
+                        result();
+                      })
+                      .catch(function (error) {
+                        console.log(error);
+                      });
+                  }}
+                />
+              ) : (
+                <Switch
+                  value={l.attributes.dishVisibility}
+                  onValueChange={() => {
+                    axios
+                      .put(`http://localhost:1337/api/special-offers/${l.id}`, {
+                        data: {
+                          dishVisibility: false,
+                        },
+                      })
+                      .then(function (response) {
+                        result();
+                      })
+                      .catch(function (error) {
+                        console.log(error);
+                      });
+                  }}
+                />
+              )}
+            </ListItem>
+          ))}
+        </ScrollView>
+        <ScrollView>
+          {selected?.map((l, i) => (
+            <ListItem
+              key={i}
+              bottomDivider
+              onPress={() =>
+                navigation.navigate("editOffer", {
+                  Pname: l.attributes.name,
+                  Pdescription: l.attributes.description,
+                  Pprice: l.attributes.price,
+                  Pimage: l.attributes.image,
+                  Ptax: l.attributes.Tax,
+                  dId: l.id,
+                })
+              }
+            >
+              <Avatar source={{ uri: `${BASEURL}${l.attributes.image}` }} />
+              <ListItem.Content>
+                <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+                  {l.attributes.name}
+                </ListItem.Title>
+                <ListItem.Subtitle>
+                  {l.attributes.description}
+                </ListItem.Subtitle>
+              </ListItem.Content>
+              {l.attributes.dishVisibility === false ? (
+                <Switch
+                  value={l.attributes.dishVisibility}
+                  onValueChange={() => {
+                    axios
+                      .put(`http://localhost:1337/api/dishes/${l.id}`, {
+                        data: {
+                          dishVisibility: true,
+                        },
+                      })
+                      .then(function (response) {
+                        dispatch(fetchItems());
+                      })
+                      .catch(function (error) {
+                        console.log(error);
+                      });
+                  }}
+                />
+              ) : (
+                <Switch
+                  value={l.attributes.dishVisibility}
+                  onValueChange={() => {
+                    axios
+                      .put(`http://localhost:1337/api/dishes/${l.id}`, {
+                        data: {
+                          dishVisibility: false,
+                        },
+                      })
+                      .then(function (response) {
+                        dispatch(fetchItems());
+                      })
+                      .catch(function (error) {
+                        console.log(error);
+                      });
+                  }}
+                />
+              )}
+            </ListItem>
+          ))}
+        </ScrollView>
+      </View>
+    );
+  } else {
+    return (
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+          backgroundColor: "rgba(39, 39, 39, 1)",
+          paddingTop: 20,
+        }}
+      >
+        <Text style={{ color: "white", fontSize: 40 }}>No Items.</Text>
+      </View>
+    );
+  }
 };
 
 export default SpecialOffers;
 
-const styles = StyleSheet.create({
-  iconBackContainer: {
-    // backgroundColor: "red",
-    left: -10,
-  },
-});
+const styles = StyleSheet.create({});

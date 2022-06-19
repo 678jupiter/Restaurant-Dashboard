@@ -1,14 +1,12 @@
-# View Detailed order History
-
 # Setting
 
 # Arriving Courier
 
 # Token Authorization to make requests
 
-# Special Offers
+# Special Offers done but do some testings
 
-# Connect Delivering
+# Decline
 
 Day 2
 
