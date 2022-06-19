@@ -35,7 +35,9 @@ const SpecialOffers = () => {
           <ListItem key={i} bottomDivider>
             <Avatar source={{ uri: l.avatar_url }} />
             <ListItem.Content>
-              <ListItem.Title>{l.name}</ListItem.Title>
+              <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+                {l.name}
+              </ListItem.Title>
               <ListItem.Subtitle>{l.subtitle}</ListItem.Subtitle>
             </ListItem.Content>
             <Switch

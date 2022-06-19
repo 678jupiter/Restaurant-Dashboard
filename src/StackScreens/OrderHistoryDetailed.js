@@ -33,16 +33,26 @@ const OrderHistoryDetailed = ({ route }) => {
                   marginBottom: 10,
                 }}
               >
-                <Text style={{ width: "50%" }}>{l.name}</Text>
-                <Text style={{ width: "10%" }}>
+                <Text
+                  style={{ width: "50%", fontFamily: "MontserratSemiBold" }}
+                >
+                  {l.name}
+                </Text>
+                <Text
+                  style={{ width: "10%", fontFamily: "MontserratSemiBold" }}
+                >
                   KES {""}
                   {l.price}
                 </Text>
-                <Text style={{ width: "10%" }}>
+                <Text
+                  style={{ width: "10%", fontFamily: "MontserratSemiBold" }}
+                >
                   X {""}
                   {l.quantity}
                 </Text>
-                <Text style={{ width: "10%" }}>
+                <Text
+                  style={{ width: "10%", fontFamily: "MontserratSemiBold" }}
+                >
                   KES {""}
                   {l.price * l.quantity}
                 </Text>
@@ -57,20 +67,26 @@ const OrderHistoryDetailed = ({ route }) => {
         <Card>
           <View style={{ height: "100%" }}>
             <View>
-              <Text>Paid</Text>
+              <Text style={{ fontFamily: "MontserratSemiBold", fontSize: 25 }}>
+                Paid
+              </Text>
             </View>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
-              <Text>Subtotal</Text>
+              <Text style={{ fontFamily: "MontserratSemiBold" }}>Subtotal</Text>
 
-              <Text>KSH 392929</Text>
+              <Text style={{ fontFamily: "MontserratSemiBold" }}>
+                KSH 392929
+              </Text>
             </View>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
-              <Text>Shipping</Text>
-              <Text>KSH {shipping}</Text>
+              <Text style={{ fontFamily: "MontserratSemiBold" }}>Shipping</Text>
+              <Text style={{ fontFamily: "MontserratSemiBold" }}>
+                KSH {shipping}
+              </Text>
             </View>
             <View
               style={{
@@ -78,15 +94,19 @@ const OrderHistoryDetailed = ({ route }) => {
                 justifyContent: "space-between",
               }}
             >
-              <Text>Total</Text>
-              <Text>KSH 2000</Text>
+              <Text style={{ fontFamily: "MontserratSemiBold" }}>Total</Text>
+              <Text style={{ fontFamily: "MontserratSemiBold" }}>KSH 2000</Text>
             </View>
             <Card.Divider />
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
-              <Text>Paid by Customer</Text>
-              <Text>KES {totalPaid}</Text>
+              <Text style={{ fontFamily: "MontserratSemiBold" }}>
+                Paid by Customer
+              </Text>
+              <Text style={{ fontFamily: "MontserratSemiBold" }}>
+                KES {totalPaid}
+              </Text>
             </View>
           </View>
         </Card>

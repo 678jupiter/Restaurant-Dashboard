@@ -93,7 +93,13 @@ const OrderHistoryScreen = ({ navigation }) => {
               name="done"
               style={{ backgroundColor: "green", borderRadius: 10 }}
             /> */}
-            <ListItem.Title style={{ marginRight: 20, width: windowWidth / 7 }}>
+            <ListItem.Title
+              style={{
+                marginRight: 20,
+                fontFamily: "MontserratSemiBold",
+                width: windowWidth / 7,
+              }}
+            >
               {item.attributes.status}
             </ListItem.Title>
             <ListItem.Content
@@ -103,14 +109,24 @@ const OrderHistoryScreen = ({ navigation }) => {
                 flexDirection: "row",
               }}
             >
-              <ListItem.Title style={{ width: windowWidth / 4 }}>
+              <ListItem.Title
+                style={{
+                  width: windowWidth / 4,
+                  fontFamily: "MontserratSemiBold",
+                }}
+              >
                 {item.attributes.mpesaReceiptNumber}
               </ListItem.Title>
 
-              <ListItem.Title style={{ width: windowWidth / 4 }}>
+              <ListItem.Title
+                style={{
+                  width: windowWidth / 4,
+                  fontFamily: "MontserratSemiBold",
+                }}
+              >
                 {item.attributes.userName}
               </ListItem.Title>
-              <ListItem.Title>
+              <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
                 Ksh {""}
                 items.
               </ListItem.Title>

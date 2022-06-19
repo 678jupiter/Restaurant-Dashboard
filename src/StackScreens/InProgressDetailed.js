@@ -120,7 +120,9 @@ const InProgressDetailed = ({ navigation, route }) => {
       <View>
         <ListItem bottomDivider>
           <ListItem.Content>
-            <ListItem.Title>{username}</ListItem.Title>
+            <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+              {username}
+            </ListItem.Title>
             <ListItem.Subtitle>{orderNumber}</ListItem.Subtitle>
           </ListItem.Content>
           <Pressable onPress={() => navigation.navigate("chartList")}>
@@ -144,15 +146,21 @@ const InProgressDetailed = ({ navigation, route }) => {
             />
           </Pressable>
 
-          <Text>{customermobilenumber}</Text>
+          <Text style={{ fontFamily: "MontserratSemiBold" }}>
+            {customermobilenumber}
+          </Text>
           <ListItem.Content>
             <View
               style={{
                 alignSelf: "flex-end",
               }}
             >
-              <ListItem.Title>{createdAt}</ListItem.Title>
-              <ListItem.Subtitle>{address}</ListItem.Subtitle>
+              <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+                {createdAt}
+              </ListItem.Title>
+              <ListItem.Subtitle style={{ fontFamily: "MontserratSemiBold" }}>
+                {address}
+              </ListItem.Subtitle>
             </View>
           </ListItem.Content>
         </ListItem>
@@ -162,8 +170,12 @@ const InProgressDetailed = ({ navigation, route }) => {
           <Card key={i}>
             <ListItem.Content key={i} style={{}}>
               <View style={{ flexDirection: "row" }}>
-                <ListItem.Title>{item.name}</ListItem.Title>
-                <ListItem.Subtitle style={{ marginLeft: 30 }}>
+                <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+                  {item.name}
+                </ListItem.Title>
+                <ListItem.Subtitle
+                  style={{ marginLeft: 30, fontFamily: "MontserratSemiBold" }}
+                >
                   x {item.quantity}
                 </ListItem.Subtitle>
               </View>
@@ -180,15 +192,33 @@ const InProgressDetailed = ({ navigation, route }) => {
                     width: "100%",
                   }}
                 >
-                  <Text style={{ marginRight: 50 }}>Subtotal</Text>
-                  <ListItem.Title>
+                  <Text
+                    style={{
+                      marginRight: 50,
+                      fontFamily: "MontserratSemiBold",
+                    }}
+                  >
+                    Subtotal
+                  </Text>
+                  <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
                     Ksh {""}
                     {item.price * item.quantity}
                   </ListItem.Title>
                 </View>
-                <View style={{ flexDirection: "row" }}>
-                  <Text style={{ marginRight: 82 }}>Tax</Text>
-                  <ListItem.Title>
+                <View
+                  style={{
+                    flexDirection: "row",
+                  }}
+                >
+                  <Text
+                    style={{
+                      marginRight: 82,
+                      fontFamily: "MontserratSemiBold",
+                    }}
+                  >
+                    Tax
+                  </Text>
+                  <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
                     Ksh {""}
                     tax
                     {/* {item.tax} */}
@@ -210,14 +240,18 @@ const InProgressDetailed = ({ navigation, route }) => {
               justifyContent: "space-between",
             }}
           >
-            <Text style={{}}> Shipping</Text>
-            <ListItem.Title>{shipping}</ListItem.Title>
+            <Text style={{ fontFamily: "MontserratSemiBold" }}> Shipping</Text>
+            <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+              {shipping}
+            </ListItem.Title>
           </View>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <Text style={{}}> Total</Text>
-            <ListItem.Title>{totalPaid}</ListItem.Title>
+            <Text style={{ fontFamily: "MontserratSemiBold" }}> Total</Text>
+            <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+              {totalPaid}
+            </ListItem.Title>
           </View>
         </Card>
       </View>

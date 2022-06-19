@@ -24,7 +24,9 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
       <View>
         <ListItem bottomDivider>
           <ListItem.Content>
-            <ListItem.Title>{userName}</ListItem.Title>
+            <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+              {userName}
+            </ListItem.Title>
             <ListItem.Subtitle>{orderNumber}</ListItem.Subtitle>
           </ListItem.Content>
           <Pressable onPress={() => navigation.navigate("chartList")}>
@@ -48,15 +50,21 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
             />
           </Pressable>
 
-          <Text>{customermobilenumber}</Text>
+          <Text style={{ fontFamily: "MontserratSemiBold" }}>
+            {customermobilenumber}
+          </Text>
           <ListItem.Content>
             <View
               style={{
                 alignSelf: "flex-end",
               }}
             >
-              <ListItem.Title>{createdAt}</ListItem.Title>
-              <ListItem.Subtitle>{address}</ListItem.Subtitle>
+              <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+                {createdAt}
+              </ListItem.Title>
+              <ListItem.Subtitle style={{ fontFamily: "MontserratSemiBold" }}>
+                {address}
+              </ListItem.Subtitle>
             </View>
           </ListItem.Content>
         </ListItem>
@@ -66,8 +74,12 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
           <Card key={i}>
             <ListItem.Content key={i} style={{}}>
               <View style={{ flexDirection: "row" }}>
-                <ListItem.Title>{item.name}</ListItem.Title>
-                <ListItem.Subtitle style={{ marginLeft: 30 }}>
+                <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+                  {item.name}
+                </ListItem.Title>
+                <ListItem.Subtitle
+                  style={{ marginLeft: 30, fontFamily: "MontserratSemiBold" }}
+                >
                   x {item.quantity}
                 </ListItem.Subtitle>
               </View>
@@ -84,15 +96,29 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
                     width: "100%",
                   }}
                 >
-                  <Text style={{ marginRight: 50 }}>Subtotal</Text>
-                  <ListItem.Title>
+                  <Text
+                    style={{
+                      marginRight: 50,
+                      fontFamily: "MontserratSemiBold",
+                    }}
+                  >
+                    Subtotal
+                  </Text>
+                  <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
                     Ksh {""}
                     {item.price * item.quantity}
                   </ListItem.Title>
                 </View>
                 <View style={{ flexDirection: "row" }}>
-                  <Text style={{ marginRight: 82 }}>Tax</Text>
-                  <ListItem.Title>
+                  <Text
+                    style={{
+                      marginRight: 82,
+                      fontFamily: "MontserratSemiBold",
+                    }}
+                  >
+                    Tax
+                  </Text>
+                  <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
                     Ksh {""}
                     tax
                     {/* {item.tax} */}
@@ -114,14 +140,18 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
               justifyContent: "space-between",
             }}
           >
-            <Text style={{}}> Shipping</Text>
-            <ListItem.Title>{shipping}</ListItem.Title>
+            <Text style={{ fontFamily: "MontserratSemiBold" }}> Shipping</Text>
+            <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+              {shipping}
+            </ListItem.Title>
           </View>
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
-            <Text style={{}}> Total</Text>
-            <ListItem.Title>{totalPaid}</ListItem.Title>
+            <Text style={{ fontFamily: "MontserratSemiBold" }}> Total</Text>
+            <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+              {totalPaid}
+            </ListItem.Title>
           </View>
         </Card>
       </View>
@@ -153,7 +183,7 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
                 style={{ marginRight: 10, padding: 10 }}
               />
             </Pressable>
-            <Text>{userName}</Text>
+            <Text style={{ fontFamily: "MontserratSemiBold" }}>{userName}</Text>
           </View>
         </View>
       </View>

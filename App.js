@@ -27,6 +27,8 @@ export default function App() {
     CircularStdBold: require("./assets/fonts/CircularStdBold.ttf"),
     CircularStdBook: require("./assets/fonts/CircularStdBook.ttf"),
     CircularStdMedium: require("./assets/fonts/CircularStdMedium.ttf"),
+    MontserratItalic: require("./assets/fonts/MontserratItalic.ttf"),
+    MontserratSemiBold: require("./assets/fonts/MontserratSemiBold.ttf"),
   });
   if (!loaded) {
     return null;

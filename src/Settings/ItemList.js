@@ -57,7 +57,9 @@ const ItemList = ({ navigation }) => {
             >
               <Avatar source={{ uri: `${BASEURL}${l.attributes.image}` }} />
               <ListItem.Content>
-                <ListItem.Title>{l.attributes.name}</ListItem.Title>
+                <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+                  {l.attributes.name}
+                </ListItem.Title>
                 <ListItem.Subtitle>
                   {l.attributes.description}
                 </ListItem.Subtitle>

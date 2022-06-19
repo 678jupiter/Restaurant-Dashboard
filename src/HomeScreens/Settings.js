@@ -40,7 +40,9 @@ const SettingScreen = ({ navigation }) => {
               backgroundColor: "#dcffee",
             }}
           >
-            <Card.Title> Items</Card.Title>
+            <Card.Title style={{ fontFamily: "MontserratSemiBold" }}>
+              Items
+            </Card.Title>
             <View
               style={{
                 position: "relative",
@@ -53,27 +55,6 @@ const SettingScreen = ({ navigation }) => {
           </Card>
         </TouchableOpacity>
 
-        {/* <TouchableOpacity onPress={() => navigation.navigate("createNewDish")}>
-          <Card
-            containerStyle={{
-              width: 150,
-              height: 150,
-              backgroundColor: "#dcffee",
-            }}
-          >
-            <Card.Title>Create Item</Card.Title>
-            <View
-              style={{
-                position: "relative",
-                alignItems: "center",
-                marginTop: 20,
-              }}
-            >
-              <Entypo name="add-to-list" size={42} color="black" />
-            </View>
-          </Card>
-        </TouchableOpacity> */}
-
         <TouchableOpacity onPress={() => navigation.navigate("cartegories")}>
           <Card
             containerStyle={{
@@ -82,7 +63,9 @@ const SettingScreen = ({ navigation }) => {
               backgroundColor: "#dcffee",
             }}
           >
-            <Card.Title>Cartegories</Card.Title>
+            <Card.Title style={{ fontFamily: "MontserratSemiBold" }}>
+              Cartegories
+            </Card.Title>
             <View
               style={{
                 position: "relative",
@@ -111,33 +94,14 @@ const SettingScreen = ({ navigation }) => {
               backgroundColor: "#dcffee",
             }}
           >
-            <Card.Title>Special Offers</Card.Title>
+            <Card.Title style={{ fontFamily: "MontserratSemiBold" }}>
+              Special Offers
+            </Card.Title>
             <View style={{ position: "relative", alignItems: "center" }}>
               <MaterialIcons name="local-offer" size={40} color="#5cb1ff" />
             </View>
           </Card>
         </TouchableOpacity>
-
-        {/* <TouchableOpacity onPress={() => navigation.navigate("help")}>
-          <Card
-            containerStyle={{
-              width: 150,
-              height: 150,
-              backgroundColor: "#dcffee",
-            }}
-          >
-            <Card.Title> Help</Card.Title>
-            <View
-              style={{
-                position: "relative",
-                alignItems: "center",
-                marginTop: 11,
-              }}
-            >
-              <Entypo name="help" size={42} color="black" />
-            </View>
-          </Card>
-        </TouchableOpacity> */}
 
         <TouchableOpacity onPress={() => navigation.navigate("settings")}>
           <Card
@@ -147,7 +111,9 @@ const SettingScreen = ({ navigation }) => {
               backgroundColor: "#dcffee",
             }}
           >
-            <Card.Title>Settings</Card.Title>
+            <Card.Title style={{ fontFamily: "MontserratSemiBold" }}>
+              Settings
+            </Card.Title>
             <View
               style={{
                 position: "relative",
