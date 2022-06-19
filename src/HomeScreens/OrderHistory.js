@@ -74,15 +74,16 @@ const OrderHistoryScreen = ({ navigation }) => {
             bottomDivider
             onPress={() =>
               navigation.navigate("orderHistory", {
-                address: item.attributes.address,
-                amount: item.attributes.amount,
-                customermobilenumber: item.attributes.customermobilenumber,
-                courierName: item.attributes.courierName,
+                userName: `${item.attributes.userName}`,
                 dishes: item.attributes.dishes,
-                mpesaReceiptNumber: item.attributes.mpesaReceiptNumber,
+                orderNumber: `${item.attributes.mpesaReceiptNumber}`,
+                orderId: item.id,
+                customermobilenumber: item.attributes.customermobilenumber,
+                shipping: item.attributes.shipping,
+                createdAt: item.attributes.createdAt,
+                address: item.attributes.address,
                 status: item.attributes.status,
-                userName: item.attributes.userName,
-                Oid: item.id,
+                totalPaid: item.attributes.totalPaid,
               })
             }
           >

@@ -67,6 +67,10 @@ const OrdersInProgress = ({ navigation }) => {
                     status: l.attributes.status,
                     cteatedAt: l.attributes.createdAt,
                     customermobilenumber: l.attributes.customermobilenumber,
+                    createdAt: l.attributes.createdAt,
+                    address: l.attributes.address,
+                    shipping: l.attributes.shipping,
+                    totalPaid: l.attributes.totalPaid,
                   })
                 }
               >

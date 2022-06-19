@@ -83,14 +83,16 @@ const ReadyForPickUp = ({ navigation }) => {
                   key={i}
                   onPress={() =>
                     navigation.navigate("readyForPickUpDetailed", {
-                      totalPaid: l.attributes.amount,
-                      createdAt: l.attributes.createdAt,
+                      userName: `${l.attributes.userName}`,
                       dish: l.attributes.dishes,
-                      orderNumber: l.attributes.mpesaReceiptNumber,
-                      status: l.attributes.status,
-                      userName: l.attributes.userName,
+                      orderNumber: `${l.attributes.mpesaReceiptNumber}`,
                       orderId: l.id,
                       customermobilenumber: l.attributes.customermobilenumber,
+                      shipping: l.attributes.shipping,
+                      createdAt: l.attributes.createdAt,
+                      address: l.attributes.address,
+                      status: l.attributes.status,
+                      totalPaid: l.attributes.totalPaid,
                     })
                   }
                   //onPress={() => console.log(l)}

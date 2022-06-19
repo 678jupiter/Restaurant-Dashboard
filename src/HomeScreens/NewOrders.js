@@ -65,6 +65,11 @@ const NewOrders = ({ navigation }) => {
                     orderNumber: `${l.attributes.mpesaReceiptNumber}`,
                     orderId: l.id,
                     customermobilenumber: l.attributes.customermobilenumber,
+                    shipping: l.attributes.shipping,
+                    createdAt: l.attributes.createdAt,
+                    address: l.attributes.address,
+                    status: l.attributes.status,
+                    totalPaid: l.attributes.totalPaid,
                   })
                 }
               >
