@@ -22,9 +22,8 @@ const OrderHistoryDetailed = ({ route }) => {
       <View style={{ flex: 0.3 }}>
         <Card>
           {dishes?.map((l, i) => (
-            <ScrollView>
+            <ScrollView key={i}>
               <View
-                key={i}
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-around",

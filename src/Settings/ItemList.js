@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { ListItem, Avatar } from "@rneui/themed";
+import { ListItem, Avatar, SearchBar } from "@rneui/themed";
 import { Switch } from "@rneui/themed";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +27,69 @@ const ItemList = ({ navigation }) => {
 
   const itemsList = useSelector((state) => state.items.restaurantDishes);
   //console.log(itemsList);
+  const [search, setSearch] = useState("");
+  const [filteredDataSource, setFilteredDataSource] = useState();
+  const [masterDataSource, setMasterDataSource] = useState();
+  const [selected, SetSelected] = useState();
+  const uri = `http://localhost:1337/api/dishes/?populate=*`;
+
+  useEffect(() => {
+    let isCancelled = false;
+    const result = async () => {
+      await axios
+        .get(uri)
+        .then(function (res) {
+          // handle success
+
+          setFilteredDataSource(res.data);
+          setMasterDataSource(res.data);
+        })
+        .catch(function (error) {
+          // handle error
+          errorHandle13();
+          function errorHandle13() {
+            var about =
+              "Dish Search Screen!" +
+              "/" +
+              "/api/dishes/?populate=*" +
+              "/" +
+              error;
+            appErrors(about);
+          }
+        })
+        .then(function () {
+          // always executed
+        });
+    };
+    result();
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
+
+  const searchFilterFunction = (text) => {
+    // Check if searched text is not blank
+    if (text) {
+      // Inserted text is not blank
+      // Filter the masterDataSource
+      // Update FilteredDataSource
+      const newData = masterDataSource?.data?.filter(function (dish) {
+        const itemData = dish.attributes.name
+          ? dish.attributes.name.toUpperCase()
+          : "".toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredDataSource(newData);
+      SetSelected(newData);
+      setSearch(text);
+    } else {
+      // Inserted text is blank
+      // Update FilteredDataSource with masterDataSource
+      setFilteredDataSource(masterDataSource);
+      setSearch(text);
+    }
+  };
 
   if (itemsList.length === 0) {
     return (
@@ -39,8 +102,86 @@ const ItemList = ({ navigation }) => {
   if (itemsList.length !== 0) {
     return (
       <View>
+        <SearchBar
+          onChangeText={(text) => searchFilterFunction(text)}
+          onClear={(text) => searchFilterFunction("")}
+          placeholder="Search Here..."
+          value={search}
+          containerStyle={{
+            backgroundColor: "#fff",
+            borderBottomColor: "transparent",
+            borderTopColor: "transparent",
+          }}
+          inputContainerStyle={{ backgroundColor: "#F5F5F5" }}
+          lightTheme={true}
+        />
         <ScrollView>
-          {itemsList?.data?.map((l, i) => (
+          {filteredDataSource?.data?.map((l, i) => (
+            <ListItem
+              key={i}
+              bottomDivider
+              onPress={() =>
+                navigation.navigate("editDish", {
+                  Pname: l.attributes.name,
+                  Pdescription: l.attributes.description,
+                  Pprice: l.attributes.price,
+                  Pimage: l.attributes.image,
+                  Ptax: l.attributes.Tax,
+                  dId: l.id,
+                })
+              }
+            >
+              <Avatar source={{ uri: `${BASEURL}${l.attributes.image}` }} />
+              <ListItem.Content>
+                <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+                  {l.attributes.name}
+                </ListItem.Title>
+                <ListItem.Subtitle>
+                  {l.attributes.description}
+                </ListItem.Subtitle>
+              </ListItem.Content>
+              {l.attributes.dishVisibility === false ? (
+                <Switch
+                  value={l.attributes.dishVisibility}
+                  onValueChange={() => {
+                    axios
+                      .put(`http://localhost:1337/api/dishes/${l.id}`, {
+                        data: {
+                          dishVisibility: true,
+                        },
+                      })
+                      .then(function (response) {
+                        dispatch(fetchItems());
+                      })
+                      .catch(function (error) {
+                        console.log(error);
+                      });
+                  }}
+                />
+              ) : (
+                <Switch
+                  value={l.attributes.dishVisibility}
+                  onValueChange={() => {
+                    axios
+                      .put(`http://localhost:1337/api/dishes/${l.id}`, {
+                        data: {
+                          dishVisibility: false,
+                        },
+                      })
+                      .then(function (response) {
+                        dispatch(fetchItems());
+                      })
+                      .catch(function (error) {
+                        console.log(error);
+                      });
+                  }}
+                />
+              )}
+            </ListItem>
+          ))}
+        </ScrollView>
+        <ScrollView>
+          {selected?.map((l, i) => (
             <ListItem
               key={i}
               bottomDivider

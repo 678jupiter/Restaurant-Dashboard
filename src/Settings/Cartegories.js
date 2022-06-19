@@ -1,10 +1,11 @@
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { ListItem, Avatar } from "@rneui/themed";
+import { ListItem, Avatar, SearchBar } from "@rneui/themed";
 import { Switch } from "@rneui/themed";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCartegories } from "../Redux/cartegoryActions";
 import { BASEURL } from "../config";
+import axios from "axios";
 
 const Cartegories = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -19,6 +20,69 @@ const Cartegories = ({ navigation }) => {
   const cartegoriesList = useSelector(
     (state) => state.cartegories.restaurantCartegories
   );
+  const [search, setSearch] = useState("");
+  const [filteredDataSource, setFilteredDataSource] = useState();
+  const [masterDataSource, setMasterDataSource] = useState();
+  const [selected, SetSelected] = useState();
+  const uri = `http://localhost:1337/api/restaurants/?populate=*`;
+
+  useEffect(() => {
+    let isCancelled = false;
+    const result = async () => {
+      await axios
+        .get(uri)
+        .then(function (res) {
+          // handle success
+
+          setFilteredDataSource(res.data);
+          setMasterDataSource(res.data);
+        })
+        .catch(function (error) {
+          // handle error
+          errorHandle13();
+          function errorHandle13() {
+            var about =
+              "Dish Search Screen!" +
+              "/" +
+              "/api/dishes/?populate=*" +
+              "/" +
+              error;
+            appErrors(about);
+          }
+        })
+        .then(function () {
+          // always executed
+        });
+    };
+    result();
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
+
+  const searchFilterFunction = (text) => {
+    // Check if searched text is not blank
+    if (text) {
+      // Inserted text is not blank
+      // Filter the masterDataSource
+      // Update FilteredDataSource
+      const newData = masterDataSource?.data?.filter(function (dish) {
+        const itemData = dish.attributes.name
+          ? dish.attributes.name.toUpperCase()
+          : "".toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setFilteredDataSource(newData);
+      SetSelected(newData);
+      setSearch(text);
+    } else {
+      // Inserted text is blank
+      // Update FilteredDataSource with masterDataSource
+      setFilteredDataSource(masterDataSource);
+      setSearch(text);
+    }
+  };
   if (cartegoriesList.length === 0) {
     return (
       <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
@@ -30,8 +94,21 @@ const Cartegories = ({ navigation }) => {
   if (cartegoriesList.length !== 0) {
     return (
       <View style={{ paddingTop: 20 }}>
-        <View>
-          {cartegoriesList?.data?.map((l, i) => (
+        <SearchBar
+          onChangeText={(text) => searchFilterFunction(text)}
+          onClear={(text) => searchFilterFunction("")}
+          placeholder="Search Here..."
+          value={search}
+          containerStyle={{
+            backgroundColor: "#fff",
+            borderBottomColor: "transparent",
+            borderTopColor: "transparent",
+          }}
+          inputContainerStyle={{ backgroundColor: "#F5F5F5" }}
+          lightTheme={true}
+        />
+        <ScrollView>
+          {filteredDataSource?.data?.map((l, i) => (
             <ListItem
               key={i}
               bottomDivider
@@ -51,7 +128,30 @@ const Cartegories = ({ navigation }) => {
               </ListItem.Content>
             </ListItem>
           ))}
-        </View>
+        </ScrollView>
+
+        <ScrollView>
+          {selected?.map((l, i) => (
+            <ListItem
+              key={i}
+              bottomDivider
+              onPress={() =>
+                navigation.navigate("editCartegory", {
+                  Cname: l.attributes.name,
+                  img: l.attributes.image,
+                  cId: l.id,
+                })
+              }
+            >
+              <Avatar source={{ uri: `${BASEURL}${l.attributes.image}` }} />
+              <ListItem.Content>
+                <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+                  {l.attributes.name}
+                </ListItem.Title>
+              </ListItem.Content>
+            </ListItem>
+          ))}
+        </ScrollView>
       </View>
     );
   } else {

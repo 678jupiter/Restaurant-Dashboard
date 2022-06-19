@@ -1,24 +1,16 @@
 # View Detailed order History
 
-# Arriving Courier
-
-# Search
-
 # Setting
 
-# Font Font Family Itallic
+# Arriving Courier
 
 # Token Authorization to make requests
 
-# Auth
-
 # Special Offers
-
-# Render Items Alphabetically
 
 # Connect Delivering
 
-by 4:00 PM
+Day 2
 
 # Push Nortification Socket.io
 

@@ -126,8 +126,8 @@ const DetailedOrder = ({ route, navigation }) => {
       </View>
       <ScrollView style={{ backgroundColor: "white", flex: 1, marginTop: 20 }}>
         {dish.map((item, i) => (
-          <Card>
-            <ListItem.Content key={i} style={{}}>
+          <Card key={i}>
+            <ListItem.Content style={{}}>
               <View style={{ flexDirection: "row" }}>
                 <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
                   {item.name}

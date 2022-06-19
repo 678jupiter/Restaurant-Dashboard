@@ -237,15 +237,6 @@ export default function StackNav() {
                       marginRight: 16,
                     }}
                   >
-                    <Ionicons
-                      name="search"
-                      size={28}
-                      color="black"
-                      style={{
-                        marginRight: 30,
-                        padding: 10,
-                      }}
-                    />
                     <TouchableWithoutFeedback
                       onPress={() => navigation.navigate("createACartegory")}
                     >
@@ -383,15 +374,6 @@ export default function StackNav() {
                       marginRight: 16,
                     }}
                   >
-                    <Ionicons
-                      name="search"
-                      size={28}
-                      color="black"
-                      style={{
-                        marginRight: 30,
-                        padding: 10,
-                      }}
-                    />
                     <TouchableWithoutFeedback
                       onPress={() => navigation.navigate("createNewOffer")}
                     >
