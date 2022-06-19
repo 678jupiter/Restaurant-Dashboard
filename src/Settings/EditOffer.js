@@ -296,7 +296,7 @@ const EditOffer = ({ route }) => {
                       fontSize: 14,
                     }}
                   >
-                    Upload
+                    Edit
                   </Text>
                 </View>
               </TouchableOpacity>

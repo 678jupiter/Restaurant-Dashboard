@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { Card, ListItem } from "@rneui/themed";
 import { Button, Icon } from "@rneui/base";
@@ -26,6 +26,7 @@ const DetailedOrder = ({ route, navigation }) => {
   console.log(orderId);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
+  const [loading3, setLoading3] = useState(false);
   const Cooking = async () => {
     setLoading1(true);
     await axios
@@ -74,6 +75,53 @@ const DetailedOrder = ({ route, navigation }) => {
         console.log(error);
       });
   };
+  const Decline = () => {
+    setLoading3(true);
+
+    axios
+      .put(`http://localhost:1337/api/restaurant-orders/${orderId}`, {
+        data: {
+          status: "Declined",
+        },
+      })
+      .then(function (response) {
+        setLoading3(false);
+        navigation.navigate("Order History");
+        dispatch(fetchOrders());
+      })
+      .catch(function (error) {
+        setLoading3(false);
+        console.log(error);
+      });
+  };
+  const createTwoButtonAlert = () =>
+    Alert.alert("Cancel", `${userName}'s Order`, [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      { text: "OK", onPress: () => Decline() },
+    ]);
+  const buttonAlert2 = () =>
+    Alert.alert(`${userName}'s Order`, `is ReadyForPickUp`, [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      { text: "OK", onPress: () => ReadyForPickUp() },
+    ]);
+
+  const buttonAlert3 = () =>
+    Alert.alert(`Accept`, `${userName}'s Order`, [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      { text: "OK", onPress: () => Cooking() },
+    ]);
   return (
     <View style={{ backgroundColor: "white", flex: 1 }}>
       <View>
@@ -211,36 +259,11 @@ const DetailedOrder = ({ route, navigation }) => {
         </Card>
       </View>
 
-      {/* <View
-        style={{
-          alignItems: "flex-start",
-        }}
-      >
-        <Button
-          color="secondary"
-          buttonStyle={{
-            // backgroundColor: "rgba(39, 39, 39, 1)",
-            height: 80,
-          }}
-          containerStyle={{
-            width: 200,
-            marginHorizontal: 30,
-            marginVertical: 10,
-          }}
-          titleStyle={{
-            color: "white",
-            marginHorizontal: 20,
-            fontWeight: "900",
-            fontSize: 19,
-          }}
-        >
-          Message Amanda
-          <Icon name="chat" color="white" size={40} />
-        </Button>
-      </View> */}
       <View style={{ flex: 0.25 }}>
         <View style={styles.buttonsContainer}>
           <Button
+            onPress={() => createTwoButtonAlert()}
+            loading={loading3}
             title="DECLINE"
             buttonStyle={{
               backgroundColor: "rgba(39, 39, 39, 1)",
@@ -259,7 +282,7 @@ const DetailedOrder = ({ route, navigation }) => {
             }}
           />
           <Button
-            onPress={() => ReadyForPickUp()}
+            onPress={() => buttonAlert2()}
             loading={loading2}
             title="READY FOR PICKUP"
             buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}
@@ -276,7 +299,7 @@ const DetailedOrder = ({ route, navigation }) => {
             }}
           />
           <Button
-            onPress={() => Cooking()}
+            onPress={() => buttonAlert3()}
             loading={loading1}
             title="CONFIRM"
             buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}

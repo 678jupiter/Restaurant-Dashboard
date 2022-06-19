@@ -393,7 +393,7 @@ const EditDish = ({ route }) => {
                         fontSize: 14,
                       }}
                     >
-                      Upload
+                      Edit
                     </Text>
                   </View>
                 </TouchableOpacity>
