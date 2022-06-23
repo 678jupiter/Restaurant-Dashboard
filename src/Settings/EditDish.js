@@ -21,6 +21,7 @@ import { Feather } from "@expo/vector-icons";
 import mime from "mime";
 import { showMessage } from "react-native-flash-message";
 import { colors } from "../../config";
+import { useSelector } from "react-redux";
 const CARTEGORY_ID = gql`
   query ($id: ID!) {
     dish(id: $id) {
@@ -70,11 +71,26 @@ const EditDish = ({ route }) => {
     setMessageType(type);
   };
 
+  const userData = useSelector((state) => state.user.usermeta);
+  const authAxios = axios.create({
+    baseURL: "http://localhost:1337/api/",
+    headers: {
+      Authorization: `Bearer ${userData.jwt}`,
+    },
+  });
+  const authAxios2 = axios.create({
+    baseURL: "http://localhost:1337/api/",
+    headers: {
+      Authorization: `Bearer ${token.jwt}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
   useEffect(() => {
     let isCancelled = false;
     const getCartegories = async () => {
-      await axios
-        .get("http://localhost:1337/api/restaurants")
+      await authAxios
+        .get("restaurants")
         .then(function (response) {
           // console.log(response.data);
           const { data } = response.data;
@@ -116,12 +132,8 @@ const EditDish = ({ route }) => {
         name: newImageUri.split("/").pop(),
       });
 
-      axios
-        .post("http://localhost:1337/api/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+      authAxios2
+        .post("upload", formData)
         .then((res) => {
           const [
             {
@@ -168,8 +180,8 @@ const EditDish = ({ route }) => {
         name: newImageUri.split("/").pop(),
       });
 
-      axios
-        .post("http://localhost:1337/api/upload", formData, {
+      authAxios
+        .post("upload", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -240,8 +252,8 @@ const EditDish = ({ route }) => {
       setLoading(true);
       setMessage("");
 
-      await axios
-        .put(`http://localhost:1337/api/dishes/${dId}`, {
+      await authAxios
+        .put(`dishes/${dId}`, {
           data: {
             name: name,
             description: description,

@@ -13,6 +13,8 @@ import axios from "axios";
 import { ListItem } from "@rneui/themed";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "../Redux/orderActions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { format } from "timeago.js";
 
 const OrdersInProgress = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -106,7 +108,7 @@ const OrdersInProgress = ({ navigation }) => {
                     {l.attributes.mpesaReceiptNumber}
                   </Text>
                   <Text style={{ marginRight: 10, paddingBottom: 10 }}>
-                    {l.attributes.publishedAt}
+                    {format(l.attributes.publishedAt)}
                   </Text>
                 </View>
               </TouchableOpacity>

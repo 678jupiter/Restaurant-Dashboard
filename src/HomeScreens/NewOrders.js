@@ -12,6 +12,9 @@ import axios from "axios";
 import { ListItem } from "@rneui/themed";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "../Redux/orderActions";
+import { colors } from "../config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { format } from "timeago.js";
 
 const NewOrders = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -26,10 +29,11 @@ const NewOrders = ({ navigation }) => {
   const restaurantOrders = useSelector(
     (state) => state.orders.restaurantOrders
   );
+  const userData = useSelector((state) => state.user.usermeta);
   if (restaurantOrders.length === 0) {
     return (
       <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
-        <ActivityIndicator size="large" color={colors.colors} />
+        <ActivityIndicator size="large" color={colors.blurple} />
       </View>
     );
   }
@@ -70,6 +74,7 @@ const NewOrders = ({ navigation }) => {
                     address: l.attributes.address,
                     status: l.attributes.status,
                     totalPaid: l.attributes.totalPaid,
+                    conversationId: l.attributes.conversationId,
                   })
                 }
               >
@@ -102,6 +107,9 @@ const NewOrders = ({ navigation }) => {
                 >
                   <Text style={{ marginLeft: 10, paddingBottom: 10 }}>
                     {l.attributes.mpesaReceiptNumber}
+                  </Text>
+                  <Text style={{ marginRight: 10, paddingBottom: 10 }}>
+                    {format(l.attributes.publishedAt)}
                   </Text>
                 </View>
               </TouchableOpacity>

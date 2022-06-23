@@ -2,12 +2,13 @@ import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { Card, ListItem } from "@rneui/themed";
 import { Button, Icon } from "@rneui/base";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { fetchOrders } from "../Redux/orderActions";
 import { Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import call from "react-native-phone-call";
+import { format } from "timeago.js";
 
 const InProgressDetailed = ({ navigation, route }) => {
   const {
@@ -25,10 +26,18 @@ const InProgressDetailed = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
+
+  const userData = useSelector((state) => state.user.usermeta);
+  const authAxios = axios.create({
+    baseURL: "http://localhost:1337/api/",
+    headers: {
+      Authorization: `Bearer ${userData.jwt}`,
+    },
+  });
   const ReadyForPickUp = async () => {
     setLoading(true);
-    await axios
-      .put(`http://localhost:1337/api/restaurant-orders/${orderId}`, {
+    await authAxios
+      .put(`restaurant-orders/${orderId}`, {
         data: {
           status: "Ready",
         },
@@ -94,7 +103,7 @@ const InProgressDetailed = ({ navigation, route }) => {
               }}
             >
               <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
-                {createdAt}
+                {format(createdAt)}
               </ListItem.Title>
               <ListItem.Subtitle style={{ fontFamily: "MontserratSemiBold" }}>
                 {address}

@@ -16,6 +16,7 @@ import { Space } from "../../components/atoms";
 import { Picker } from "@react-native-picker/picker";
 import mime from "mime";
 import { showMessage } from "react-native-flash-message";
+import { useSelector } from "react-redux";
 
 const windowWidth = Dimensions.get("window").width;
 const CreateNewOffer = () => {
@@ -38,6 +39,20 @@ const CreateNewOffer = () => {
     setMessage(message);
     setMessageType(type);
   };
+  const userData = useSelector((state) => state.user.usermeta);
+  const authAxios = axios.create({
+    baseURL: "http://localhost:1337/api/",
+    headers: {
+      Authorization: `Bearer ${userData.jwt}`,
+    },
+  });
+  const authAxios2 = axios.create({
+    baseURL: "http://localhost:1337/api/",
+    headers: {
+      Authorization: `Bearer ${token.jwt}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   const uploadImage = async () => {
     setMessage("");
@@ -64,12 +79,8 @@ const CreateNewOffer = () => {
         name: newImageUri.split("/").pop(),
       });
 
-      axios
-        .post("http://localhost:1337/api/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+      authAxios2
+        .post("upload", formData)
         .then((res) => {
           const [
             {
@@ -117,12 +128,8 @@ const CreateNewOffer = () => {
         name: newImageUri.split("/").pop(),
       });
 
-      axios
-        .post("http://localhost:1337/api/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+      authAxios2
+        .post("upload", formData)
         .then((res) => {
           const [
             {
@@ -167,8 +174,8 @@ const CreateNewOffer = () => {
     setLoading(true);
     setMessage("");
 
-    await axios
-      .post("http://localhost:1337/api/special-offers", {
+    await authAxios
+      .post("special-offers", {
         data: {
           name: name,
           description: description,

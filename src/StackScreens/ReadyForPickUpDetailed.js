@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../config";
 import call from "react-native-phone-call";
 import { Card } from "@rneui/base";
+import { format } from "timeago.js";
 
 const ReadyForPickUpDetailed = ({ navigation, route }) => {
   const {
@@ -60,7 +61,7 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
               }}
             >
               <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
-                {createdAt}
+                {format(createdAt)}
               </ListItem.Title>
               <ListItem.Subtitle style={{ fontFamily: "MontserratSemiBold" }}>
                 {address}

@@ -4,10 +4,11 @@ import { Card, ListItem } from "@rneui/themed";
 import { Button, Icon } from "@rneui/base";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "../Redux/orderActions";
 import { Pressable } from "react-native";
 import call from "react-native-phone-call";
+import { format } from "timeago.js";
 
 const DetailedOrder = ({ route, navigation }) => {
   const dispatch = useDispatch();
@@ -22,15 +23,41 @@ const DetailedOrder = ({ route, navigation }) => {
     address,
     createdAt,
     shipping,
+    conversationId,
   } = route.params;
-  console.log(orderId);
+  console.log(conversationId);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [loading3, setLoading3] = useState(false);
+  const userData = useSelector((state) => state.user.usermeta);
+  const authAxios = axios.create({
+    baseURL: "http://localhost:1337/api/",
+    headers: {
+      Authorization: `Bearer ${userData.jwt}`,
+    },
+  });
+
+  const sendConfirmationMessage = async (text) => {
+    await axios
+      .post(`http://localhost:8800/api/messages`, {
+        sender: userData.id,
+        text: text,
+        conversationId: conversationId,
+        user: {
+          _id: userData.username,
+          name: userData.username,
+          avatar: "https://placeimg.com/140/140/any",
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      });
+  };
+
   const Cooking = async () => {
     setLoading1(true);
-    await axios
-      .put(`http://localhost:1337/api/restaurant-orders/${orderId}`, {
+    await authAxios
+      .put(`restaurant-orders/${orderId}`, {
         data: {
           status: "Cooking",
         },
@@ -38,6 +65,9 @@ const DetailedOrder = ({ route, navigation }) => {
       .then(function (response) {
         dispatch(fetchOrders());
         setLoading1(false);
+        let text = `Your order ${orderId} is being processed.`;
+
+        sendConfirmationMessage(text);
         navigation.navigate("Orders in progress", {
           userName,
           dish,
@@ -53,8 +83,8 @@ const DetailedOrder = ({ route, navigation }) => {
   };
   const ReadyForPickUp = async () => {
     setLoading2(true);
-    await axios
-      .put(`http://localhost:1337/api/restaurant-orders/${orderId}`, {
+    await authAxios
+      .put(`restaurant-orders/${orderId}`, {
         data: {
           status: "Ready",
         },
@@ -78,8 +108,8 @@ const DetailedOrder = ({ route, navigation }) => {
   const Decline = () => {
     setLoading3(true);
 
-    axios
-      .put(`http://localhost:1337/api/restaurant-orders/${orderId}`, {
+    authAxios
+      .put(`restaurant-orders/${orderId}`, {
         data: {
           status: "Declined",
         },
@@ -163,7 +193,7 @@ const DetailedOrder = ({ route, navigation }) => {
               }}
             >
               <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
-                {createdAt}
+                {format(createdAt)}
               </ListItem.Title>
               <ListItem.Subtitle style={{ fontFamily: "MontserratSemiBold" }}>
                 {address}

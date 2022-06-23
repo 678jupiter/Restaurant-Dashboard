@@ -21,6 +21,7 @@ import { Feather } from "@expo/vector-icons";
 import mime from "mime";
 import { showMessage } from "react-native-flash-message";
 import { colors } from "../../config";
+import { useSelector } from "react-redux";
 
 const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
@@ -46,6 +47,20 @@ const EditOffer = ({ route }) => {
     setMessage(message);
     setMessageType(type);
   };
+  const userData = useSelector((state) => state.user.usermeta);
+  const authAxios = axios.create({
+    baseURL: "http://localhost:1337/api/",
+    headers: {
+      Authorization: `Bearer ${userData.jwt}`,
+    },
+  });
+  const authAxios2 = axios.create({
+    baseURL: "http://localhost:1337/api/",
+    headers: {
+      Authorization: `Bearer ${token.jwt}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   const uploadImage = async () => {
     setMessage("");
@@ -72,12 +87,8 @@ const EditOffer = ({ route }) => {
         name: newImageUri.split("/").pop(),
       });
 
-      axios
-        .post("http://localhost:1337/api/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+      authAxios2
+        .post("upload", formData)
         .then((res) => {
           const [
             {
@@ -124,12 +135,8 @@ const EditOffer = ({ route }) => {
         name: newImageUri.split("/").pop(),
       });
 
-      axios
-        .post("http://localhost:1337/api/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+      authAxios2
+        .post("upload", formData)
         .then((res) => {
           const [
             {
@@ -177,7 +184,7 @@ const EditOffer = ({ route }) => {
     setMessage("");
 
     await axios
-      .put(`http://localhost:1337/api/special-offers/${dId}`, {
+      .put(`special-offers/${dId}`, {
         data: {
           name: name,
           description: description,

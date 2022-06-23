@@ -15,6 +15,7 @@ import mime from "mime";
 import { showMessage } from "react-native-flash-message";
 import axios from "axios";
 import { Space } from "../../components/atoms";
+import { useSelector } from "react-redux";
 const windowWidth = Dimensions.get("window").width;
 
 const CreateACartegory = () => {
@@ -25,6 +26,20 @@ const CreateACartegory = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState();
+  const userData = useSelector((state) => state.user.usermeta);
+  const authAxios = axios.create({
+    baseURL: "http://localhost:1337/api/",
+    headers: {
+      Authorization: `Bearer ${userData.jwt}`,
+    },
+  });
+  const authAxios2 = axios.create({
+    baseURL: "http://localhost:1337/api/",
+    headers: {
+      Authorization: `Bearer ${token.jwt}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -55,12 +70,8 @@ const CreateACartegory = () => {
         name: newImageUri.split("/").pop(),
       });
 
-      axios
-        .post("http://localhost:1337/api/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+      authAxios2
+        .post("http://localhost:1337/api/upload", formData)
         .then((res) => {
           setLoading(false);
 
@@ -111,12 +122,8 @@ const CreateACartegory = () => {
         name: newImageUri.split("/").pop(),
       });
 
-      axios
-        .post("http://localhost:1337/api/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+      authAxios2
+        .post("http://localhost:1337/api/upload", formData)
         .then((res) => {
           setLoading(false);
 
@@ -156,8 +163,8 @@ const CreateACartegory = () => {
     setMessage("");
     setLoading(true);
 
-    await axios
-      .post("http://localhost:1337/api/restaurants", {
+    await authAxios
+      .post("restaurants", {
         data: {
           name: name,
 

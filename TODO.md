@@ -4,10 +4,6 @@
 
 # Token Authorization to make requests
 
-# Special Offers done but do some testings
-
-# Decline
-
 Day 2
 
 # Push Nortification Socket.io

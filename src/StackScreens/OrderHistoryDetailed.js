@@ -2,6 +2,7 @@ import React from "react";
 import { View, ScrollView, Pressable, StyleSheet, Image } from "react-native";
 import { Text, Card, Button, Icon, ListItem } from "@rneui/themed";
 import { Ionicons } from "@expo/vector-icons";
+import { format } from "timeago.js";
 
 const OrderHistoryDetailed = ({ route }) => {
   const {
@@ -61,7 +62,7 @@ const OrderHistoryDetailed = ({ route }) => {
               }}
             >
               <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
-                {createdAt}
+                {format(createdAt)}
               </ListItem.Title>
               <ListItem.Subtitle style={{ fontFamily: "MontserratSemiBold" }}>
                 {address}

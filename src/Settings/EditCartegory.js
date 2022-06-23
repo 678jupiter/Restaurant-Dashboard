@@ -16,6 +16,7 @@ import { showMessage } from "react-native-flash-message";
 
 import axios from "axios";
 import { Space } from "../../components/atoms";
+import { useSelector } from "react-redux";
 const windowWidth = Dimensions.get("window").width;
 
 const EditCartegory = ({ route }) => {
@@ -31,6 +32,21 @@ const EditCartegory = ({ route }) => {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+  const userData = useSelector((state) => state.user.usermeta);
+  const authAxios = axios.create({
+    baseURL: "http://localhost:1337/api/",
+    headers: {
+      Authorization: `Bearer ${userData.jwt}`,
+    },
+  });
+  const authAxios2 = axios.create({
+    baseURL: "http://localhost:1337/api/",
+    headers: {
+      Authorization: `Bearer ${token.jwt}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
   const uploadImage = async () => {
     setLoading(true);
     setMessage("");
@@ -57,12 +73,8 @@ const EditCartegory = ({ route }) => {
         name: newImageUri.split("/").pop(),
       });
 
-      axios
-        .post("http://localhost:1337/api/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+      authAxios2
+        .post("upload", formData)
         .then((res) => {
           setLoading(false);
 
@@ -110,12 +122,8 @@ const EditCartegory = ({ route }) => {
         name: newImageUri.split("/").pop(),
       });
 
-      axios
-        .post("http://localhost:1337/api/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+      authAxios2
+        .post("upload", formData)
         .then((res) => {
           setLoading(false);
 
@@ -155,8 +163,8 @@ const EditCartegory = ({ route }) => {
 
     var q = JSON.stringify(name);
 
-    await axios
-      .put(`http://localhost:1337/api/restaurants/${cId}`, {
+    await authAxios
+      .put(`restaurants/${cId}`, {
         data: {
           name: q,
 

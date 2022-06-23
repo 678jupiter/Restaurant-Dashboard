@@ -1,53 +1,113 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+} from "react";
 import { GiftedChat } from "react-native-gifted-chat";
 import { Text, View, Button } from "react-native";
 import axios from "axios";
 import io from "socket.io-client";
+import { useSelector } from "react-redux";
 
-const ChatScreen = () => {
-  const [chatMessages, setChatMessages] = useState([]);
-  useEffect(() => {
-    const socket = io("http://localhost:3000");
-    socket.on("chat message", (msg) => {
-      setChatMessages({ chatMessages: [...chatMessages, msg] });
-    });
-  }, []);
-
-  const submit = () => {
-    const socket = io("http://localhost:3000");
-    socket.emit("chat message", "Hello World");
-    // clear chat message state
-  };
-
+const ChatScreen = ({ route }) => {
+  const { currentChat } = route.params;
+  const userData = useSelector((state) => state.user.usermeta);
+  const [text, setText] = useState("");
   const [messages, setMessages] = useState([]);
 
+  const socket = io("http://localhost:4000");
+
+  function showRoom() {
+    console.log("Joined Room");
+  }
+
   useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: "Hello developer",
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: "React Native",
-          avatar: "https://placeimg.com/140/140/any",
-        },
-      },
-    ]);
+    const input = currentChat._id;
+    socket.emit("enter_conversation_space", input, showRoom);
   }, []);
 
+  function addMessage(message) {
+    setMessages([...messages, message]);
+  }
+
+  socket.on("new_conversation_message", addMessage);
+
+  useEffect(() => {
+    const getMessages = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:8800/api/messages/${currentChat._id}`
+        );
+        setMessages(res.data);
+      } catch (error) {
+        console.log("3" + error);
+      }
+    };
+    getMessages();
+  }, [currentChat._id]);
+
   const onSend = useCallback((messages = []) => {
+    console.log(messages[0]);
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages)
     );
+    const { _id, createdAt, text, user } = messages[0];
+    const message = {
+      sender: userData.id,
+      text: text,
+      conversationId: currentChat._id,
+      user: {
+        _id: userData.username,
+        name: userData.username,
+        avatar: "https://placeimg.com/140/140/any",
+      },
+    };
+    try {
+      axios.post(`http://localhost:8800/api/messages`, message);
+      let roomName = currentChat._id;
+      socket.emit("new_conversation_message", message, roomName, () => {
+        console.log("emit");
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
-  console.log(chatMessages);
+  console.log(messages);
 
   return (
-    <View style={{ flex: 1, justifyContent: "center" }}>
-      <Button title="Send text" onPress={() => submit()} />
+    <View style={{ flex: 1 }}>
+      {currentChat ? (
+        <GiftedChat
+          messages={messages}
+          onSend={(messages) => onSend(messages)}
+          showAvatarForEveryMessage={true}
+          showUserAvatar={true}
+          user={{
+            _id: userData.username,
+            name: userData.username,
+            avatar: "https://placeimg.com/140/140/any",
+          }}
+          // alignTop
+          alignTop
+          alwaysShowSend
+          scrollToBottom
+        />
+      ) : (
+        <Text>No current Chat</Text>
+      )}
     </View>
   );
 };
 
 export default ChatScreen;
+
+{
+  /* {messages.map((m, i) => (
+            <View key={i}>
+              <Text>{m.text}</Text>
+              <Text>{m.createdAt}</Text>
+            </View>
+          ))}
+          <Button title="Text" onPress={() => handleSubmit()} /> */
+}

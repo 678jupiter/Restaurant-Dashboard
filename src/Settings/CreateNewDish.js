@@ -16,6 +16,7 @@ import { Space } from "../../components/atoms";
 import { Picker } from "@react-native-picker/picker";
 import mime from "mime";
 import { showMessage } from "react-native-flash-message";
+import { useSelector } from "react-redux";
 
 const windowWidth = Dimensions.get("window").width;
 const CreateNewDish = () => {
@@ -41,11 +42,26 @@ const CreateNewDish = () => {
     setMessageType(type);
   };
 
+  const userData = useSelector((state) => state.user.usermeta);
+  const authAxios = axios.create({
+    baseURL: "http://localhost:1337/api/",
+    headers: {
+      Authorization: `Bearer ${userData.jwt}`,
+    },
+  });
+  const authAxios2 = axios.create({
+    baseURL: "http://localhost:1337/api/",
+    headers: {
+      Authorization: `Bearer ${token.jwt}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
   useEffect(() => {
     let isCancelled = false;
     const getCartegories = async () => {
-      await axios
-        .get("http://localhost:1337/api/restaurants")
+      await authAxios
+        .get("restaurants")
         .then(function (response) {
           // console.log(response.data);
           const { data } = response.data;
@@ -87,12 +103,8 @@ const CreateNewDish = () => {
         name: newImageUri.split("/").pop(),
       });
 
-      axios
-        .post("http://localhost:1337/api/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+      authAxios2
+        .post("upload", formData)
         .then((res) => {
           const [
             {
@@ -140,12 +152,8 @@ const CreateNewDish = () => {
         name: newImageUri.split("/").pop(),
       });
 
-      axios
-        .post("http://localhost:1337/api/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
+      authAxios2
+        .post("upload", formData)
         .then((res) => {
           const [
             {
@@ -192,8 +200,8 @@ const CreateNewDish = () => {
     setLoading(true);
     setMessage("");
 
-    await axios
-      .post("http://localhost:1337/api/dishes", {
+    await authAxios
+      .post("dishes", {
         data: {
           name: name,
           description: description,
