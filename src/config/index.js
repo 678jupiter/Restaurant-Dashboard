@@ -7,4 +7,4 @@ export const colors = {
   slate: "#0A2540",
 };
 
-export const BASEURL = "http://localhost:1337/api/";
+export const BASEURL = "http://localhost:1337";

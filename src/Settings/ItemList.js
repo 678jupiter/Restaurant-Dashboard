@@ -12,8 +12,9 @@ import { Switch } from "@rneui/themed";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchItems } from "../Redux/itemsActions";
-import { BASEURL } from "../config";
+import { BASEURL, colors } from "../config";
 import axios from "axios";
+import { useFocusEffect } from "@react-navigation/native";
 
 const ItemList = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -33,39 +34,39 @@ const ItemList = ({ navigation }) => {
   const [selected, SetSelected] = useState();
   const uri = `http://localhost:1337/api/dishes/?populate=*`;
 
-  useEffect(() => {
-    let isCancelled = false;
-    const result = async () => {
-      await axios
-        .get(uri)
-        .then(function (res) {
-          // handle success
+  const userData = useSelector((state) => state.user.usermeta);
+  const authAxios = axios.create({
+    baseURL: "http://localhost:1337/api/",
+    headers: {
+      Authorization: `Bearer ${userData.jwt}`,
+    },
+  });
 
-          setFilteredDataSource(res.data);
-          setMasterDataSource(res.data);
-        })
-        .catch(function (error) {
-          // handle error
-          errorHandle13();
-          function errorHandle13() {
-            var about =
-              "Dish Search Screen!" +
-              "/" +
-              "/api/dishes/?populate=*" +
-              "/" +
-              error;
-            appErrors(about);
-          }
-        })
-        .then(function () {
-          // always executed
-        });
-    };
-    result();
-    return () => {
-      isCancelled = true;
-    };
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      let isCancelled = false;
+      const result = async () => {
+        await axios
+          .get(uri)
+          .then(function (res) {
+            // handle success
+
+            setFilteredDataSource(res.data);
+            setMasterDataSource(res.data);
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+          .then(function () {
+            // always executed
+          });
+      };
+      result();
+      return () => {
+        isCancelled = true;
+      };
+    }, [])
+  );
 
   const searchFilterFunction = (text) => {
     // Check if searched text is not blank
@@ -94,7 +95,7 @@ const ItemList = ({ navigation }) => {
   if (itemsList.length === 0) {
     return (
       <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
-        <ActivityIndicator size="large" color={colors.colors} />
+        <ActivityIndicator size="large" color={colors.light_gray} />
       </View>
     );
   }
@@ -144,8 +145,8 @@ const ItemList = ({ navigation }) => {
                 <Switch
                   value={l.attributes.dishVisibility}
                   onValueChange={() => {
-                    axios
-                      .put(`http://localhost:1337/api/dishes/${l.id}`, {
+                    authAxios
+                      .put(`dishes/${l.id}`, {
                         data: {
                           dishVisibility: true,
                         },
@@ -162,8 +163,8 @@ const ItemList = ({ navigation }) => {
                 <Switch
                   value={l.attributes.dishVisibility}
                   onValueChange={() => {
-                    axios
-                      .put(`http://localhost:1337/api/dishes/${l.id}`, {
+                    authAxios
+                      .put(`dishes/${l.id}`, {
                         data: {
                           dishVisibility: false,
                         },
@@ -209,8 +210,8 @@ const ItemList = ({ navigation }) => {
                 <Switch
                   value={l.attributes.dishVisibility}
                   onValueChange={() => {
-                    axios
-                      .put(`http://localhost:1337/api/dishes/${l.id}`, {
+                    authAxios
+                      .put(`dishes/${l.id}`, {
                         data: {
                           dishVisibility: true,
                         },
@@ -227,8 +228,8 @@ const ItemList = ({ navigation }) => {
                 <Switch
                   value={l.attributes.dishVisibility}
                   onValueChange={() => {
-                    axios
-                      .put(`http://localhost:1337/api/dishes/${l.id}`, {
+                    authAxios
+                      .put(`dishes/${l.id}`, {
                         data: {
                           dishVisibility: false,
                         },

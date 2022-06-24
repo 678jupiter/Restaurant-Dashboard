@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchItems } from "../Redux/itemsActions";
 import { BASEURL } from "../config";
 import axios from "axios";
+import { useFocusEffect } from "@react-navigation/native";
 
 const SpecialOffers = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -24,6 +25,14 @@ const SpecialOffers = ({ navigation }) => {
       isCancelled = true;
     };
   }, [dispatch]);
+
+  const userData = useSelector((state) => state.user.usermeta);
+  const authAxios = axios.create({
+    baseURL: "http://localhost:1337/api/",
+    headers: {
+      Authorization: `Bearer ${userData.jwt}`,
+    },
+  });
 
   const itemsList = useSelector((state) => state.items.restaurantDishes);
   //console.log(itemsList);
@@ -43,29 +52,23 @@ const SpecialOffers = ({ navigation }) => {
       })
       .catch(function (error) {
         // handle error
-        errorHandle13();
-        function errorHandle13() {
-          var about =
-            "Dish Search Screen!" +
-            "/" +
-            "/api/dishes/?populate=*" +
-            "/" +
-            error;
-          appErrors(about);
-        }
+        console.log(error);
       })
       .then(function () {
         // always executed
       });
   };
-  useEffect(() => {
-    let isCancelled = false;
 
-    result();
-    return () => {
-      isCancelled = true;
-    };
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      let isCancelled = false;
+
+      result();
+      return () => {
+        isCancelled = true;
+      };
+    }, [])
+  );
 
   const searchFilterFunction = (text) => {
     // Check if searched text is not blank
@@ -144,8 +147,8 @@ const SpecialOffers = ({ navigation }) => {
                 <Switch
                   value={l.attributes.dishVisibility}
                   onValueChange={() => {
-                    axios
-                      .put(`http://localhost:1337/api/special-offers/${l.id}`, {
+                    authAxios
+                      .put(`special-offers/${l.id}`, {
                         ///api/special-offers/:id
                         data: {
                           dishVisibility: true,
@@ -163,8 +166,8 @@ const SpecialOffers = ({ navigation }) => {
                 <Switch
                   value={l.attributes.dishVisibility}
                   onValueChange={() => {
-                    axios
-                      .put(`http://localhost:1337/api/special-offers/${l.id}`, {
+                    authAxios
+                      .put(`special-offers/${l.id}`, {
                         data: {
                           dishVisibility: false,
                         },
@@ -210,8 +213,8 @@ const SpecialOffers = ({ navigation }) => {
                 <Switch
                   value={l.attributes.dishVisibility}
                   onValueChange={() => {
-                    axios
-                      .put(`http://localhost:1337/api/dishes/${l.id}`, {
+                    authAxios
+                      .put(`special-offers/${l.id}`, {
                         data: {
                           dishVisibility: true,
                         },
@@ -228,8 +231,8 @@ const SpecialOffers = ({ navigation }) => {
                 <Switch
                   value={l.attributes.dishVisibility}
                   onValueChange={() => {
-                    axios
-                      .put(`http://localhost:1337/api/dishes/${l.id}`, {
+                    authAxios
+                      .put(`special-offers/${l.id}`, {
                         data: {
                           dishVisibility: false,
                         },

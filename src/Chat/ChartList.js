@@ -1,12 +1,10 @@
-import { ListItem, Avatar } from "@rneui/themed";
-
 import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import Conversation from "./conversation";
 
-const ChartList = ({ navigation }) => {
+const ChartList = () => {
   const [conversations, setConversations] = useState([]);
   const userData = useSelector((state) => state.user.usermeta);
 
@@ -27,9 +25,7 @@ const ChartList = ({ navigation }) => {
   return (
     <View>
       {conversations?.map((c, i) => (
-        <>
-          <Conversation conversation={c} />
-        </>
+        <Conversation conversation={c} key={i} />
       ))}
     </View>
   );

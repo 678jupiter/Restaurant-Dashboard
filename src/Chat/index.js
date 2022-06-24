@@ -27,28 +27,34 @@ const ChatScreen = ({ route }) => {
     socket.emit("enter_conversation_space", input, showRoom);
   }, []);
 
+  socket.on("welcome", () => {
+    console.log("someone joined");
+  });
+  socket.on("bye", () => {
+    console.log("someone left ");
+  });
+  const getMessages = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8800/api/messages/${currentChat._id}`
+      );
+      setMessages(res.data.reverse());
+    } catch (error) {
+      console.log("3" + error);
+    }
+  };
+
   function addMessage(message) {
-    setMessages([...messages, message]);
+    getMessages();
   }
 
   socket.on("new_conversation_message", addMessage);
 
   useEffect(() => {
-    const getMessages = async () => {
-      try {
-        const res = await axios.get(
-          `http://localhost:8800/api/messages/${currentChat._id}`
-        );
-        setMessages(res.data);
-      } catch (error) {
-        console.log("3" + error);
-      }
-    };
     getMessages();
-  }, [currentChat._id]);
+  }, []);
 
   const onSend = useCallback((messages = []) => {
-    console.log(messages[0]);
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages)
     );
@@ -67,13 +73,12 @@ const ChatScreen = ({ route }) => {
       axios.post(`http://localhost:8800/api/messages`, message);
       let roomName = currentChat._id;
       socket.emit("new_conversation_message", message, roomName, () => {
-        console.log("emit");
+        console.log("rest emit");
       });
     } catch (error) {
       console.log(error);
     }
   }, []);
-  console.log(messages);
 
   return (
     <View style={{ flex: 1 }}>

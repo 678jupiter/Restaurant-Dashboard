@@ -2,8 +2,6 @@
 
 # Arriving Courier
 
-# Token Authorization to make requests
-
 Day 2
 
 # Push Nortification Socket.io

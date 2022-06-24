@@ -49,7 +49,7 @@ const CreateNewOffer = () => {
   const authAxios2 = axios.create({
     baseURL: "http://localhost:1337/api/",
     headers: {
-      Authorization: `Bearer ${token.jwt}`,
+      Authorization: `Bearer ${userData.jwt}`,
       "Content-Type": "multipart/form-data",
     },
   });

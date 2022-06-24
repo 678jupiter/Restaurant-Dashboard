@@ -36,7 +36,7 @@ const CreateACartegory = () => {
   const authAxios2 = axios.create({
     baseURL: "http://localhost:1337/api/",
     headers: {
-      Authorization: `Bearer ${token.jwt}`,
+      Authorization: `Bearer ${userData.jwt}`,
       "Content-Type": "multipart/form-data",
     },
   });
@@ -73,6 +73,7 @@ const CreateACartegory = () => {
       authAxios2
         .post("http://localhost:1337/api/upload", formData)
         .then((res) => {
+          console.log(res.data);
           setLoading(false);
 
           const [
@@ -167,7 +168,6 @@ const CreateACartegory = () => {
       .post("restaurants", {
         data: {
           name: name,
-
           image: imgUrl,
         },
       })
@@ -185,6 +185,7 @@ const CreateACartegory = () => {
         });
       })
       .catch((error) => {
+        console.log(error);
         showMessage({
           message: "Update failed, try again.",
           // description: "All fields are required",

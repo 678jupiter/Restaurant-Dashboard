@@ -14,6 +14,7 @@ import { Card } from "@rneui/themed";
 import { Ionicons } from "@expo/vector-icons";
 import { fetchOrders } from "../Redux/orderActions";
 import { useDispatch, useSelector } from "react-redux";
+import { format } from "timeago.js";
 
 const drivers = [
   {
@@ -131,7 +132,7 @@ const ReadyForPickUp = ({ navigation }) => {
                       {l.attributes.mpesaReceiptNumber}
                     </Text>
                     <Text style={{ marginRight: 10, paddingBottom: 10 }}>
-                      {l.attributes.publishedAt}
+                      {format(l.attributes.publishedAt)}
                     </Text>
                   </View>
                 </TouchableOpacity>
