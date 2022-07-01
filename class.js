@@ -25,10 +25,13 @@ export class Ayee extends Component {
   state = {
     custom_fields: [{ meta_name: "", meta_value: 0 }],
     required: false,
-    optional: false,
+    optional: true,
     tick: false,
     isSubmitting: false,
+    choice: "",
+    numerTo: 1,
   };
+
   addCustomField() {
     this.setState({
       custom_fields: [
@@ -50,12 +53,13 @@ export class Ayee extends Component {
     this.state.custom_fields.splice(index, 1);
     this.setState({ custom_fields: this.state.custom_fields });
   };
+
   createModifier = () => {
     this.setState({ isSubmitting: true });
     axios
       .post("http://localhost:1337/api/modifiers", {
         data: {
-          Title: "Choice of Test",
+          Title: this.state.choice,
           Numberofitemstochoose: 1,
           isRequired: this.state.tick,
           dishes: 40,
@@ -88,6 +92,18 @@ export class Ayee extends Component {
       this.state.custom_fields.find(this.isCherries);
     }
   };
+  validateNumber() {
+    const fields = this.state.custom_fields.length;
+    const nuchose = this.state.numerTo;
+    // true
+    if (nuchose == fields || nuchose >= Math.max(1)) {
+      console.log("true");
+    }
+    // false
+    if (nuchose < 1 || nuchose <= 0) {
+      console.log("False");
+    }
+  }
 
   render() {
     return (
@@ -105,7 +121,10 @@ export class Ayee extends Component {
         >
           <View style={{ width: windowWidth / 2 }}>
             <View style={{ width: windowWidth / 2 }}>
-              <Input placeholder="Choice of Spice" />
+              <Input
+                placeholder="Choice of Spice"
+                onChangeText={(text) => this.setState({ choice: text })}
+              />
             </View>
           </View>
 
@@ -120,14 +139,16 @@ export class Ayee extends Component {
 
             <View style={{ width: windowWidth / 12 }}>
               <TextInput
-                placeholder="0"
+                placeholder="1"
                 style={{
                   height: 40,
                   margin: 12,
                   borderWidth: 1,
                   padding: 10,
                 }}
+                onChangeText={(text) => this.setState({ numerTo: text })}
                 placeholderTextColor="red"
+                keyboardType="number-pad"
               />
             </View>
           </View>
@@ -296,7 +317,7 @@ export class Ayee extends Component {
             }}
           >
             <Pressable
-              onPress={() => this.check()}
+              onPress={() => this.validateNumber()}
               style={{
                 backgroundColor: colors.dark_gray,
                 padding: 20,
