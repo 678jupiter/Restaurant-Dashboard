@@ -10,5 +10,5 @@ export const colors = {
   white: "#FFFFFF",
   light_gray: "#F6F9FC",
   dark_gray: "#425466",
-  slate: "#0A2540",
+  slate: "#2196F3",
 };

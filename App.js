@@ -21,6 +21,7 @@ import {
 import { colors } from "./config";
 import Push from "./lib/Push";
 import { useEffect } from "react";
+import Ayee from "./class";
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -75,7 +76,8 @@ export default function App() {
         <Provider store={store}>
           <PersistGate persistor={persistor}>
             <ApolloProvider client={client}>
-              <StackNav />
+              <Ayee />
+              {/* <StackNav /> */}
               {/* <SocketNav /> */}
               {/* <Push /> */}
             </ApolloProvider>

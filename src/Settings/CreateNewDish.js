@@ -17,8 +17,29 @@ import { Picker } from "@react-native-picker/picker";
 import mime from "mime";
 import { showMessage } from "react-native-flash-message";
 import { useSelector } from "react-redux";
+import { FlatList } from "react-native";
+
+const modifierGp = [
+  {
+    Title: "Choice of Spice",
+    id: "0",
+  },
+  {
+    Title: "Choice of Drink",
+    id: "2",
+  },
+  {
+    Title: "Choice of Fruit",
+    id: "3",
+  },
+  {
+    Title: "Choice of Sugar",
+    id: "4",
+  },
+];
 
 const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 const CreateNewDish = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
@@ -40,6 +61,27 @@ const CreateNewDish = () => {
   const handleMessage = (message, type = "FAILED") => {
     setMessage(message);
     setMessageType(type);
+  };
+  const Header = () => {
+    return (
+      <View style={{ margin: 10, alignItems: "center" }}>
+        <Text style={{ fontFamily: "CircularStdBold", fontSize: 18 }}>
+          Modifier Groups
+        </Text>
+      </View>
+    );
+  };
+
+  const Footer = () => {
+    return (
+      <View style={{ margin: 10, alignItems: "center" }}>
+        <TouchableOpacity>
+          <Text style={{ color: "blue", fontWeight: "900", fontSize: 20 }}>
+            Add
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   const userData = useSelector((state) => state.user.usermeta);
@@ -252,7 +294,6 @@ const CreateNewDish = () => {
       <View
         style={{
           flex: 0.9,
-          justifyContent: "space-around",
           flexDirection: "row",
         }}
       >
@@ -288,13 +329,24 @@ const CreateNewDish = () => {
             </Picker>
           </View>
         </View>
-        <View style={{ justifyContent: "space-evenly" }}>
-          <View style={{ width: windowWidth / 3 }}>
-            <Input placeholder="Tax" onChangeText={(text) => setTax(text)} />
+        <View
+          style={{
+            justifyContent: "space-evenly",
+            width: windowWidth / 3,
+          }}
+        >
+          <View
+            style={{
+              width: windowWidth / 8,
+              alignSelf: "center",
+            }}
+          >
+            <Input placeholder="Vat" onChangeText={(text) => setTax(text)} />
           </View>
           <View
             style={{
               alignItems: "center",
+              width: windowWidth / 3,
             }}
           >
             <ImageBackground
@@ -329,6 +381,32 @@ const CreateNewDish = () => {
               </TouchableOpacity>
             </ImageBackground>
           </View>
+        </View>
+        <View
+          style={{
+            justifyContent: "space-evenly",
+            width: windowWidth / 3,
+          }}
+        >
+          <FlatList
+            data={modifierGp}
+            ListHeaderComponent={Header}
+            ListFooterComponent={Footer}
+            renderItem={({ item, i }) => (
+              <View
+                key={i}
+                style={{
+                  margin: 10,
+                  alignItems: "center",
+                }}
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <Text style={{ marginRight: 8 }}>{item.id}</Text>
+                  <Text>{item.Title}</Text>
+                </View>
+              </View>
+            )}
+          />
         </View>
       </View>
       <View

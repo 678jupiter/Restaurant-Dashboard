@@ -208,12 +208,12 @@ const DetailedOrder = ({ route, navigation }) => {
             <ListItem.Content style={{}}>
               <View style={{ flexDirection: "row" }}>
                 <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
-                  {item.name}
+                  {item.attributes.dishName}
                 </ListItem.Title>
                 <ListItem.Subtitle
                   style={{ marginLeft: 30, fontFamily: "MontserratSemiBold" }}
                 >
-                  x {item.quantity}
+                  x {item.attributes.quantity}
                 </ListItem.Subtitle>
               </View>
 
@@ -239,7 +239,7 @@ const DetailedOrder = ({ route, navigation }) => {
                   </Text>
                   <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
                     Ksh {""}
-                    {item.price * item.quantity}
+                    {item.attributes.dishPrice * item.attributes.quantity}
                   </ListItem.Title>
                 </View>
                 <View style={{ flexDirection: "row" }}>
@@ -249,11 +249,11 @@ const DetailedOrder = ({ route, navigation }) => {
                       fontFamily: "MontserratSemiBold",
                     }}
                   >
-                    Tax
+                    VAT
                   </Text>
                   <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
                     Ksh {""}
-                    tax
+                    VAT
                     {/* {item.tax} */}
                   </ListItem.Title>
                 </View>

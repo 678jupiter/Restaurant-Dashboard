@@ -87,25 +87,25 @@ const OrderHistoryDetailed = ({ route }) => {
                 <Text
                   style={{ width: "50%", fontFamily: "MontserratSemiBold" }}
                 >
-                  {l.name}
+                  {l.attributes.dishName}
                 </Text>
                 <Text
                   style={{ width: "10%", fontFamily: "MontserratSemiBold" }}
                 >
                   KES {""}
-                  {l.price}
+                  {l.attributes.dishPrice}
                 </Text>
                 <Text
                   style={{ width: "10%", fontFamily: "MontserratSemiBold" }}
                 >
                   X {""}
-                  {l.quantity}
+                  {l.attributes.quantity}
                 </Text>
                 <Text
                   style={{ width: "10%", fontFamily: "MontserratSemiBold" }}
                 >
                   KES {""}
-                  {l.price * l.quantity}
+                  {l.attributes.dishPrice * l.attributes.quantity}
                 </Text>
                 <Card.Divider />
               </View>
