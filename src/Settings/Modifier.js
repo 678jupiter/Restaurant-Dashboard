@@ -15,13 +15,13 @@ import React, { Component } from "react";
 import { Input } from "@rneui/base";
 import { CheckBox } from "@rneui/themed";
 import { Ionicons } from "@expo/vector-icons";
-import { colors } from "./config";
+import { colors } from "../../config";
 import axios from "axios";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export class Ayee extends Component {
+export class Modifiers extends Component {
   state = {
     custom_fields: [{ meta_name: "", meta_value: 0 }],
     required: false,
@@ -54,58 +54,69 @@ export class Ayee extends Component {
     this.setState({ custom_fields: this.state.custom_fields });
   };
 
-  createModifier = () => {
-    this.setState({ isSubmitting: true });
-    axios
-      .post("http://localhost:1337/api/modifiers", {
-        data: {
-          Title: this.state.choice,
-          Numberofitemstochoose: 1,
-          isRequired: this.state.tick,
-          dishes: 40,
-          modifierChild: this.state.custom_fields,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        this.setState({ isSubmitting: false });
-      })
-      .catch((error) => {
-        console.log(error);
-        this.setState({ isSubmitting: false });
-      });
-  };
-  isCherries(item) {
-    // return item.meta_name === "" || item.meta_value === "";
-    if (item.meta_name === "") {
-      Alert.alert("Field Name Should Not Be Empty");
-    } else {
-      console.log("Full");
-      this.createModifier();
-    }
-  }
-  check = () => {
-    const last = this.state.custom_fields[this.state.custom_fields.length - 1];
-    if (last === undefined) {
-      Alert.alert("At least one one item is required.");
-    } else {
-      this.state.custom_fields.find(this.isCherries);
-    }
-  };
-  validateNumber() {
-    const fields = this.state.custom_fields.length;
-    const nuchose = this.state.numerTo;
-    // true
-    if (nuchose == fields || nuchose >= Math.max(1)) {
-      console.log("true");
-    }
-    // false
-    if (nuchose < 1 || nuchose <= 0) {
-      console.log("False");
-    }
-  }
-
   render() {
+    const navigation = this.props;
+
+    const check = () => {
+      const last =
+        this.state.custom_fields[this.state.custom_fields.length - 1];
+      const fields = this.state.custom_fields.length;
+      const nuchose = this.state.numerTo;
+      if (last === undefined) {
+        Alert.alert("At least one  item is required.");
+      } // true
+      if (nuchose == fields || nuchose >= Math.max(1)) {
+        console.log("true");
+      }
+      // false
+      if (nuchose < 1 || nuchose <= 0) {
+        console.log("False");
+      }
+      if (this.state.choice === "") {
+        Alert.alert("Title is missing.");
+      } else {
+        createModifier();
+      }
+    };
+    const isCherries = () => {
+      const result = this.state.custom_fields.find(
+        ({ meta_name }) => meta_name === ""
+      );
+      if (result === undefined) {
+        //console.log("true");
+        return true;
+      } else {
+        Alert.alert("Field Name Should Not Be Empty");
+
+        return false;
+      }
+    };
+
+    const createModifier = () => {
+      if (!isCherries()) {
+        return;
+      }
+      const { dishId } = navigation.route.params;
+      this.setState({ isSubmitting: true });
+      axios
+        .post("http://localhost:1337/api/modifiers", {
+          data: {
+            Title: this.state.choice,
+            Numberofitemstochoose: this.state.numerTo,
+            isRequired: this.state.tick,
+            dishes: dishId,
+            modifierChild: this.state.custom_fields,
+          },
+        })
+        .then((res) => {
+          console.log(1);
+          this.setState({ isSubmitting: false });
+        })
+        .catch((error) => {
+          console.log(error);
+          this.setState({ isSubmitting: false });
+        });
+    };
     return (
       <SafeAreaView
         style={{
@@ -135,7 +146,9 @@ export class Ayee extends Component {
               alignItems: "center",
             }}
           >
-            <Text>How many items can the customer choose?</Text>
+            <Text style={{ fontSize: 18, fontWeight: "600" }}>
+              How many items can the customer choose?
+            </Text>
 
             <View style={{ width: windowWidth / 12 }}>
               <TextInput
@@ -147,7 +160,7 @@ export class Ayee extends Component {
                   padding: 10,
                 }}
                 onChangeText={(text) => this.setState({ numerTo: text })}
-                placeholderTextColor="red"
+                placeholderTextColor="black"
                 keyboardType="number-pad"
               />
             </View>
@@ -226,7 +239,11 @@ export class Ayee extends Component {
                     justifyContent: "center",
                   }}
                 >
-                  <View style={{}}>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Text style={{ fontSize: 18, fontWeight: "600" }}>
+                      Name
+                    </Text>
+
                     <TextInput
                       style={{
                         height: 40,
@@ -243,7 +260,8 @@ export class Ayee extends Component {
                       //defaultValue={customInput.meta_name}
                     />
                   </View>
-                  <View>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Text style={{ fontSize: 18, fontWeight: "600" }}>Fee</Text>
                     <TextInput
                       style={{
                         height: 40,
@@ -341,7 +359,7 @@ export class Ayee extends Component {
             </Pressable>
             {this.state.isSubmitting === false ? (
               <Pressable
-                onPress={() => this.check()}
+                onPress={() => check()}
                 style={{
                   backgroundColor: colors.slate,
                   padding: 20,
@@ -390,4 +408,4 @@ export class Ayee extends Component {
   }
 }
 
-export default Ayee;
+export default Modifiers;

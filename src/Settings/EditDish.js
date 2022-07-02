@@ -7,6 +7,7 @@ import {
   Dimensions,
   Modal,
   Pressable,
+  FlatList,
 } from "react-native";
 import { gql, useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
@@ -22,6 +23,7 @@ import mime from "mime";
 import { showMessage } from "react-native-flash-message";
 import { colors } from "../../config";
 import { useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 const CARTEGORY_ID = gql`
   query ($id: ID!) {
     dish(id: $id) {
@@ -41,6 +43,24 @@ const CARTEGORY_ID = gql`
     }
   }
 `;
+const modifierGp = [
+  {
+    Title: "Choice of Spice",
+    id: "0",
+  },
+  {
+    Title: "Choice of Drink",
+    id: "2",
+  },
+  {
+    Title: "Choice of Fruit",
+    id: "3",
+  },
+  {
+    Title: "Choice of Sugar",
+    id: "4",
+  },
+];
 const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 const EditDish = ({ route }) => {
@@ -86,6 +106,34 @@ const EditDish = ({ route }) => {
       "Content-Type": "multipart/form-data",
     },
   });
+  const Header = () => {
+    return (
+      <View style={{ margin: 10, alignItems: "center" }}>
+        <Text style={{ fontFamily: "CircularStdBold", fontSize: 18 }}>
+          Modifier Groups
+        </Text>
+      </View>
+    );
+  };
+
+  const Footer = (item) => {
+    const navigation = useNavigation();
+    return (
+      <View style={{ margin: 10, alignItems: "center" }}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("modifiers", {
+              dishId: dId,
+            })
+          }
+        >
+          <Text style={{ color: "blue", fontWeight: "900", fontSize: 20 }}>
+            Add
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   useEffect(() => {
     let isCancelled = false;
@@ -370,7 +418,7 @@ const EditDish = ({ route }) => {
             <View style={{ width: windowWidth / 3 }}>
               <Input
                 keyboardType="number-pad"
-                placeholder="Tax"
+                placeholder="Vat"
                 onChangeText={(text) => setTax(text)}
                 defaultValue={Ptax}
               />
@@ -378,6 +426,7 @@ const EditDish = ({ route }) => {
             <View
               style={{
                 alignItems: "center",
+                width: windowWidth / 3,
               }}
             >
               <ImageBackground
@@ -412,6 +461,32 @@ const EditDish = ({ route }) => {
                 </TouchableOpacity>
               </ImageBackground>
             </View>
+          </View>
+          <View
+            style={{
+              justifyContent: "space-evenly",
+              width: windowWidth / 3,
+            }}
+          >
+            <FlatList
+              data={modifierGp}
+              ListHeaderComponent={Header}
+              ListFooterComponent={Footer}
+              renderItem={({ item, i }) => (
+                <View
+                  key={i}
+                  style={{
+                    margin: 10,
+                    alignItems: "center",
+                  }}
+                >
+                  <View style={{ flexDirection: "row" }}>
+                    <Text style={{ marginRight: 8 }}>{item.id}</Text>
+                    <Text>{item.Title}</Text>
+                  </View>
+                </View>
+              )}
+            />
           </View>
         </View>
         <View

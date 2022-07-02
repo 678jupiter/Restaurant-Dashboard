@@ -40,7 +40,9 @@ const SettingScreen = ({ navigation }) => {
               backgroundColor: "#dcffee",
             }}
           >
-            <Card.Title style={{ fontFamily: "MontserratSemiBold" }}>
+            <Card.Title
+              style={{ fontFamily: "MontserratSemiBold", fontSize: 18 }}
+            >
               Items
             </Card.Title>
             <View
@@ -63,7 +65,9 @@ const SettingScreen = ({ navigation }) => {
               backgroundColor: "#dcffee",
             }}
           >
-            <Card.Title style={{ fontFamily: "MontserratSemiBold" }}>
+            <Card.Title
+              style={{ fontFamily: "MontserratSemiBold", fontSize: 18 }}
+            >
               Cartegories
             </Card.Title>
             <View
@@ -94,7 +98,9 @@ const SettingScreen = ({ navigation }) => {
               backgroundColor: "#dcffee",
             }}
           >
-            <Card.Title style={{ fontFamily: "MontserratSemiBold" }}>
+            <Card.Title
+              style={{ fontFamily: "MontserratSemiBold", fontSize: 18 }}
+            >
               Special Offers
             </Card.Title>
             <View style={{ position: "relative", alignItems: "center" }}>
@@ -111,7 +117,9 @@ const SettingScreen = ({ navigation }) => {
               backgroundColor: "#dcffee",
             }}
           >
-            <Card.Title style={{ fontFamily: "MontserratSemiBold" }}>
+            <Card.Title
+              style={{ fontFamily: "MontserratSemiBold", fontSize: 18 }}
+            >
               Settings
             </Card.Title>
             <View

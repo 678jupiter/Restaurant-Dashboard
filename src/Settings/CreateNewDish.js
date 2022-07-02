@@ -18,6 +18,7 @@ import mime from "mime";
 import { showMessage } from "react-native-flash-message";
 import { useSelector } from "react-redux";
 import { FlatList } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const modifierGp = [
   {
@@ -72,10 +73,11 @@ const CreateNewDish = () => {
     );
   };
 
-  const Footer = () => {
+  const Footer = (item) => {
+    const navigation = useNavigation();
     return (
       <View style={{ margin: 10, alignItems: "center" }}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("modifiers")}>
           <Text style={{ color: "blue", fontWeight: "900", fontSize: 20 }}>
             Add
           </Text>
@@ -312,6 +314,7 @@ const CreateNewDish = () => {
           </View>
           <View style={{ width: windowWidth / 3 }}>
             <Input
+              keyboardType="number-pad"
               placeholder="Item Price"
               onChangeText={(text) => setPrice(text)}
             />
@@ -341,7 +344,11 @@ const CreateNewDish = () => {
               alignSelf: "center",
             }}
           >
-            <Input placeholder="Vat" onChangeText={(text) => setTax(text)} />
+            <Input
+              keyboardType="number-pad"
+              placeholder="Vat"
+              onChangeText={(text) => setTax(text)}
+            />
           </View>
           <View
             style={{

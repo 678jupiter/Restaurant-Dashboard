@@ -37,6 +37,7 @@ import EditDish from "../Settings/EditDish";
 import EditCartegory from "../Settings/EditCartegory";
 import OrderHistoryDetailed from "../StackScreens/OrderHistoryDetailed";
 import EditOffer from "../Settings/EditOffer";
+import Modifiers from "../Settings/Modifier";
 
 function DrawerNav({ navigation }) {
   const windowWidth = Dimensions.get("window").width;
@@ -280,6 +281,14 @@ export default function StackNav() {
               options={{
                 animationTypeForReplace: "pop",
                 title: "New Item",
+              }}
+            />
+            <Stack.Screen
+              name="modifiers"
+              component={Modifiers}
+              options={{
+                animationTypeForReplace: "pop",
+                title: "Modifiers",
               }}
             />
             <Stack.Screen
