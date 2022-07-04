@@ -1,63 +1,66 @@
 import {
-  ActivityIndicator,
-  Alert,
-  Button,
-  Dimensions,
-  KeyboardAvoidingView,
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+ActivityIndicator,
+Alert,
+Button,
+Dimensions,
+Pressable,
+SafeAreaView,
+ScrollView,
+Text,
+TextInput,
+TouchableOpacity,
+View,
 } from "react-native";
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { Input } from "@rneui/base";
 import { CheckBox } from "@rneui/themed";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../config";
 import axios from "axios";
-import { Space } from "../../components";
-import { KeyboardScrollUpForms } from "../../utils";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export class NewModifier extends Component {
-  state = {
-    custom_fields: [{ meta_name: "", meta_value: "0" }],
-    required: false,
-    optional: true,
-    tick: false,
-    isSubmitting: false,
-    choice: "",
-    numerTo: 1,
-  };
+export class EditModifier extends Component {
+state = {
+custom_fields: [],
+required: false,
+optional: true,
+tick: false,
+isSubmitting: false,
+choice: "",
+numerTo: 1,
+};
 
-  addCustomField() {
-    this.setState({
-      custom_fields: [
-        ...this.state.custom_fields,
-        { meta_name: "", meta_value: "0" },
-      ],
-    });
-  }
-  OnCustomInputNameHandler = (value, index) => {
-    this.state.custom_fields[index].meta_name = value;
-    this.setState({ custom_fields: this.state.custom_fields });
-  };
-  OnCustomInputKeyHandler = (value, index) => {
-    this.state.custom_fields[index].meta_value = value;
-    this.setState({ custom_fields: this.state.custom_fields });
-  };
-  deleteDynamicField = (index) => {
-    this.state.custom_fields.splice(index, 1);
-    this.setState({ custom_fields: this.state.custom_fields });
-  };
-  render() {
-    const navigation = this.props;
+addCustomField() {
+this.setState({
+custom_fields: [
+...this.state.custom_fields,
+{ meta_name: "", meta_value: "0" },
+],
+});
+}
+OnCustomInputNameHandler = (value, index) => {
+console.log(value);
+this.state.custom_fields[index].meta_name = value;
+this.setState({ custom_fields: this.state.custom_fields });
+};
+OnCustomInputKeyHandler = (value, index) => {
+this.state.custom_fields[index].meta_value = value;
+this.setState({ custom_fields: this.state.custom_fields });
+};
+deleteDynamicField = (index) => {
+this.state.custom_fields.splice(index, 1);
+this.setState({ custom_fields: this.state.custom_fields });
+};
+
+render() {
+const navigation = this.props;
+const { modifierId, numberofitemstochoose, title, isRequired, child } =
+navigation.route.params;
+// console.log(child);
+
+    //console.log(this.state.custom_fields);
 
     const check = () => {
       const last =
@@ -102,10 +105,10 @@ export class NewModifier extends Component {
       if (!isCherries()) {
         return;
       }
-      const { dishId } = navigation.route.params;
+      const { modifierId } = navigation.route.params;
       this.setState({ isSubmitting: true });
       axios
-        .post("http://localhost:1337/api/modifiers", {
+        .put(`http://localhost:1337/api/modifiers/${modifierId}`, {
           data: {
             Title: this.state.choice,
             Numberofitemstochoose: this.state.numerTo,
@@ -123,78 +126,113 @@ export class NewModifier extends Component {
           this.setState({ isSubmitting: false });
         });
     };
+
     return (
-      <SafeAreaView style={styles.safe}>
-        <View style={styles.header}></View>
-        <View style={styles.title}>
-          <Text style={{ fontSize: 18, fontWeight: "600" }}>Title</Text>
-          <Space width={10} />
-          <View style={{ width: windowWidth / 1.3 }}>
-            <Input
-              placeholder="Choice of Spice"
-              onChangeText={(text) => this.setState({ choice: text })}
-            />
+      <SafeAreaView
+        style={{
+          flex: 1,
+        }}
+      >
+        <View
+          style={{
+            flex: 0.3,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View style={{ width: windowWidth / 2 }}>
+            <View style={{ width: windowWidth / 2 }}>
+              <Input
+                placeholder="Choice of Spice"
+                onChangeText={(text) => this.setState({ choice: text })}
+              />
+            </View>
           </View>
-        </View>
-        <View style={styles.question}>
-          <Text style={{ fontSize: 18, fontWeight: "600" }}>
-            How many items can the customer choose?
-          </Text>
-          <Space width={70} />
 
-          <View style={{ width: windowWidth / 12 }}>
-            <TextInput
-              placeholder="1"
-              style={styles.numberInput}
-              onChangeText={(text) => this.setState({ numerTo: text })}
-              placeholderTextColor="black"
-              keyboardType="number-pad"
-            />
-          </View>
-        </View>
-        <View style={styles.requied}>
-          <CheckBox
-            checked={this.state.required}
-            checkedColor="#0F0"
-            checkedTitle="Required"
-            containerStyle={{ width: "40%" }}
-            size={30}
-            textStyle={{}}
-            title="Required"
-            titleProps={{}}
-            uncheckedColor="#F00"
-            onIconPress={() =>
-              this.setState({ optional: false }) ||
-              this.setState({ required: true }) ||
-              this.setState({ tick: true })
-            }
-          />
-          <CheckBox
-            checked={this.state.optional}
-            checkedColor="#0F0"
-            checkedTitle="Optional"
-            containerStyle={{ width: "40%" }}
-            size={30}
-            textStyle={{}}
-            title="Optional"
-            titleProps={{}}
-            uncheckedColor="#F00"
-            onIconPress={() =>
-              this.setState({ optional: true }) ||
-              this.setState({ required: false }) ||
-              this.setState({ tick: false })
-            }
-          />
-        </View>
-
-        <View style={styles.available}>
-          <ScrollView
-            style={{}}
-            showsVerticalScrollIndicator={true}
-            showsHorizontalScrollIndicator={true}
-            indicatorStyle={{ colors: "#000" }}
+          <View
+            style={{
+              width: windowWidth / 2,
+              flexDirection: "row",
+              alignItems: "center",
+            }}
           >
+            <Text style={{ fontSize: 18, fontWeight: "600" }}>
+              How many items can the customer choose?
+            </Text>
+
+            <View style={{ width: windowWidth / 12 }}>
+              <TextInput
+                placeholder="1"
+                style={{
+                  height: 40,
+                  margin: 12,
+                  borderWidth: 1,
+                  padding: 10,
+                }}
+                onChangeText={(text) => this.setState({ numerTo: text })}
+                placeholderTextColor="black"
+                keyboardType="number-pad"
+              />
+            </View>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              alignContent: "center",
+              justifyContent: "center",
+              width: windowWidth / 3,
+            }}
+          >
+            <CheckBox
+              checked={this.state.required}
+              checkedColor="#0F0"
+              checkedTitle="Required"
+              containerStyle={{ width: "75%" }}
+              onIconPress={() =>
+                this.setState({ optional: false }) ||
+                this.setState({ required: true }) ||
+                this.setState({ tick: true })
+              }
+              size={30}
+              textStyle={{}}
+              title="Required"
+              titleProps={{}}
+              uncheckedColor="#F00"
+            />
+            <CheckBox
+              checked={this.state.optional}
+              checkedColor="#0F0"
+              checkedTitle="Optional"
+              containerStyle={{ width: "75%" }}
+              // onIconPress={() => setChecked(!checked)}
+              onIconPress={() =>
+                this.setState({ optional: true }) ||
+                this.setState({ required: false }) ||
+                this.setState({ tick: false })
+              }
+              size={30}
+              textStyle={{}}
+              title="Optional"
+              titleProps={{}}
+              uncheckedColor="#F00"
+            />
+          </View>
+        </View>
+        <View
+          style={{
+            flex: 0.6,
+            justifyContent: "center",
+            alignContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ color: "#2196F3", fontSize: 18 }}>Item</Text>
+
+          <ScrollView>
             {this.state.custom_fields.map((customInput, key) => {
+              // repeat able block
               return (
                 <View
                   key={key}
@@ -223,7 +261,7 @@ export class NewModifier extends Component {
                         this.OnCustomInputNameHandler(name, key);
                       }}
                       placeholder={"Name"}
-                      //defaultValue={customInput.meta_name}
+                      defaultValue={customInput.meta_name}
                     />
                   </View>
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -268,23 +306,31 @@ export class NewModifier extends Component {
                   </View>
                 </View>
               );
+              // End
             })}
           </ScrollView>
+
+          <View>
+            <TouchableOpacity
+              style={{ flexDirection: "row", alignItems: "center" }}
+              onPress={() => {
+                this.addCustomField();
+              }}
+            >
+              <Ionicons name="add-sharp" size={28} color="#2196F3" />
+              <Text style={{ color: "#2196F3", fontSize: 18 }}>
+                ADD ANOTHER ITEM
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.add}>
-          <TouchableOpacity
-            style={{ flexDirection: "row", alignItems: "center" }}
-            onPress={() => {
-              this.addCustomField();
-            }}
-          >
-            <Ionicons name="add-sharp" size={28} color="#2196F3" />
-            <Text style={{ color: "#2196F3", fontSize: 18 }}>
-              ADD ANOTHER ITEM
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.savecancel}>
+        <View
+          style={{
+            flex: 0.1,
+            // backgroundColor: "green",
+            justifyContent: "center",
+          }}
+        >
           <View
             style={{
               alignSelf: "flex-end",
@@ -336,7 +382,7 @@ export class NewModifier extends Component {
                 <Text
                   style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
                 >
-                  SAVE
+                  UPDATE
                 </Text>
               </Pressable>
             ) : (
@@ -363,136 +409,8 @@ export class NewModifier extends Component {
         </View>
       </SafeAreaView>
     );
-  }
+
+}
 }
 
-export default NewModifier;
-const styles = StyleSheet.create({
-  safe: { flex: 1 },
-  header: { flex: 0.07 },
-  title: {
-    flex: 0.06,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  question: {
-    flex: 0.08,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  requied: {
-    flex: 0.13,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
-  },
-  available: {
-    flex: 0.52,
-    // backgroundColor: "yellow",
-  },
-  add: {
-    flex: 0.05,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  savecancel: {
-    flex: 0.09,
-    justifyContent: "center",
-  },
-  layout: {
-    backgroundColor: "white",
-    shadowColor: "#000",
-
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    borderRadius: 8,
-
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    width: windowWidth / 2,
-    height: 50,
-    justifyContent: "center",
-    alignContent: "center",
-  },
-  input: {
-    backgroundColor: "white",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    borderRadius: 8,
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    width: windowWidth / 2,
-    height: 50,
-    justifyContent: "center",
-    alignContent: "center",
-  },
-  newinput: {
-    backgroundColor: "white",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    borderRadius: 8,
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    width: windowWidth / 1.8,
-    height: 50,
-    justifyContent: "center",
-    alignContent: "center",
-  },
-  numberInput: {
-    backgroundColor: "white",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    borderRadius: 2,
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    //padding: 10,
-    textAlign: "center",
-  },
-  centeredView: {
-    //flex: 1,
-    justifyContent: "center",
-    //alignItems: "center",
-    marginTop: 120,
-    backgroundColor: "white",
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    height: 100,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignContent: "center",
-  },
-});
+export default EditModifier;

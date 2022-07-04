@@ -8,6 +8,7 @@ import {
   Modal,
   Pressable,
   FlatList,
+  Touchable,
 } from "react-native";
 import { gql, useQuery } from "@apollo/client";
 import React, { useEffect, useState } from "react";
@@ -30,6 +31,17 @@ const CARTEGORY_ID = gql`
       data {
         id
         attributes {
+          modifiers {
+            data {
+              id
+              attributes {
+                Title
+                Numberofitemstochoose
+                isRequired
+                modifierChild
+              }
+            }
+          }
           restaurants {
             data {
               id
@@ -64,6 +76,8 @@ const modifierGp = [
 const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 const EditDish = ({ route }) => {
+  const navigation = useNavigation();
+
   const { Pname, Pprice, Pimage, Ptax, dId, Pdescription } = route.params;
   console.log(Pimage);
 
@@ -117,7 +131,6 @@ const EditDish = ({ route }) => {
   };
 
   const Footer = (item) => {
-    const navigation = useNavigation();
     return (
       <View style={{ margin: 10, alignItems: "center" }}>
         <TouchableOpacity
@@ -282,10 +295,12 @@ const EditDish = ({ route }) => {
 
   if (data) {
     // console.log(data.dish.data.attributes.restaurants.data);
+
     const {
       dish: {
         data: {
           attributes: {
+            modifiers,
             restaurants: {
               data: [id],
             },
@@ -469,7 +484,7 @@ const EditDish = ({ route }) => {
             }}
           >
             <FlatList
-              data={modifierGp}
+              data={modifiers.data}
               ListHeaderComponent={Header}
               ListFooterComponent={Footer}
               renderItem={({ item, i }) => (
@@ -481,8 +496,20 @@ const EditDish = ({ route }) => {
                   }}
                 >
                   <View style={{ flexDirection: "row" }}>
-                    <Text style={{ marginRight: 8 }}>{item.id}</Text>
-                    <Text>{item.Title}</Text>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate("editModifier", {
+                          numberofitemstochoose:
+                            item.attributes.Numberofitemstochoose,
+                          title: item.attributes.Title,
+                          isRequired: item.attributes.isRequired,
+                          child: item.attributes.modifierChild,
+                          modifierId: item.id,
+                        })
+                      }
+                    >
+                      <Text>{item.attributes.Title}</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               )}

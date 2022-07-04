@@ -3,7 +3,6 @@ import {
   Alert,
   Button,
   Dimensions,
-  KeyboardAvoidingView,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -12,29 +11,40 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Modal,
 } from "react-native";
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { Input } from "@rneui/base";
 import { CheckBox } from "@rneui/themed";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../config";
 import axios from "axios";
+import { EvilIcons } from "@expo/vector-icons";
 import { Space } from "../../components";
-import { KeyboardScrollUpForms } from "../../utils";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export class NewModifier extends Component {
+export class EditModifier extends Component {
   state = {
-    custom_fields: [{ meta_name: "", meta_value: "0" }],
+    prevModifires: [],
+    custom_fields: null,
     required: false,
     optional: true,
     tick: false,
     isSubmitting: false,
     choice: "",
     numerTo: 1,
+    isSubmitting: false,
+    modalVisible: false,
+    custom_fields: [],
   };
+  mergeItems() {
+    this.setState({
+      prevModifires: [...this.state.prevModifires, ...this.state.custom_fields],
+    });
+    this.setState({ custom_fields: [] });
+  }
 
   addCustomField() {
     this.setState({
@@ -56,8 +66,49 @@ export class NewModifier extends Component {
     this.state.custom_fields.splice(index, 1);
     this.setState({ custom_fields: this.state.custom_fields });
   };
+
+  openModal = () => {
+    this.addCustomField();
+    this.setState({ modalVisible: true });
+  };
+  closeModal = () => {
+    this.mergeItems();
+    this.setState({ modalVisible: false });
+  };
+  updateCache = (item) => {
+    this.state.prevModifires.splice(this.state.prevModifires.indexOf(item), 1);
+    const newarr = this.state.prevModifires;
+    this.setState({ prevModifires: newarr });
+  };
+  getPrevMofifires = () => {
+    const navigation = this.props;
+    const { modifierId, numberofitemstochoose, title, isRequired, child } =
+      navigation.route.params;
+    axios
+      .get(`http://localhost:1337/api/modifiers/${modifierId}`)
+      .then((res) => {
+        const {
+          data: {
+            attributes: { modifierChild },
+          },
+        } = res.data;
+        this.setState({ prevModifires: modifierChild });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  componentDidMount = () => {
+    this.getPrevMofifires();
+  };
+
   render() {
     const navigation = this.props;
+    const { modifierId, numberofitemstochoose, title, isRequired, child } =
+      navigation.route.params;
+    // console.log(child);
+
+    //console.log(this.state.custom_fields);
 
     const check = () => {
       const last =
@@ -102,16 +153,17 @@ export class NewModifier extends Component {
       if (!isCherries()) {
         return;
       }
-      const { dishId } = navigation.route.params;
-      this.setState({ isSubmitting: true });
+      this.closeModal();
+    };
+    const updateItemModifier = () => {
       axios
-        .post("http://localhost:1337/api/modifiers", {
+        .put(`http://localhost:1337/api/modifiers/40`, {
           data: {
-            Title: this.state.choice,
+            Title: "Dish Check",
             Numberofitemstochoose: this.state.numerTo,
             isRequired: this.state.tick,
-            dishes: dishId,
-            modifierChild: this.state.custom_fields,
+            //   dishes: dishId,
+            modifierChild: this.state.prevModifires,
           },
         })
         .then((res) => {
@@ -123,6 +175,7 @@ export class NewModifier extends Component {
           this.setState({ isSubmitting: false });
         });
     };
+
     return (
       <SafeAreaView style={styles.safe}>
         <View style={styles.header}></View>
@@ -146,7 +199,7 @@ export class NewModifier extends Component {
             <TextInput
               placeholder="1"
               style={styles.numberInput}
-              onChangeText={(text) => this.setState({ numerTo: text })}
+              // onChangeText={(text) => this.setState({ numerTo: text })}
               placeholderTextColor="black"
               keyboardType="number-pad"
             />
@@ -154,7 +207,7 @@ export class NewModifier extends Component {
         </View>
         <View style={styles.requied}>
           <CheckBox
-            checked={this.state.required}
+            checked={true}
             checkedColor="#0F0"
             checkedTitle="Required"
             containerStyle={{ width: "40%" }}
@@ -163,14 +216,9 @@ export class NewModifier extends Component {
             title="Required"
             titleProps={{}}
             uncheckedColor="#F00"
-            onIconPress={() =>
-              this.setState({ optional: false }) ||
-              this.setState({ required: true }) ||
-              this.setState({ tick: true })
-            }
           />
           <CheckBox
-            checked={this.state.optional}
+            checked={true}
             checkedColor="#0F0"
             checkedTitle="Optional"
             containerStyle={{ width: "40%" }}
@@ -179,14 +227,8 @@ export class NewModifier extends Component {
             title="Optional"
             titleProps={{}}
             uncheckedColor="#F00"
-            onIconPress={() =>
-              this.setState({ optional: true }) ||
-              this.setState({ required: false }) ||
-              this.setState({ tick: false })
-            }
           />
         </View>
-
         <View style={styles.available}>
           <ScrollView
             style={{}}
@@ -194,89 +236,89 @@ export class NewModifier extends Component {
             showsHorizontalScrollIndicator={true}
             indicatorStyle={{ colors: "#000" }}
           >
-            {this.state.custom_fields.map((customInput, key) => {
-              return (
-                <View
-                  key={key}
-                  style={{
-                    flexDirection: "row",
-                    alignContent: "space-around",
-                    width: windowWidth,
-                    justifyContent: "center",
-                  }}
-                >
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <Text style={{ fontSize: 18, fontWeight: "600" }}>
-                      Name
-                    </Text>
-
-                    <TextInput
+            {this.state.prevModifires?.map((item, i) => (
+              <View
+                key={i}
+                style={{
+                  justifyContent: "center",
+                  alignContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <View style={styles.layout}>
+                  <View
+                    style={{
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      flexDirection: "row",
+                      //  marginTop: 15,
+                    }}
+                  >
+                    <View
                       style={{
-                        height: 40,
-                        width: windowWidth / 4,
-                        margin: 12,
-                        borderWidth: 1,
-                        padding: 10,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        alignContent: "center",
                       }}
-                      value={customInput.key}
-                      onChangeText={(name) => {
-                        this.OnCustomInputNameHandler(name, key);
-                      }}
-                      placeholder={"Name"}
-                      //defaultValue={customInput.meta_name}
-                    />
-                  </View>
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <Text style={{ fontSize: 18, fontWeight: "600" }}>Fee</Text>
-                    <TextInput
+                    >
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          // fontWeight: "bold",
+                          marginLeft: 10,
+                          color: "black",
+                        }}
+                      >
+                        {item.meta_name}
+                      </Text>
+                    </View>
+                    <View
                       style={{
-                        height: 40,
-                        width: windowWidth / 8,
-
-                        margin: 12,
-                        borderWidth: 1,
-                        padding: 10,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        alignContent: "center",
                       }}
-                      onChangeText={(value) => {
-                        this.OnCustomInputKeyHandler(value, key);
-                      }}
-                      placeholder={"KSH 0"}
-                      keyboardType="numeric"
-                      defaultValue="0"
-                    />
+                    >
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          // fontWeight: "bold",
+                          marginLeft: 10,
+                          color: "black",
+                        }}
+                      >
+                        KSH {item.meta_value}
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => this.updateCache(item)}
+                        style={{ marginRight: 20, marginLeft: 20 }}
+                      >
+                        <EvilIcons name="trash" size={30} color="black" />
+                      </TouchableOpacity>
+                    </View>
                   </View>
                   <View
                     style={{
-                      alignSelf: "center",
-                      justifyContent: "center",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      flexDirection: "row",
+                      marginTop: 6,
                     }}
-                  >
-                    <TouchableOpacity
-                      onPress={() => this.deleteDynamicField(key)}
-                      style={{
-                        padding: 10,
-                      }}
-                    >
-                      <Text style={{}}>
-                        <Ionicons
-                          name="ios-trash-outline"
-                          size={24}
-                          color="black"
-                        />
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                  ></View>
                 </View>
-              );
-            })}
+                <View
+                  style={{ margin: 6, backgroundColor: "rgba(39, 39, 39, 1)" }}
+                ></View>
+              </View>
+            ))}
           </ScrollView>
         </View>
         <View style={styles.add}>
           <TouchableOpacity
             style={{ flexDirection: "row", alignItems: "center" }}
-            onPress={() => {
-              this.addCustomField();
-            }}
+            onPress={() => this.openModal()}
           >
             <Ionicons name="add-sharp" size={28} color="#2196F3" />
             <Text style={{ color: "#2196F3", fontSize: 18 }}>
@@ -317,7 +359,7 @@ export class NewModifier extends Component {
             </Pressable>
             {this.state.isSubmitting === false ? (
               <Pressable
-                onPress={() => check()}
+                onPress={() => updateItemModifier()}
                 style={{
                   backgroundColor: colors.slate,
                   padding: 20,
@@ -361,12 +403,160 @@ export class NewModifier extends Component {
             )}
           </View>
         </View>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text
+                style={{
+                  marginTop: 10,
+                  fontSize: 20,
+                  color: colors.slate,
+
+                  fontWeight: "600",
+                }}
+              >
+                New Item
+              </Text>
+              {this.state.custom_fields.map((customInput, key) => {
+                return (
+                  <View style={styles.newinput} key={key}>
+                    <View
+                      style={{
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        flexDirection: "row",
+                        //  marginTop: 15,
+                      }}
+                    >
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          alignContent: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 20,
+                            marginLeft: 10,
+                            color: "black",
+                          }}
+                        >
+                          Name
+                        </Text>
+                        <TextInput
+                          style={{
+                            height: 40,
+                            width: windowWidth / 5,
+
+                            margin: 12,
+                            borderBottomWidth: 1,
+                            padding: 10,
+                          }}
+                          placeholder="Name"
+                          textAlign="left"
+                          value={customInput.key}
+                          onChangeText={(name) => {
+                            this.OnCustomInputNameHandler(name, key);
+                          }}
+                        />
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          alignContent: "center",
+                          marginTop: 4,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 20,
+                            marginLeft: 10,
+                            color: "black",
+                          }}
+                        >
+                          KSH
+                        </Text>
+                        <TextInput
+                          style={{
+                            height: 40,
+                            width: windowWidth / 16,
+                            borderWidth: 1,
+
+                            margin: 12,
+                            borderBottomWidth: 1,
+                            padding: 10,
+                          }}
+                          placeholder="0"
+                          textAlign="center"
+                          keyboardAppearance="default"
+                          keyboardType="number-pad"
+                          onChangeText={(value) => {
+                            this.OnCustomInputKeyHandler(value, key);
+                          }}
+                        />
+                        <View style={{ marginRight: 20, marginLeft: 20 }}>
+                          <EvilIcons name="trash" size={30} color="black" />
+                        </View>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        flexDirection: "row",
+                        marginTop: 6,
+                      }}
+                    ></View>
+                  </View>
+                );
+              })}
+
+              <View style={{ marginLeft: 35 }}>
+                <Text
+                  onPress={() => createModifier()}
+                  style={{
+                    marginTop: 10,
+                    fontSize: 20,
+                    color: colors.slate,
+                    fontWeight: "600",
+                  }}
+                >
+                  SAVE
+                </Text>
+                <Text
+                  onPress={() => console.log(this.state.prevModifires)}
+                  style={{
+                    marginTop: 10,
+                    fontSize: 20,
+                    color: colors.slate,
+                    fontWeight: "600",
+                  }}
+                >
+                  Check
+                </Text>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </SafeAreaView>
     );
   }
 }
 
-export default NewModifier;
+export default EditModifier;
 const styles = StyleSheet.create({
   safe: { flex: 1 },
   header: { flex: 0.07 },

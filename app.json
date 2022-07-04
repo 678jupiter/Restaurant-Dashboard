@@ -3,7 +3,7 @@
     "name": "restaurantTab",
     "slug": "restaurantTab",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "landscape",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "splash": {

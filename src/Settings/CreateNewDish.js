@@ -297,6 +297,7 @@ const CreateNewDish = () => {
         style={{
           flex: 0.9,
           flexDirection: "row",
+          justifyContent: "center",
         }}
       >
         <View style={{ justifyContent: "space-evenly" }}>
@@ -388,32 +389,6 @@ const CreateNewDish = () => {
               </TouchableOpacity>
             </ImageBackground>
           </View>
-        </View>
-        <View
-          style={{
-            justifyContent: "space-evenly",
-            width: windowWidth / 3,
-          }}
-        >
-          <FlatList
-            data={modifierGp}
-            ListHeaderComponent={Header}
-            ListFooterComponent={Footer}
-            renderItem={({ item, i }) => (
-              <View
-                key={i}
-                style={{
-                  margin: 10,
-                  alignItems: "center",
-                }}
-              >
-                <View style={{ flexDirection: "row" }}>
-                  <Text style={{ marginRight: 8 }}>{item.id}</Text>
-                  <Text>{item.Title}</Text>
-                </View>
-              </View>
-            )}
-          />
         </View>
       </View>
       <View

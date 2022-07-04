@@ -3,11 +3,9 @@ import {
   Alert,
   Button,
   Dimensions,
-  KeyboardAvoidingView,
   Pressable,
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -19,8 +17,6 @@ import { CheckBox } from "@rneui/themed";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../config";
 import axios from "axios";
-import { Space } from "../../components";
-import { KeyboardScrollUpForms } from "../../utils";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -186,7 +182,6 @@ export class NewModifier extends Component {
             }
           />
         </View>
-
         <View style={styles.available}>
           <ScrollView
             style={{}}
@@ -384,6 +379,7 @@ const styles = StyleSheet.create({
   },
   requied: {
     flex: 0.13,
+    backgroundColor: "pink",
     flexDirection: "row",
     justifyContent: "center",
     alignContent: "center",
