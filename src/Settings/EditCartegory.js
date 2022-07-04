@@ -205,6 +205,7 @@ const EditCartegory = ({ route }) => {
           defaultValue={Cname}
           placeholder="Name a Cartegory"
           onChangeText={(text) => setName(text)}
+          textAlign="center"
         />
       </View>
       <Space height={30} />

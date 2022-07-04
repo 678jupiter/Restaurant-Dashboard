@@ -75,6 +75,10 @@ export class EditModifier extends Component {
     this.mergeItems();
     this.setState({ modalVisible: false });
   };
+  cancelModal = () => {
+    this.setState({ modalVisible: false });
+    this.setState({ custom_fields: [] });
+  };
   updateCache = (item) => {
     this.state.prevModifires.splice(this.state.prevModifires.indexOf(item), 1);
     const newarr = this.state.prevModifires;
@@ -89,15 +93,35 @@ export class EditModifier extends Component {
       .then((res) => {
         const {
           data: {
-            attributes: { modifierChild },
+            attributes: {
+              Numberofitemstochoose,
+              Title,
+              isRequired,
+              modifierChild,
+            },
           },
         } = res.data;
         this.setState({ prevModifires: modifierChild });
+        this.setState({ tick: isRequired });
+        this.setState({ choice: Title });
+        this.setState({ numerTo: Numberofitemstochoose });
+
+        if (isRequired === true) {
+          this.setState({ tick: true });
+          this.setState({ required: true });
+          this.setState({ optional: false });
+        }
+        if (isRequired === false) {
+          this.setState({ tick: false });
+          this.setState({ optional: true });
+          this.setState({ required: false });
+        }
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
   componentDidMount = () => {
     this.getPrevMofifires();
   };
@@ -155,14 +179,37 @@ export class EditModifier extends Component {
       }
       this.closeModal();
     };
+
+    const checkUpper = () => {
+      const fields = this.state.custom_fields.length;
+      const nuchose = this.state.numerTo;
+
+      if (nuchose == fields || nuchose >= Math.max(1)) {
+        console.log("true");
+      }
+      // false
+      if (nuchose < 1 || nuchose <= 0) {
+        Alert.alert("Number of items is incorrect");
+      }
+      if (this.state.choice === "") {
+        Alert.alert("Title is missing.");
+      }
+      if (this.state.prevModifires.length === 0) {
+        Alert.alert("At least one  item is required.");
+      } else {
+        updateItemModifier();
+      }
+    };
     const updateItemModifier = () => {
+      const navigation = this.props;
+      const { modifierId } = navigation.route.params;
+
       axios
-        .put(`http://localhost:1337/api/modifiers/40`, {
+        .put(`http://localhost:1337/api/modifiers/${modifierId}`, {
           data: {
-            Title: "Dish Check",
+            Title: this.state.choice,
             Numberofitemstochoose: this.state.numerTo,
             isRequired: this.state.tick,
-            //   dishes: dishId,
             modifierChild: this.state.prevModifires,
           },
         })
@@ -186,6 +233,7 @@ export class EditModifier extends Component {
             <Input
               placeholder="Choice of Spice"
               onChangeText={(text) => this.setState({ choice: text })}
+              defaultValue={this.state.choice}
             />
           </View>
         </View>
@@ -199,15 +247,16 @@ export class EditModifier extends Component {
             <TextInput
               placeholder="1"
               style={styles.numberInput}
-              // onChangeText={(text) => this.setState({ numerTo: text })}
+              onChangeText={(text) => this.setState({ numerTo: text })}
               placeholderTextColor="black"
               keyboardType="number-pad"
+              defaultValue={JSON.stringify(this.state.numerTo)}
             />
           </View>
         </View>
         <View style={styles.requied}>
           <CheckBox
-            checked={true}
+            checked={this.state.required}
             checkedColor="#0F0"
             checkedTitle="Required"
             containerStyle={{ width: "40%" }}
@@ -216,9 +265,14 @@ export class EditModifier extends Component {
             title="Required"
             titleProps={{}}
             uncheckedColor="#F00"
+            onIconPress={() =>
+              this.setState({ optional: false }) ||
+              this.setState({ required: true }) ||
+              this.setState({ tick: true })
+            }
           />
           <CheckBox
-            checked={true}
+            checked={this.state.optional}
             checkedColor="#0F0"
             checkedTitle="Optional"
             containerStyle={{ width: "40%" }}
@@ -227,6 +281,11 @@ export class EditModifier extends Component {
             title="Optional"
             titleProps={{}}
             uncheckedColor="#F00"
+            onIconPress={() =>
+              this.setState({ optional: true }) ||
+              this.setState({ required: false }) ||
+              this.setState({ tick: false })
+            }
           />
         </View>
         <View style={styles.available}>
@@ -359,7 +418,7 @@ export class EditModifier extends Component {
             </Pressable>
             {this.state.isSubmitting === false ? (
               <Pressable
-                onPress={() => updateItemModifier()}
+                onPress={() => checkUpper()}
                 style={{
                   backgroundColor: colors.slate,
                   padding: 20,
@@ -537,7 +596,7 @@ export class EditModifier extends Component {
                   SAVE
                 </Text>
                 <Text
-                  onPress={() => console.log(this.state.prevModifires)}
+                  onPress={() => this.cancelModal()}
                   style={{
                     marginTop: 10,
                     fontSize: 20,
@@ -545,7 +604,7 @@ export class EditModifier extends Component {
                     fontWeight: "600",
                   }}
                 >
-                  Check
+                  Cancel
                 </Text>
               </View>
             </View>

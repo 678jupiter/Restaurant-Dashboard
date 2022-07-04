@@ -123,8 +123,14 @@ const EditDish = ({ route }) => {
   const Header = () => {
     return (
       <View style={{ margin: 10, alignItems: "center" }}>
-        <Text style={{ fontFamily: "CircularStdBold", fontSize: 18 }}>
-          Modifier Groups
+        <Text
+          style={{
+            fontFamily: "CircularStdBold",
+            fontSize: 18,
+            color: colors.slate,
+          }}
+        >
+          Available Modifier Groups
         </Text>
       </View>
     );
@@ -140,8 +146,8 @@ const EditDish = ({ route }) => {
             })
           }
         >
-          <Text style={{ color: "blue", fontWeight: "900", fontSize: 20 }}>
-            Add
+          <Text style={{ color: colors.slate, fontSize: 20 }}>
+            Add New Group
           </Text>
         </TouchableOpacity>
       </View>
@@ -378,6 +384,7 @@ const EditDish = ({ route }) => {
                 placeholder="Item Name"
                 defaultValue={Pname}
                 onChangeText={(text) => setName(text)}
+                textAlign="center"
               />
             </View>
             <View style={{ width: windowWidth / 3 }}>
@@ -385,6 +392,7 @@ const EditDish = ({ route }) => {
                 placeholder="Item Description"
                 defaultValue={Pdescription}
                 onChangeText={(text) => setDescription(text)}
+                textAlign="center"
               />
             </View>
             <View style={{ width: windowWidth / 3 }}>
@@ -393,12 +401,13 @@ const EditDish = ({ route }) => {
                 placeholder="Item Price"
                 defaultValue={angile}
                 onChangeText={(text) => setPrice(text)}
+                textAlign="center"
               />
             </View>
             {cartegoryName === "" ? (
               <Pressable
                 onPress={() => closeModal(true)}
-                style={{ width: windowWidth / 3 }}
+                style={{ width: windowWidth / 3, alignItems: "center" }}
               >
                 <Text
                   style={{
@@ -410,11 +419,14 @@ const EditDish = ({ route }) => {
                   {id.attributes.name}
                 </Text>
                 <Border height={1} backgroundColor={colors.dark_gray} />
+                <Text style={{ color: colors.slate, fontSize: 20 }}>
+                  Press to edit cartegory
+                </Text>
               </Pressable>
             ) : (
               <Pressable
                 onPress={() => closeModal(true)}
-                style={{ width: windowWidth / 3 }}
+                style={{ width: windowWidth / 3, alignItems: "center" }}
               >
                 <Text
                   style={{
@@ -425,7 +437,10 @@ const EditDish = ({ route }) => {
                 >
                   {cartegoryName}
                 </Text>
-                <Border height={1} backgroundColor={colors.dark_gray} />
+                <Text style={{ color: colors.slate, fontSize: 20 }}>
+                  Press to edit cartegory
+                </Text>
+                <Border height={1} backgroundColor={colors.slate} />
               </Pressable>
             )}
           </View>
@@ -436,6 +451,7 @@ const EditDish = ({ route }) => {
                 placeholder="Vat"
                 onChangeText={(text) => setTax(text)}
                 defaultValue={Ptax}
+                textAlign="center"
               />
             </View>
             <View
