@@ -125,7 +125,9 @@ const Delivering = ({ navigation }) => {
           paddingTop: 20,
         }}
       >
-        <Text style={{ color: "white", fontSize: 40 }}>No New Orders.</Text>
+        <Text style={{ color: "white", fontSize: 40 }}>
+          No Accepted Orders.
+        </Text>
       </View>
     );
   }

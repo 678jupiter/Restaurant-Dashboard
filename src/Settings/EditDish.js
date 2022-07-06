@@ -397,7 +397,7 @@ const EditDish = ({ route }) => {
             </View>
             <View style={{ width: windowWidth / 3 }}>
               <Input
-                keyboardType="number-pad"
+                keyboardType={"numeric"}
                 placeholder="Item Price"
                 defaultValue={angile}
                 onChangeText={(text) => setPrice(text)}
@@ -447,7 +447,7 @@ const EditDish = ({ route }) => {
           <View style={{ justifyContent: "space-evenly" }}>
             <View style={{ width: windowWidth / 3 }}>
               <Input
-                keyboardType="number-pad"
+                keyboardType={"numeric"}
                 placeholder="Vat"
                 onChangeText={(text) => setTax(text)}
                 defaultValue={Ptax}

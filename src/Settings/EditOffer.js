@@ -256,7 +256,7 @@ const EditOffer = ({ route }) => {
           </View>
           <View style={{ width: windowWidth / 3 }}>
             <Input
-              keyboardType="number-pad"
+              keyboardType={"numeric"}
               placeholder="Item Price"
               defaultValue={angile}
               onChangeText={(text) => setPrice(text)}
@@ -266,7 +266,7 @@ const EditOffer = ({ route }) => {
         <View style={{ justifyContent: "space-evenly" }}>
           <View style={{ width: windowWidth / 3 }}>
             <Input
-              keyboardType="number-pad"
+              keyboardType={"numeric"}
               placeholder="Tax"
               onChangeText={(text) => setTax(text)}
               defaultValue={Ptax}

@@ -35,9 +35,9 @@ export class EditModifier extends Component {
     isSubmitting: false,
     choice: "",
     numerTo: 1,
-    isSubmitting: false,
     modalVisible: false,
     custom_fields: [],
+    fetchingData: false,
   };
   mergeItems() {
     this.setState({
@@ -88,9 +88,11 @@ export class EditModifier extends Component {
     const navigation = this.props;
     const { modifierId, numberofitemstochoose, title, isRequired, child } =
       navigation.route.params;
+    this.setState({ fetchingData: true });
     axios
       .get(`http://localhost:1337/api/modifiers/${modifierId}`)
       .then((res) => {
+        this.setState({ fetchingData: false });
         const {
           data: {
             attributes: {
@@ -116,6 +118,7 @@ export class EditModifier extends Component {
           this.setState({ optional: true });
           this.setState({ required: false });
         }
+        this.setState({ fetchingData: false });
       })
       .catch((error) => {
         console.log(error);
@@ -203,6 +206,7 @@ export class EditModifier extends Component {
     const updateItemModifier = () => {
       const navigation = this.props;
       const { modifierId } = navigation.route.params;
+      this.setState({ isSubmitting: true });
 
       axios
         .put(`http://localhost:1337/api/modifiers/${modifierId}`, {
@@ -225,391 +229,407 @@ export class EditModifier extends Component {
 
     return (
       <SafeAreaView style={styles.safe}>
-        <View style={styles.header}></View>
-        <View style={styles.title}>
-          <Text style={{ fontSize: 18, fontWeight: "600" }}>Title</Text>
-          <Space width={10} />
-          <View style={{ width: windowWidth / 1.3 }}>
-            <Input
-              placeholder="Choice of Spice"
-              onChangeText={(text) => this.setState({ choice: text })}
-              defaultValue={this.state.choice}
-            />
-          </View>
-        </View>
-        <View style={styles.question}>
-          <Text style={{ fontSize: 18, fontWeight: "600" }}>
-            How many items can the customer choose?
-          </Text>
-          <Space width={70} />
-
-          <View style={{ width: windowWidth / 12 }}>
-            <TextInput
-              placeholder="1"
-              style={styles.numberInput}
-              onChangeText={(text) => this.setState({ numerTo: text })}
-              placeholderTextColor="black"
-              keyboardType="number-pad"
-              defaultValue={JSON.stringify(this.state.numerTo)}
-            />
-          </View>
-        </View>
-        <View style={styles.requied}>
-          <CheckBox
-            checked={this.state.required}
-            checkedColor="#0F0"
-            checkedTitle="Required"
-            containerStyle={{ width: "40%" }}
-            size={30}
-            textStyle={{}}
-            title="Required"
-            titleProps={{}}
-            uncheckedColor="#F00"
-            onIconPress={() =>
-              this.setState({ optional: false }) ||
-              this.setState({ required: true }) ||
-              this.setState({ tick: true })
-            }
-          />
-          <CheckBox
-            checked={this.state.optional}
-            checkedColor="#0F0"
-            checkedTitle="Optional"
-            containerStyle={{ width: "40%" }}
-            size={30}
-            textStyle={{}}
-            title="Optional"
-            titleProps={{}}
-            uncheckedColor="#F00"
-            onIconPress={() =>
-              this.setState({ optional: true }) ||
-              this.setState({ required: false }) ||
-              this.setState({ tick: false })
-            }
-          />
-        </View>
-        <View style={styles.available}>
-          <ScrollView
-            style={{}}
-            showsVerticalScrollIndicator={true}
-            showsHorizontalScrollIndicator={true}
-            indicatorStyle={{ colors: "#000" }}
+        {this.setState.fetchingData ? (
+          <View
+            style={{ alignItems: "center", flex: 1, justifyContent: "center" }}
           >
-            {this.state.prevModifires?.map((item, i) => (
-              <View
-                key={i}
-                style={{
-                  justifyContent: "center",
-                  alignContent: "center",
-                  alignItems: "center",
-                }}
+            <ActivityIndicator size="large" />
+          </View>
+        ) : (
+          <>
+            <View style={styles.header}></View>
+            <View style={styles.title}>
+              <Text style={{ fontSize: 18, fontWeight: "600" }}>Title</Text>
+              <Space width={10} />
+              <View style={{ width: windowWidth / 1.3 }}>
+                <Input
+                  placeholder="Choice of Spice"
+                  onChangeText={(text) => this.setState({ choice: text })}
+                  defaultValue={this.state.choice}
+                />
+              </View>
+            </View>
+            <View style={styles.question}>
+              <Text style={{ fontSize: 18, fontWeight: "600" }}>
+                How many items can the customer choose?
+              </Text>
+              <Space width={70} />
+
+              <View style={{ width: windowWidth / 12 }}>
+                <TextInput
+                  // placeholder="1"
+                  style={styles.numberInput}
+                  onChangeText={(text) => this.setState({ numerTo: text })}
+                  placeholderTextColor="black"
+                  keyboardType={"numeric"}
+                  defaultValue={this.state.numerTo.toString()}
+                />
+              </View>
+            </View>
+            <View style={styles.requied}>
+              <CheckBox
+                checked={this.state.required}
+                checkedColor="#0F0"
+                checkedTitle="Required"
+                containerStyle={{ width: "40%" }}
+                size={30}
+                textStyle={{}}
+                title="Required"
+                titleProps={{}}
+                uncheckedColor="#F00"
+                onIconPress={() =>
+                  this.setState({ optional: false }) ||
+                  this.setState({ required: true }) ||
+                  this.setState({ tick: true })
+                }
+              />
+              <CheckBox
+                checked={this.state.optional}
+                checkedColor="#0F0"
+                checkedTitle="Optional"
+                containerStyle={{ width: "40%" }}
+                size={30}
+                textStyle={{}}
+                title="Optional"
+                titleProps={{}}
+                uncheckedColor="#F00"
+                onIconPress={() =>
+                  this.setState({ optional: true }) ||
+                  this.setState({ required: false }) ||
+                  this.setState({ tick: false })
+                }
+              />
+            </View>
+            <View style={styles.available}>
+              <ScrollView
+                style={{}}
+                showsVerticalScrollIndicator={true}
+                showsHorizontalScrollIndicator={true}
+                indicatorStyle={{ colors: "#000" }}
               >
-                <View style={styles.layout}>
+                {this.state.prevModifires?.map((item, i) => (
                   <View
+                    key={i}
                     style={{
+                      justifyContent: "center",
+                      alignContent: "center",
                       alignItems: "center",
-                      justifyContent: "space-between",
-                      flexDirection: "row",
-                      //  marginTop: 15,
                     }}
                   >
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        alignContent: "center",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          // fontWeight: "bold",
-                          marginLeft: 10,
-                          color: "black",
-                        }}
-                      >
-                        {item.meta_name}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        alignContent: "center",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          // fontWeight: "bold",
-                          marginLeft: 10,
-                          color: "black",
-                        }}
-                      >
-                        KSH {item.meta_value}
-                      </Text>
-                      <TouchableOpacity
-                        onPress={() => this.updateCache(item)}
-                        style={{ marginRight: 20, marginLeft: 20 }}
-                      >
-                        <EvilIcons name="trash" size={30} color="black" />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      flexDirection: "row",
-                      marginTop: 6,
-                    }}
-                  ></View>
-                </View>
-                <View
-                  style={{ margin: 6, backgroundColor: "rgba(39, 39, 39, 1)" }}
-                ></View>
-              </View>
-            ))}
-          </ScrollView>
-        </View>
-        <View style={styles.add}>
-          <TouchableOpacity
-            style={{ flexDirection: "row", alignItems: "center" }}
-            onPress={() => this.openModal()}
-          >
-            <Ionicons name="add-sharp" size={28} color="#2196F3" />
-            <Text style={{ color: "#2196F3", fontSize: 18 }}>
-              ADD ANOTHER ITEM
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.savecancel}>
-          <View
-            style={{
-              alignSelf: "flex-end",
-              marginRight: 50,
-              flexDirection: "row",
-            }}
-          >
-            <Pressable
-              onPress={() => this.props.navigation.goBack()}
-              style={{
-                backgroundColor: colors.dark_gray,
-                padding: 20,
-                alignItems: "center",
-                marginLeft: 10,
-                marginRight: 10,
-                borderRadius: 4,
-                marginBottom: "auto",
-                padding: 10,
-                elevation: 2,
-                width: 120,
-                height: 60,
-                justifyContent: "center",
-              }}
-            >
-              <Text
-                style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
-              >
-                CANCEL
-              </Text>
-            </Pressable>
-            {this.state.isSubmitting === false ? (
-              <Pressable
-                onPress={() => checkUpper()}
-                style={{
-                  backgroundColor: colors.slate,
-                  padding: 20,
-                  alignItems: "center",
-                  marginLeft: 10,
-                  marginRight: 10,
-                  borderRadius: 4,
-                  marginBottom: "auto",
-                  padding: 10,
-                  elevation: 2,
-                  width: 120,
-                  height: 60,
-                  justifyContent: "center",
-                }}
-              >
-                <Text
-                  style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
-                >
-                  SAVE
-                </Text>
-              </Pressable>
-            ) : (
-              <Pressable
-                style={{
-                  backgroundColor: colors.slate,
-                  padding: 20,
-                  alignItems: "center",
-                  marginLeft: 10,
-                  marginRight: 10,
-                  borderRadius: 4,
-                  marginBottom: "auto",
-                  padding: 10,
-                  elevation: 2,
-                  width: 120,
-                  height: 60,
-                  justifyContent: "center",
-                }}
-              >
-                <ActivityIndicator color="white" size="large" />
-              </Pressable>
-            )}
-          </View>
-        </View>
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text
-                style={{
-                  marginTop: 10,
-                  fontSize: 20,
-                  color: colors.slate,
-
-                  fontWeight: "600",
-                }}
-              >
-                New Item
-              </Text>
-              {this.state.custom_fields.map((customInput, key) => {
-                return (
-                  <View style={styles.newinput} key={key}>
-                    <View
-                      style={{
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        flexDirection: "row",
-                        //  marginTop: 15,
-                      }}
-                    >
+                    <View style={styles.layout}>
                       <View
                         style={{
-                          flexDirection: "row",
                           alignItems: "center",
-                          justifyContent: "center",
-                          alignContent: "center",
+                          justifyContent: "space-between",
+                          flexDirection: "row",
+                          //  marginTop: 15,
                         }}
                       >
-                        <Text
+                        <View
                           style={{
-                            fontSize: 20,
-                            marginLeft: 10,
-                            color: "black",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            alignContent: "center",
                           }}
                         >
-                          Name
-                        </Text>
-                        <TextInput
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              // fontWeight: "bold",
+                              marginLeft: 10,
+                              color: "black",
+                            }}
+                          >
+                            {item.meta_name}
+                          </Text>
+                        </View>
+                        <View
                           style={{
-                            height: 40,
-                            width: windowWidth / 5,
-
-                            margin: 12,
-                            borderBottomWidth: 1,
-                            padding: 10,
-                          }}
-                          placeholder="Name"
-                          textAlign="left"
-                          value={customInput.key}
-                          onChangeText={(name) => {
-                            this.OnCustomInputNameHandler(name, key);
-                          }}
-                        />
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          alignContent: "center",
-                          marginTop: 4,
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: 20,
-                            marginLeft: 10,
-                            color: "black",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            alignContent: "center",
                           }}
                         >
-                          KSH
-                        </Text>
-                        <TextInput
-                          style={{
-                            height: 40,
-                            width: windowWidth / 16,
-                            borderWidth: 1,
-
-                            margin: 12,
-                            borderBottomWidth: 1,
-                            padding: 10,
-                          }}
-                          placeholder="0"
-                          textAlign="center"
-                          keyboardAppearance="default"
-                          keyboardType="number-pad"
-                          onChangeText={(value) => {
-                            this.OnCustomInputKeyHandler(value, key);
-                          }}
-                        />
-                        <View style={{ marginRight: 20, marginLeft: 20 }}>
-                          <EvilIcons name="trash" size={30} color="black" />
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              // fontWeight: "bold",
+                              marginLeft: 10,
+                              color: "black",
+                            }}
+                          >
+                            KSH {item.meta_value}
+                          </Text>
+                          <TouchableOpacity
+                            onPress={() => this.updateCache(item)}
+                            style={{ marginRight: 20, marginLeft: 20 }}
+                          >
+                            <EvilIcons name="trash" size={30} color="black" />
+                          </TouchableOpacity>
                         </View>
                       </View>
+                      <View
+                        style={{
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          flexDirection: "row",
+                          marginTop: 6,
+                        }}
+                      ></View>
                     </View>
                     <View
                       style={{
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        flexDirection: "row",
-                        marginTop: 6,
+                        margin: 6,
+                        backgroundColor: "rgba(39, 39, 39, 1)",
                       }}
                     ></View>
                   </View>
-                );
-              })}
-
-              <View style={{ marginLeft: 35 }}>
-                <Text
-                  onPress={() => createModifier()}
+                ))}
+              </ScrollView>
+            </View>
+            <View style={styles.add}>
+              <TouchableOpacity
+                style={{ flexDirection: "row", alignItems: "center" }}
+                onPress={() => this.openModal()}
+              >
+                <Ionicons name="add-sharp" size={28} color="#2196F3" />
+                <Text style={{ color: "#2196F3", fontSize: 18 }}>
+                  ADD ANOTHER ITEM
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.savecancel}>
+              <View
+                style={{
+                  alignSelf: "flex-end",
+                  marginRight: 50,
+                  flexDirection: "row",
+                }}
+              >
+                <Pressable
+                  onPress={() => this.props.navigation.goBack()}
                   style={{
-                    marginTop: 10,
-                    fontSize: 20,
-                    color: colors.slate,
-                    fontWeight: "600",
+                    backgroundColor: colors.dark_gray,
+                    padding: 20,
+                    alignItems: "center",
+                    marginLeft: 10,
+                    marginRight: 10,
+                    borderRadius: 4,
+                    marginBottom: "auto",
+                    padding: 10,
+                    elevation: 2,
+                    width: 120,
+                    height: 60,
+                    justifyContent: "center",
                   }}
                 >
-                  SAVE
-                </Text>
-                <Text
-                  onPress={() => this.cancelModal()}
-                  style={{
-                    marginTop: 10,
-                    fontSize: 20,
-                    color: colors.slate,
-                    fontWeight: "600",
-                  }}
-                >
-                  Cancel
-                </Text>
+                  <Text
+                    style={{ color: "white", fontSize: 20, fontWeight: "bold" }}
+                  >
+                    CANCEL
+                  </Text>
+                </Pressable>
+                {this.state.isSubmitting === false ? (
+                  <Pressable
+                    onPress={() => checkUpper()}
+                    style={{
+                      backgroundColor: colors.slate,
+                      padding: 20,
+                      alignItems: "center",
+                      marginLeft: 10,
+                      marginRight: 10,
+                      borderRadius: 4,
+                      marginBottom: "auto",
+                      padding: 10,
+                      elevation: 2,
+                      width: 120,
+                      height: 60,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "white",
+                        fontSize: 20,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      SAVE
+                    </Text>
+                  </Pressable>
+                ) : (
+                  <Pressable
+                    style={{
+                      backgroundColor: colors.slate,
+                      padding: 20,
+                      alignItems: "center",
+                      marginLeft: 10,
+                      marginRight: 10,
+                      borderRadius: 4,
+                      marginBottom: "auto",
+                      padding: 10,
+                      elevation: 2,
+                      width: 120,
+                      height: 60,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <ActivityIndicator color="white" size="large" />
+                  </Pressable>
+                )}
               </View>
             </View>
-          </View>
-        </Modal>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={this.state.modalVisible}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                  <Text
+                    style={{
+                      marginTop: 10,
+                      fontSize: 20,
+                      color: colors.slate,
+
+                      fontWeight: "600",
+                    }}
+                  >
+                    New Item
+                  </Text>
+                  {this.state.custom_fields.map((customInput, key) => {
+                    return (
+                      <View style={styles.newinput} key={key}>
+                        <View
+                          style={{
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            flexDirection: "row",
+                            //  marginTop: 15,
+                          }}
+                        >
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              alignContent: "center",
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontSize: 20,
+                                marginLeft: 10,
+                                color: "black",
+                              }}
+                            >
+                              Name
+                            </Text>
+                            <TextInput
+                              style={{
+                                height: 40,
+                                width: windowWidth / 5,
+
+                                margin: 12,
+                                borderBottomWidth: 1,
+                                padding: 10,
+                              }}
+                              placeholder="Name"
+                              textAlign="left"
+                              value={customInput.key}
+                              onChangeText={(name) => {
+                                this.OnCustomInputNameHandler(name, key);
+                              }}
+                            />
+                          </View>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              alignContent: "center",
+                              marginTop: 4,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontSize: 20,
+                                marginLeft: 10,
+                                color: "black",
+                              }}
+                            >
+                              KSH
+                            </Text>
+                            <TextInput
+                              style={{
+                                height: 40,
+                                width: windowWidth / 16,
+                                borderWidth: 1,
+
+                                margin: 12,
+                                borderBottomWidth: 1,
+                                padding: 10,
+                              }}
+                              placeholder="0"
+                              textAlign="center"
+                              keyboardAppearance="default"
+                              keyboardType={"numeric"}
+                              onChangeText={(value) => {
+                                this.OnCustomInputKeyHandler(value, key);
+                              }}
+                            />
+                            <View style={{ marginRight: 20, marginLeft: 20 }}>
+                              <EvilIcons name="trash" size={30} color="black" />
+                            </View>
+                          </View>
+                        </View>
+                        <View
+                          style={{
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            flexDirection: "row",
+                            marginTop: 6,
+                          }}
+                        ></View>
+                      </View>
+                    );
+                  })}
+
+                  <View style={{ marginLeft: 35 }}>
+                    <Text
+                      onPress={() => createModifier()}
+                      style={{
+                        marginTop: 10,
+                        fontSize: 20,
+                        color: colors.slate,
+                        fontWeight: "600",
+                      }}
+                    >
+                      SAVE
+                    </Text>
+                    <Text
+                      onPress={() => this.cancelModal()}
+                      style={{
+                        marginTop: 10,
+                        fontSize: 20,
+                        color: colors.slate,
+                        fontWeight: "600",
+                      }}
+                    >
+                      Cancel
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+          </>
+        )}
       </SafeAreaView>
     );
   }

@@ -246,6 +246,7 @@ const CreateNewOffer = () => {
             <Input
               placeholder="Item Price"
               onChangeText={(text) => setPrice(text)}
+              keyboardType="numeric"
             />
           </View>
         </View>

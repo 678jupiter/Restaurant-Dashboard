@@ -148,7 +148,7 @@ export class NewModifier extends Component {
               style={styles.numberInput}
               onChangeText={(text) => this.setState({ numerTo: text })}
               placeholderTextColor="black"
-              keyboardType="number-pad"
+              keyboardType={"numeric"}
             />
           </View>
         </View>
@@ -241,7 +241,7 @@ export class NewModifier extends Component {
                         this.OnCustomInputKeyHandler(value, key);
                       }}
                       placeholder={"KSH 0"}
-                      keyboardType="numeric"
+                      keyboardType={"numeric"}
                       defaultValue="0"
                     />
                   </View>

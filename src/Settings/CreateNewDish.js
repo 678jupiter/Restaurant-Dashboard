@@ -315,7 +315,7 @@ const CreateNewDish = () => {
           </View>
           <View style={{ width: windowWidth / 3 }}>
             <Input
-              keyboardType="number-pad"
+              keyboardType={"numeric"}
               placeholder="Item Price"
               onChangeText={(text) => setPrice(text)}
             />
@@ -346,7 +346,7 @@ const CreateNewDish = () => {
             }}
           >
             <Input
-              keyboardType="number-pad"
+              keyboardType={"numeric"}
               placeholder="Vat"
               onChangeText={(text) => setTax(text)}
             />

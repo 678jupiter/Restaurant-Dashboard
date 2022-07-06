@@ -71,6 +71,9 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
         </ListItem>
       </View>
       <ScrollView style={{ backgroundColor: "white", flex: 1, marginTop: 20 }}>
+        <Text style={{ marginLeft: 16, fontSize: 18 }}>
+          {dish.length} Items
+        </Text>
         {dish.map((item, i) => (
           <Card key={i}>
             <ListItem.Content key={i} style={{}}>
@@ -127,6 +130,17 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
                 </View>
               </View>
             </ListItem.Content>
+            <Text
+              style={{
+                alignSelf: "flex-start",
+                backgroundColor: "yellow",
+                maxHeight: 100,
+                maxWidth: "50%",
+                fontSize: 18,
+              }}
+            >
+              {item.attributes.SpecialInstructions}
+            </Text>
           </Card>
         ))}
       </ScrollView>

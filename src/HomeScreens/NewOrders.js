@@ -73,7 +73,7 @@ const NewOrders = ({ navigation }) => {
                     createdAt: l.attributes.createdAt,
                     address: l.attributes.address,
                     status: l.attributes.status,
-                    totalPaid: l.attributes.subTotal,
+                    totalPaid: l.attributes.totalPaid,
                     conversationId: l.attributes.conversationId,
                   })
                 }
