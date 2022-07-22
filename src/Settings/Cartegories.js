@@ -7,7 +7,8 @@ import { fetchCartegories } from "../Redux/cartegoryActions";
 import { BASEURL, colors } from "../config";
 import axios from "axios";
 import { useFocusEffect } from "@react-navigation/native";
-
+import { dfhs } from "@env";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const Cartegories = ({ navigation }) => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -25,14 +26,20 @@ const Cartegories = ({ navigation }) => {
   const [filteredDataSource, setFilteredDataSource] = useState();
   const [masterDataSource, setMasterDataSource] = useState();
   const [selected, SetSelected] = useState();
-  const uri = `http://localhost:1337/api/restaurants/?populate=*`;
+  const userData = useSelector((state) => state.user.usermeta);
+  const authAxios = axios.create({
+    baseURL: `${dfhs}`,
+    headers: {
+      Authorization: `Bearer ${userData.jwt}`,
+    },
+  });
 
   useFocusEffect(
     React.useCallback(() => {
       let isCancelled = false;
       const result = async () => {
         await axios
-          .get(uri)
+          .get(`${dfhs}restaurants/?populate=*`)
           .then(function (res) {
             // handle success
 
@@ -112,8 +119,9 @@ const Cartegories = ({ navigation }) => {
                   cId: l.id,
                 })
               }
+              // onPress={() => AsyncStorage.clear()}
             >
-              <Avatar source={{ uri: `${BASEURL}${l.attributes.image}` }} />
+              <Avatar source={{ uri: `${l.attributes.image}` }} />
               <ListItem.Content>
                 <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
                   {l.attributes.name}
@@ -135,6 +143,7 @@ const Cartegories = ({ navigation }) => {
                   cId: l.id,
                 })
               }
+              // onPress={() => AsyncStorage.clear()}
             >
               <Avatar source={{ uri: `${BASEURL}${l.attributes.image}` }} />
               <ListItem.Content>

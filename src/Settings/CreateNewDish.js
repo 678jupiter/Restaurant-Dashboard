@@ -19,7 +19,7 @@ import { showMessage } from "react-native-flash-message";
 import { useSelector } from "react-redux";
 import { FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
+import { dfhs } from "@env";
 const modifierGp = [
   {
     Title: "Choice of Spice",
@@ -88,13 +88,13 @@ const CreateNewDish = () => {
 
   const userData = useSelector((state) => state.user.usermeta);
   const authAxios = axios.create({
-    baseURL: "http://localhost:1337/api/",
+    baseURL: `${dfhs}`,
     headers: {
       Authorization: `Bearer ${userData.jwt}`,
     },
   });
   const authAxios2 = axios.create({
-    baseURL: "http://localhost:1337/api/",
+    baseURL: `${dfhs}`,
     headers: {
       Authorization: `Bearer ${userData.jwt}`,
       "Content-Type": "multipart/form-data",

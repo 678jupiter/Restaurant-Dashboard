@@ -20,7 +20,7 @@ import { Picker } from "@react-native-picker/picker";
 import { Feather } from "@expo/vector-icons";
 import mime from "mime";
 import { showMessage } from "react-native-flash-message";
-import { colors } from "../../config";
+import { dfhs } from "@env";
 import { useSelector } from "react-redux";
 
 const windowHeight = Dimensions.get("window").height;
@@ -49,13 +49,13 @@ const EditOffer = ({ route }) => {
   };
   const userData = useSelector((state) => state.user.usermeta);
   const authAxios = axios.create({
-    baseURL: "http://localhost:1337/api/",
+    baseURL: `${dfhs}`,
     headers: {
       Authorization: `Bearer ${userData.jwt}`,
     },
   });
   const authAxios2 = axios.create({
-    baseURL: "http://localhost:1337/api/",
+    baseURL: `${dfhs}`,
     headers: {
       Authorization: `Bearer ${token.jwt}`,
       "Content-Type": "multipart/form-data",
@@ -183,7 +183,7 @@ const EditOffer = ({ route }) => {
     setLoading(true);
     setMessage("");
 
-    await axios
+    await authAxios
       .put(`special-offers/${dId}`, {
         data: {
           name: name,

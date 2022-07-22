@@ -9,7 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { ListItem, Avatar, SearchBar } from "@rneui/themed";
 import { Switch } from "@rneui/themed";
-import { Ionicons } from "@expo/vector-icons";
+import { dfhs } from "@env";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchItems } from "../Redux/itemsActions";
 import { BASEURL, colors } from "../config";
@@ -32,11 +32,10 @@ const ItemList = ({ navigation }) => {
   const [filteredDataSource, setFilteredDataSource] = useState();
   const [masterDataSource, setMasterDataSource] = useState();
   const [selected, SetSelected] = useState();
-  const uri = `http://localhost:1337/api/dishes/?populate=*`;
 
   const userData = useSelector((state) => state.user.usermeta);
   const authAxios = axios.create({
-    baseURL: "http://localhost:1337/api/",
+    baseURL: `${dfhs}`,
     headers: {
       Authorization: `Bearer ${userData.jwt}`,
     },
@@ -47,9 +46,10 @@ const ItemList = ({ navigation }) => {
       let isCancelled = false;
       const result = async () => {
         await axios
-          .get(uri)
+          .get(`${dfhs}dishes/?populate=*`)
           .then(function (res) {
             // handle success
+            // console.log(res);
 
             setFilteredDataSource(res.data);
             setMasterDataSource(res.data);
@@ -132,7 +132,7 @@ const ItemList = ({ navigation }) => {
                 })
               }
             >
-              <Avatar source={{ uri: `${BASEURL}${l.attributes.image}` }} />
+              <Avatar source={{ uri: `${l.attributes.image}` }} />
               <ListItem.Content>
                 <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
                   {l.attributes.name}

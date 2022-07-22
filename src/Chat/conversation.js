@@ -4,6 +4,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { ListItem, Avatar } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
+import { format } from "timeago.js";
 
 const Conversation = ({ conversation }) => {
   console.log(conversation);
@@ -16,7 +17,7 @@ const Conversation = ({ conversation }) => {
     const getUser = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:1337/api/users/${friendId}`
+          `https://myfoodcms189.herokuapp.com/api/users/${friendId}`
         );
         setUser(res.data);
         // console.log(res.data);
@@ -26,6 +27,7 @@ const Conversation = ({ conversation }) => {
     };
     getUser();
   }, [userData.id, conversation]);
+  console.log(conversation.updatedAt);
 
   return (
     <View>
@@ -52,7 +54,7 @@ const Conversation = ({ conversation }) => {
             style={{ alignSelf: "flex-end", justifyContent: "flex-end" }}
             numberOfLines={1}
           >
-            l.times
+            {format(conversation.updatedAt)}
           </ListItem.Subtitle>
         </ListItem.Content>
       </ListItem>

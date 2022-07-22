@@ -30,7 +30,7 @@ const DeliveringDetailed = ({ route, navigation }) => {
   const latitudeDelta = 0.0922;
   const longitudeDelta = 0.0421;
 
-  const socket = io("http://localhost:4000");
+  const socket = io("https://socketitisha.herokuapp.com");
   function showRoom() {
     console.log("Joined Room");
   }

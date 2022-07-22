@@ -9,7 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { ListItem, Avatar, SearchBar } from "@rneui/themed";
 import { Switch } from "@rneui/themed";
-import { Ionicons } from "@expo/vector-icons";
+import { dfhs } from "@env";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchItems } from "../Redux/itemsActions";
 import { BASEURL } from "../config";
@@ -28,7 +28,7 @@ const SpecialOffers = ({ navigation }) => {
 
   const userData = useSelector((state) => state.user.usermeta);
   const authAxios = axios.create({
-    baseURL: "http://localhost:1337/api/",
+    baseURL: `${dfhs}`,
     headers: {
       Authorization: `Bearer ${userData.jwt}`,
     },
@@ -40,10 +40,10 @@ const SpecialOffers = ({ navigation }) => {
   const [filteredDataSource, setFilteredDataSource] = useState();
   const [masterDataSource, setMasterDataSource] = useState();
   const [selected, SetSelected] = useState();
-  const uri = `http://localhost:1337/api/special-offers/?populate=*`;
+
   const result = async () => {
-    await axios
-      .get(uri)
+    await authAxios
+      .get(`special-offers/?populate=*`)
       .then(function (res) {
         // handle success
 

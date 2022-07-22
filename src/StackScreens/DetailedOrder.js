@@ -9,6 +9,7 @@ import { fetchOrders } from "../Redux/orderActions";
 import { Pressable } from "react-native";
 import call from "react-native-phone-call";
 import { format } from "timeago.js";
+import { dfhs } from "@env";
 
 const DetailedOrder = ({ route, navigation }) => {
   const dispatch = useDispatch();
@@ -31,17 +32,17 @@ const DetailedOrder = ({ route, navigation }) => {
   const [loading3, setLoading3] = useState(false);
   const userData = useSelector((state) => state.user.usermeta);
   const authAxios = axios.create({
-    baseURL: "http://localhost:1337/api/",
+    baseURL: `${dfhs}`,
     headers: {
       Authorization: `Bearer ${userData.jwt}`,
     },
   });
 
-  const sendConfirmationMessage = async (text) => {
+  const sendConfirmationMessage = async () => {
     await axios
-      .post(`http://localhost:8800/api/messages`, {
+      .post(`https://msgintisha.herokuapp.com/api/messages`, {
         sender: userData.id,
-        text: text,
+        text: `Your order ${orderId} is being processed.`,
         conversationId: conversationId,
         user: {
           _id: userData.username,
@@ -50,7 +51,10 @@ const DetailedOrder = ({ route, navigation }) => {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        console.log("Message Sent");
+      })
+      .catch((error) => {
+        console.log("message server");
       });
   };
 
@@ -65,9 +69,8 @@ const DetailedOrder = ({ route, navigation }) => {
       .then(function (response) {
         dispatch(fetchOrders());
         setLoading1(false);
-        let text = `Your order ${orderId} is being processed.`;
 
-        sendConfirmationMessage(text);
+        sendConfirmationMessage();
         navigation.navigate("Orders in progress", {
           userName,
           dish,
@@ -79,6 +82,7 @@ const DetailedOrder = ({ route, navigation }) => {
       .catch(function (error) {
         setLoading1(false);
         console.log(error);
+        console.log("Str");
       });
   };
   const ReadyForPickUp = async () => {

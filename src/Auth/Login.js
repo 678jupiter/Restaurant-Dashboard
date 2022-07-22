@@ -162,19 +162,8 @@ const Login = () => {
               isSubmitting={isSubmitting}
             />
 
-            <Space height={40} />
-            <Button
-              label="Register a new account"
-              txtSize={13}
-              radius={0}
-              borderWidth={0}
-              bgColor="#fff"
-              textColor={primaryColor}
-              fontFam="CircularStdBold"
-              onPress={() => navigation.navigate("Register")}
-            />
             <Space height={20} />
-            <Button
+            {/* <Button
               label="Forgot password"
               txtSize={12}
               radius={0}
@@ -183,7 +172,7 @@ const Login = () => {
               textColor={primaryColor}
               fontFam="CircularStdBold"
               onPress={() => navigation.navigate("ForgotPassword")}
-            />
+            /> */}
           </View>
         </ScrollView>
       </KeyboardScrollUpForms>

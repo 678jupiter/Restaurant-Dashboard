@@ -11,7 +11,7 @@ const ChartList = () => {
   const getConversations = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8800/api/conversations/${userData.id}`
+        `https://msgintisha.herokuapp.com/api/conversations/${userData.id}`
       );
       setConversations(res.data);
     } catch (error) {

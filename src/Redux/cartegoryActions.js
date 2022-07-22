@@ -1,9 +1,11 @@
+import { useSelector } from "react-redux";
 import { cartegoryActions } from "./cartegorySlice";
+import { dfhs } from "@env";
 
 export const fetchCartegories = () => {
   return async (dispatch) => {
     const fetchHandler = async () => {
-      const res = await fetch("http://localhost:1337/api/restaurants");
+      const res = await fetch(`${dfhs}restaurants`);
       const data = await res.json();
       return data;
     };

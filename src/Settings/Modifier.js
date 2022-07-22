@@ -20,7 +20,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../config";
 import axios from "axios";
 import { Space } from "../../components";
-import { KeyboardScrollUpForms } from "../../utils";
+import { dfhs } from "@env";
+import { useSelector } from "react-redux";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -97,15 +98,21 @@ export class NewModifier extends Component {
         return false;
       }
     };
-
+    const userData = useSelector((state) => state.user.usermeta);
+    const authAxios = axios.create({
+      baseURL: `${dfhs}`,
+      headers: {
+        Authorization: `Bearer ${userData.jwt}`,
+      },
+    });
     const createModifier = () => {
       if (!isCherries()) {
         return;
       }
       const { dishId } = navigation.route.params;
       this.setState({ isSubmitting: true });
-      axios
-        .post("http://localhost:1337/api/modifiers", {
+      authAxios
+        .post(`modifiers`, {
           data: {
             Title: this.state.choice,
             Numberofitemstochoose: this.state.numerTo,

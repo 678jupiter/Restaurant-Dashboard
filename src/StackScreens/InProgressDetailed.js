@@ -9,6 +9,7 @@ import { Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import call from "react-native-phone-call";
 import { format } from "timeago.js";
+import { dfhs } from "@env";
 
 const InProgressDetailed = ({ navigation, route }) => {
   const {
@@ -29,7 +30,7 @@ const InProgressDetailed = ({ navigation, route }) => {
 
   const userData = useSelector((state) => state.user.usermeta);
   const authAxios = axios.create({
-    baseURL: "http://localhost:1337/api/",
+    baseURL: `${dfhs}`,
     headers: {
       Authorization: `Bearer ${userData.jwt}`,
     },

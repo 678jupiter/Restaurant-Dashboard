@@ -11,6 +11,7 @@ import FlashMessage from "react-native-flash-message";
 import io from "socket.io-client";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
+import { GETTY } from "@env";
 import {
   ApolloClient,
   InMemoryCache,
@@ -32,7 +33,7 @@ Notifications.setNotificationHandler({
 });
 
 export default function App() {
-  const socket = io("https://8d65-197-156-137-184.in.ngrok.io");
+  const socket = io("https://socketitisha.herokuapp.com");
   function showRoom() {
     console.log("Joined Room");
   }
@@ -57,7 +58,7 @@ export default function App() {
   socket.on("new_placed_orders", addMessage);
 
   const client = new ApolloClient({
-    uri: "http://localhost:1337/graphql",
+    uri: `${GETTY}graphql`,
     cache: new InMemoryCache(),
   });
   const [loaded] = useFonts({
@@ -98,8 +99,8 @@ export default function App() {
 async function schedulePushNotification() {
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: "You've got mail! 📬",
-      body: "Here is the notification body",
+      title: "New Order Confimation",
+      body: "We have received your order",
       data: { data: "goes here" },
       sound: true,
     },

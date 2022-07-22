@@ -13,7 +13,7 @@ import { IconText, ModalBottom } from "../../components";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { Space } from "../../components/atoms";
-import { Picker } from "@react-native-picker/picker";
+import { dfhs } from "@env";
 import mime from "mime";
 import { showMessage } from "react-native-flash-message";
 import { useSelector } from "react-redux";
@@ -41,13 +41,13 @@ const CreateNewOffer = () => {
   };
   const userData = useSelector((state) => state.user.usermeta);
   const authAxios = axios.create({
-    baseURL: "http://localhost:1337/api/",
+    baseURL: `${dfhs}`,
     headers: {
       Authorization: `Bearer ${userData.jwt}`,
     },
   });
   const authAxios2 = axios.create({
-    baseURL: "http://localhost:1337/api/",
+    baseURL: `${dfhs}`,
     headers: {
       Authorization: `Bearer ${userData.jwt}`,
       "Content-Type": "multipart/form-data",

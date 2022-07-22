@@ -15,7 +15,6 @@ import { fetchOrders } from "../Redux/orderActions";
 import { colors } from "../config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { format } from "timeago.js";
-
 const NewOrders = ({ navigation }) => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -77,6 +76,8 @@ const NewOrders = ({ navigation }) => {
                     conversationId: l.attributes.conversationId,
                   })
                 }
+                // onPress={() => console.log(l)}
+                // onPress={() => AsyncStorage.clear()}
               >
                 <View
                   style={{

@@ -16,6 +16,7 @@ import { showMessage } from "react-native-flash-message";
 import axios from "axios";
 import { Space } from "../../components/atoms";
 import { useSelector } from "react-redux";
+import { dfhs } from "@env";
 const windowWidth = Dimensions.get("window").width;
 
 const CreateACartegory = () => {
@@ -28,13 +29,13 @@ const CreateACartegory = () => {
   const [messageType, setMessageType] = useState();
   const userData = useSelector((state) => state.user.usermeta);
   const authAxios = axios.create({
-    baseURL: "http://localhost:1337/api/",
+    baseURL: `${dfhs}`,
     headers: {
       Authorization: `Bearer ${userData.jwt}`,
     },
   });
   const authAxios2 = axios.create({
-    baseURL: "http://localhost:1337/api/",
+    baseURL: `${dfhs}`,
     headers: {
       Authorization: `Bearer ${userData.jwt}`,
       "Content-Type": "multipart/form-data",
@@ -71,7 +72,7 @@ const CreateACartegory = () => {
       });
 
       authAxios2
-        .post("http://localhost:1337/api/upload", formData)
+        .post(`${dfhs}upload`, formData)
         .then((res) => {
           console.log(res.data);
           setLoading(false);
@@ -124,7 +125,7 @@ const CreateACartegory = () => {
       });
 
       authAxios2
-        .post("http://localhost:1337/api/upload", formData)
+        .post(`${dfhs}upload`, formData)
         .then((res) => {
           setLoading(false);
 

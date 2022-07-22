@@ -21,6 +21,8 @@ import { colors } from "../../config";
 import axios from "axios";
 import { EvilIcons } from "@expo/vector-icons";
 import { Space } from "../../components";
+import { dfhs } from "@env";
+import { useSelector } from "react-redux";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -85,12 +87,19 @@ export class EditModifier extends Component {
     this.setState({ prevModifires: newarr });
   };
   getPrevMofifires = () => {
+    const userData = useSelector((state) => state.user.usermeta);
+    const authAxios = axios.create({
+      baseURL: `${dfhs}`,
+      headers: {
+        Authorization: `Bearer ${userData.jwt}`,
+      },
+    });
     const navigation = this.props;
     const { modifierId, numberofitemstochoose, title, isRequired, child } =
       navigation.route.params;
     this.setState({ fetchingData: true });
-    axios
-      .get(`http://localhost:1337/api/modifiers/${modifierId}`)
+    authAxios
+      .get(`modifiers/${modifierId}`)
       .then((res) => {
         this.setState({ fetchingData: false });
         const {
@@ -203,13 +212,20 @@ export class EditModifier extends Component {
         updateItemModifier();
       }
     };
+    const userData = useSelector((state) => state.user.usermeta);
+    const authAxios = axios.create({
+      baseURL: `${dfhs}`,
+      headers: {
+        Authorization: `Bearer ${userData.jwt}`,
+      },
+    });
     const updateItemModifier = () => {
       const navigation = this.props;
       const { modifierId } = navigation.route.params;
       this.setState({ isSubmitting: true });
 
-      axios
-        .put(`http://localhost:1337/api/modifiers/${modifierId}`, {
+      authAxios
+        .put(`modifiers/${modifierId}`, {
           data: {
             Title: this.state.choice,
             Numberofitemstochoose: this.state.numerTo,
