@@ -1,10 +1,4 @@
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Dimensions, StyleSheet, Text, Pressable, View } from "react-native";
 import React from "react";
 import { Button } from "react-native";
 import { Card } from "@rneui/themed";
@@ -29,19 +23,19 @@ const SettingScreen = ({ navigation }) => {
           alignItems: "center",
           justifyContent: "space-evenly",
           flexDirection: "row",
-          marginBottom: 20,
+          // marginBottom: 20,
         }}
       >
-        <TouchableOpacity onPress={() => navigation.navigate("itemList")}>
+        <Pressable onPress={() => navigation.navigate("itemList")}>
           <Card
             containerStyle={{
-              width: 150,
-              height: 150,
+              width: 80,
+              height: 80,
               backgroundColor: "#dcffee",
             }}
           >
             <Card.Title
-              style={{ fontFamily: "MontserratSemiBold", fontSize: 18 }}
+              style={{ fontFamily: "MontserratSemiBold", fontSize: 10 }}
             >
               Items
             </Card.Title>
@@ -49,24 +43,24 @@ const SettingScreen = ({ navigation }) => {
               style={{
                 position: "relative",
                 alignItems: "center",
-                marginTop: 17,
+                // marginTop: 17,
               }}
             >
-              <FontAwesome5 name="clipboard-list" size={42} color="#5cb1ff" />
+              <FontAwesome5 name="clipboard-list" size={12} color="#5cb1ff" />
             </View>
           </Card>
-        </TouchableOpacity>
+        </Pressable>
 
-        <TouchableOpacity onPress={() => navigation.navigate("cartegories")}>
+        <Pressable onPress={() => navigation.navigate("cartegories")}>
           <Card
             containerStyle={{
-              width: 150,
-              height: 150,
+              width: 80,
+              height: 80,
               backgroundColor: "#dcffee",
             }}
           >
             <Card.Title
-              style={{ fontFamily: "MontserratSemiBold", fontSize: 18 }}
+              style={{ fontFamily: "MontserratSemiBold", fontSize: 10 }}
             >
               Cartegories
             </Card.Title>
@@ -74,13 +68,13 @@ const SettingScreen = ({ navigation }) => {
               style={{
                 position: "relative",
                 alignItems: "center",
-                marginTop: 12,
+                // marginTop: 12,
               }}
             >
-              <MaterialIcons name="post-add" size={45} color="#5cb1ff" />
+              <MaterialIcons name="post-add" size={12} color="#5cb1ff" />
             </View>
           </Card>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       <View
@@ -90,35 +84,35 @@ const SettingScreen = ({ navigation }) => {
           flexDirection: "row",
         }}
       >
-        <TouchableOpacity onPress={() => navigation.navigate("specialOffers")}>
+        <Pressable onPress={() => navigation.navigate("specialOffers")}>
           <Card
             containerStyle={{
-              width: 150,
-              height: 150,
+              width: 80,
+              height: 80,
               backgroundColor: "#dcffee",
             }}
           >
             <Card.Title
-              style={{ fontFamily: "MontserratSemiBold", fontSize: 18 }}
+              style={{ fontFamily: "MontserratSemiBold", fontSize: 10 }}
             >
               Special Offers
             </Card.Title>
             <View style={{ position: "relative", alignItems: "center" }}>
-              <MaterialIcons name="local-offer" size={40} color="#5cb1ff" />
+              <MaterialIcons name="local-offer" size={12} color="#5cb1ff" />
             </View>
           </Card>
-        </TouchableOpacity>
+        </Pressable>
 
-        <TouchableOpacity onPress={() => navigation.navigate("settings")}>
+        <Pressable onPress={() => navigation.navigate("settings")}>
           <Card
             containerStyle={{
-              width: 150,
-              height: 150,
+              width: 80,
+              height: 80,
               backgroundColor: "#dcffee",
             }}
           >
             <Card.Title
-              style={{ fontFamily: "MontserratSemiBold", fontSize: 18 }}
+              style={{ fontFamily: "MontserratSemiBold", fontSize: 10 }}
             >
               Settings
             </Card.Title>
@@ -129,10 +123,10 @@ const SettingScreen = ({ navigation }) => {
                 marginTop: 8,
               }}
             >
-              <Ionicons name="ios-settings" size={42} color="#5cb1ff" />
+              <Ionicons name="ios-settings" size={12} color="#5cb1ff" />
             </View>
           </Card>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       {/* <Button

@@ -1,5 +1,5 @@
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, ListItem } from "@rneui/themed";
 import { Button, Icon } from "@rneui/base";
 import { Ionicons } from "@expo/vector-icons";
@@ -10,6 +10,7 @@ import { Pressable } from "react-native";
 import call from "react-native-phone-call";
 import { format } from "timeago.js";
 import { dfhs } from "@env";
+import io from "socket.io-client";
 
 const DetailedOrder = ({ route, navigation }) => {
   const dispatch = useDispatch();
@@ -37,6 +38,29 @@ const DetailedOrder = ({ route, navigation }) => {
       Authorization: `Bearer ${userData.jwt}`,
     },
   });
+  const socket = io("https://socketitisha.herokuapp.com");
+  function showRoom() {
+    console.log("Joined Room");
+  }
+  useEffect(() => {
+    let isCancelled = false;
+    const input = `${conversationId}`;
+    const notInit = () => {
+      socket.emit("enter_user_order_channel", input, showRoom);
+    };
+    notInit();
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
+
+  const clientNotification = () => {
+    let roomName = `${conversationId}`;
+    let message = "message";
+    socket.emit("order_status_changes", message, roomName, () => {
+      console.log("rest emit");
+    });
+  };
 
   const sendConfirmationMessage = async () => {
     await axios
@@ -59,31 +83,32 @@ const DetailedOrder = ({ route, navigation }) => {
   };
 
   const Cooking = async () => {
-    setLoading1(true);
-    await authAxios
-      .put(`restaurant-orders/${orderId}`, {
-        data: {
-          status: "Cooking",
-        },
-      })
-      .then(function (response) {
-        dispatch(fetchOrders());
-        setLoading1(false);
+    clientNotification();
+    // setLoading1(true);
+    // await authAxios
+    //   .put(`restaurant-orders/${orderId}`, {
+    //     data: {
+    //       status: "Cooking",
+    //     },
+    //   })
+    //   .then(function (response) {
+    //     dispatch(fetchOrders());
+    //     setLoading1(false);
 
-        sendConfirmationMessage();
-        navigation.navigate("Orders in progress", {
-          userName,
-          dish,
-          orderNumber,
-          orderId,
-        });
-        //  setDeliveryStatus(ORDER_STATUSES.ACCEPTED);
-      })
-      .catch(function (error) {
-        setLoading1(false);
-        console.log(error);
-        console.log("Str");
-      });
+    //     sendConfirmationMessage();
+    //     navigation.navigate("Orders in progress", {
+    //       userName,
+    //       dish,
+    //       orderNumber,
+    //       orderId,
+    //     });
+    //     //  setDeliveryStatus(ORDER_STATUSES.ACCEPTED);
+    //   })
+    //   .catch(function (error) {
+    //     setLoading1(false);
+    //     console.log(error);
+    //     console.log("Str");
+    //   });
   };
   const ReadyForPickUp = async () => {
     setLoading2(true);
@@ -138,7 +163,7 @@ const DetailedOrder = ({ route, navigation }) => {
       { text: "OK", onPress: () => Decline() },
     ]);
   const buttonAlert2 = () =>
-    Alert.alert(`${userName}'s Order`, `is ReadyForPickUp`, [
+    Alert.alert(`${userName}'s Order`, `Is Ready For PickUp`, [
       {
         text: "Cancel",
         onPress: () => console.log("Cancel Pressed"),
@@ -170,7 +195,7 @@ const DetailedOrder = ({ route, navigation }) => {
             <Icon
               name="chat"
               color="black"
-              size={32}
+              size={20}
               style={{ marginRight: 10, padding: 6 }}
             />
           </Pressable>
@@ -181,7 +206,7 @@ const DetailedOrder = ({ route, navigation }) => {
           >
             <Ionicons
               name="call-outline"
-              size={28}
+              size={20}
               color="black"
               style={{ marginRight: 10, padding: 6 }}
             />
@@ -284,7 +309,7 @@ const DetailedOrder = ({ route, navigation }) => {
         ))}
       </ScrollView>
 
-      <View
+      {/* <View
         style={{ alignSelf: "flex-end", backgroundColor: "red", width: "20%" }}
       >
         <Card>
@@ -308,7 +333,7 @@ const DetailedOrder = ({ route, navigation }) => {
             </ListItem.Title>
           </View>
         </Card>
-      </View>
+      </View> */}
 
       <View style={{ flex: 0.25 }}>
         <View style={styles.buttonsContainer}>
@@ -321,7 +346,7 @@ const DetailedOrder = ({ route, navigation }) => {
               height: 80,
             }}
             containerStyle={{
-              width: 250,
+              width: 150,
               marginHorizontal: 30,
               marginVertical: 10,
             }}
@@ -338,7 +363,7 @@ const DetailedOrder = ({ route, navigation }) => {
             title="READY FOR PICKUP"
             buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}
             containerStyle={{
-              width: 250,
+              width: 150,
               marginHorizontal: 30,
               marginVertical: 10,
             }}
@@ -355,7 +380,7 @@ const DetailedOrder = ({ route, navigation }) => {
             title="CONFIRM"
             buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}
             containerStyle={{
-              width: 250,
+              width: 150,
               marginHorizontal: 30,
               marginVertical: 10,
             }}

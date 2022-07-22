@@ -63,12 +63,16 @@ const ReadyForPickUp = ({ navigation }) => {
           paddingTop: 20,
         }}
       >
-        <View style={{ marginLeft: 100, marginRight: 100, flex: 0.05 }}>
-          <Text style={{ color: "white", fontSize: 22, fontWeight: "800" }}>
-            Ready
-          </Text>
+        <View
+          style={{
+            marginLeft: 100,
+            marginRight: 100,
+            flex: 0.06,
+          }}
+        >
+          <Text style={{ color: "white", fontSize: 20 }}>Ready</Text>
         </View>
-        <View style={{ flex: 0.8 }}>
+        <View style={{ flex: 0.79 }}>
           <ScrollView
             style={{
               marginTop: 10,
@@ -78,7 +82,7 @@ const ReadyForPickUp = ({ navigation }) => {
             }}
           >
             {result.map((l, i) => (
-              <View key={i}>
+              <View key={i} style={{ height: 50 }}>
                 <TouchableOpacity
                   style={{ backgroundColor: "white", flex: 1 }}
                   key={i}
@@ -108,9 +112,7 @@ const ReadyForPickUp = ({ navigation }) => {
                   >
                     <Text
                       style={{
-                        color: "black",
-                        fontSize: 20,
-                        fontWeight: "500",
+                        fontSize: 15,
                         marginLeft: 10,
                       }}
                     >
@@ -128,10 +130,22 @@ const ReadyForPickUp = ({ navigation }) => {
                       marginTop: 6,
                     }}
                   >
-                    <Text style={{ marginLeft: 10, paddingBottom: 10 }}>
+                    <Text
+                      style={{
+                        marginLeft: 10,
+                        paddingBottom: 10,
+                        fontSize: 10,
+                      }}
+                    >
                       {l.attributes.mpesaReceiptNumber}
                     </Text>
-                    <Text style={{ marginRight: 10, paddingBottom: 10 }}>
+                    <Text
+                      style={{
+                        marginRight: 10,
+                        paddingBottom: 10,
+                        fontSize: 10,
+                      }}
+                    >
                       {format(l.attributes.publishedAt)}
                     </Text>
                   </View>
@@ -147,8 +161,14 @@ const ReadyForPickUp = ({ navigation }) => {
         <View style={{ flex: 0.3 }}>
           <ScrollView horizontal>
             {drivers.map((item, i) => (
-              <Card containerStyle={{ width: 150, height: 150 }} key={i}>
-                <View style={{ position: "relative", alignItems: "center" }}>
+              <Card containerStyle={{ width: 60, height: 60 }} key={i}>
+                <View
+                  style={{
+                    position: "relative",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   <Image
                     style={{
                       width: "100%",

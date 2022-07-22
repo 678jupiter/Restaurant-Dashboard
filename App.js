@@ -12,6 +12,7 @@ import io from "socket.io-client";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import { GETTY } from "@env";
+import * as NavigationBar from "expo-navigation-bar";
 import {
   ApolloClient,
   InMemoryCache,
@@ -33,11 +34,17 @@ Notifications.setNotificationHandler({
 });
 
 export default function App() {
+  const hidebar = async () => {
+    const visibility = await NavigationBar.setVisibilityAsync("hidden");
+  };
+  useEffect(() => {
+    hidebar();
+  }, []);
+
   const socket = io("https://socketitisha.herokuapp.com");
   function showRoom() {
     console.log("Joined Room");
   }
-
   // recieving instructions from my backend
   useEffect(() => {
     let isCancelled = false;

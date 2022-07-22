@@ -50,15 +50,13 @@ const NewOrders = ({ navigation }) => {
         }}
       >
         <View style={{ marginLeft: 100, marginRight: 100 }}>
-          <Text style={{ color: "white", fontSize: 22, fontWeight: "800" }}>
-            New
-          </Text>
+          <Text style={{ color: "white", fontSize: 20 }}>New</Text>
         </View>
         <ScrollView
           style={{ marginTop: 10, marginLeft: 100, marginRight: 100 }}
         >
           {result.map((l, i) => (
-            <View key={l.id}>
+            <View key={l.id} style={{ height: 50 }}>
               <TouchableOpacity
                 style={{ backgroundColor: "#3fff00", flex: 1 }}
                 onPress={() =>
@@ -89,8 +87,7 @@ const NewOrders = ({ navigation }) => {
                 >
                   <Text
                     style={{
-                      fontSize: 20,
-                      fontWeight: "bold",
+                      fontSize: 15,
                       marginLeft: 10,
                     }}
                   >
@@ -103,13 +100,17 @@ const NewOrders = ({ navigation }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     flexDirection: "row",
-                    marginTop: 6,
+                    //  marginTop: 6,
                   }}
                 >
-                  <Text style={{ marginLeft: 10, paddingBottom: 10 }}>
+                  <Text
+                    style={{ marginLeft: 10, paddingBottom: 10, fontSize: 10 }}
+                  >
                     {l.attributes.mpesaReceiptNumber}
                   </Text>
-                  <Text style={{ marginRight: 10, paddingBottom: 10 }}>
+                  <Text
+                    style={{ marginRight: 10, paddingBottom: 10, fontSize: 10 }}
+                  >
                     {format(l.attributes.publishedAt)}
                   </Text>
                 </View>

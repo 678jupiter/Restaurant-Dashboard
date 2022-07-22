@@ -47,15 +47,18 @@ function DrawerNav({ navigation }) {
     <Drawer.Navigator
       id="LeftDrawer"
       screenOptions={{
+        headerStyle: {
+          borderBottomColor: "red",
+        },
         headerLeft: false,
         headerRight: () => (
-          <View style={{ marginRight: 20 }}>
+          <View style={{ marginRight: 20, marginTop: 20 }}>
             <TouchableWithoutFeedback
               onPress={() => navigation.navigate("chartList")}
             >
               <Ionicons
                 name="ios-chatbubble-ellipses-sharp"
-                size={30}
+                size={20}
                 color="#5cb1ff"
               />
             </TouchableWithoutFeedback>
@@ -66,7 +69,7 @@ function DrawerNav({ navigation }) {
         drawerPosition: "left",
         headerShown: false,
         drawerContentContainerStyle: {
-          marginTop: 100,
+          marginTop: 30,
           justifyContent: "center",
           alignContent: "space-around",
           //alignItems: "center",
@@ -88,11 +91,12 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen
         options={{
           headerShown: true,
+          headerStatusBarHeight: 1,
           title: "",
           drawerIcon: ({ focused }) => (
             <MaterialIcons
               name="fiber-new"
-              size={50}
+              size={25}
               color={focused ? "#5cb1ff" : "rgba(39, 39, 39, 1)"}
             />
           ),
@@ -103,12 +107,13 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen
         options={{
           // title: "",
-          headerShown: true,
+          headerShown: false,
+          headerStatusBarHeight: 1,
 
           drawerIcon: ({ focused }) => (
             <MaterialCommunityIcons
               name="progress-clock"
-              size={50}
+              size={25}
               color={focused ? "#5cb1ff" : "rgba(39, 39, 39, 1)"}
             />
           ),
@@ -119,12 +124,12 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen
         options={{
           title: "Ready For Pickup",
-          headerShown: true,
+          headerShown: false,
 
           drawerIcon: ({ focused }) => (
             <MaterialIcons
               name="done-outline"
-              size={50}
+              size={25}
               color={focused ? "#5cb1ff" : "rgba(39, 39, 39, 1)"}
             />
           ),
@@ -135,12 +140,12 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen
         options={{
           title: "",
-          headerShown: true,
+          headerShown: false,
 
           drawerIcon: ({ focused }) => (
             <MaterialIcons
               name="delivery-dining"
-              size={50}
+              size={25}
               color={focused ? "#5cb1ff" : "rgba(39, 39, 39, 1)"}
             />
           ),
@@ -151,12 +156,12 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen
         options={{
           title: "",
-          headerShown: true,
+          headerShown: false,
 
           drawerIcon: ({ focused }) => (
             <FontAwesome5
               name="history"
-              size={50}
+              size={25}
               color={focused ? "#5cb1ff" : "rgba(39, 39, 39, 1)"}
             />
           ),
@@ -167,12 +172,12 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen
         options={{
           title: "",
-          headerShown: true,
+          headerShown: false,
 
           drawerIcon: ({ focused }) => (
             <Feather
               name="settings"
-              size={50}
+              size={25}
               color={focused ? "#5cb1ff" : "rgba(39, 39, 39, 1)"}
             />
           ),
@@ -214,7 +219,11 @@ export default function StackNav() {
             <Stack.Screen
               name="detailedOrder"
               component={DetailedOrder}
-              options={{ animationTypeForReplace: "pop", title: "New order" }}
+              options={{
+                animationTypeForReplace: "pop",
+                title: "New order",
+                headerStatusBarHeight: 1,
+              }}
             />
             <Stack.Screen
               name="inProgressDetailed"

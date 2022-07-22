@@ -23,6 +23,7 @@ const ChatScreen = ({ route }) => {
   }
 
   useEffect(() => {
+    // enter conversation room
     const input = currentChat._id;
     socket.emit("enter_conversation_space", input, showRoom);
   }, []);
