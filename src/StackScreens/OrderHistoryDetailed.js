@@ -1,16 +1,31 @@
-import React from "react";
-import { View, ScrollView, Pressable, StyleSheet, Image } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  ScrollView,
+  Pressable,
+  StyleSheet,
+  Image,
+  Modal,
+  SafeAreaView,
+  Dimensions,
+} from "react-native";
 import { Text, Card, Button, Icon, ListItem } from "@rneui/themed";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "timeago.js";
+import { Border } from "../../components";
+import { AntDesign } from "@expo/vector-icons";
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
-const OrderHistoryDetailed = ({ route }) => {
+const OrderHistoryDetailed = ({ route, navigation }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [featured, setFeatured] = useState(null);
   const {
     address,
     amount,
     customermobilenumber,
     courierName,
-    dishes,
+    dish,
     mpesaReceiptNumber,
     status,
     createdAt,
@@ -19,145 +34,207 @@ const OrderHistoryDetailed = ({ route }) => {
     orderNumber,
     totalPaid,
     shipping,
+    methodofPayment,
+    methodofDelivery,
   } = route.params;
-  console.log(dishes);
+  console.log(dish);
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ flex: 0.08 }}>
-        <ListItem bottomDivider>
-          <ListItem.Content>
-            <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
-              {userName}
-            </ListItem.Title>
-            <ListItem.Subtitle>{orderNumber}</ListItem.Subtitle>
-          </ListItem.Content>
-          <Pressable onPress={() => navigation.navigate("chartList")}>
-            <Icon
-              name="chat"
-              color="black"
-              size={32}
-              style={{ marginRight: 10, padding: 6 }}
-            />
-          </Pressable>
+    <SafeAreaView style={{ flex: 1 }}>
+      <View
+        style={{
+          flex: 0.2,
+          justifyContent: "center",
+          alignContent: "center",
+          width: windowWidth,
+          flexDirection: "row",
+          backgroundColor: "white",
+        }}
+      >
+        <View
+          style={{
+            width: windowWidth / 2,
+            justifyContent: "center",
+            alignItems: "flex-start",
+            alignContent: "center",
+          }}
+        >
           <Pressable
-            onPress={() =>
-              call({ number: `${customermobilenumber}`, prompt: false })
-            }
+            onPress={() => navigation.goBack()}
+            style={{ alignSelf: "flex-start" }}
           >
             <Ionicons
-              name="call-outline"
-              size={28}
+              name="arrow-back-sharp"
+              size={24}
               color="black"
-              style={{ marginRight: 10, padding: 6 }}
+              style={{ marginLeft: 10, marginTop: 25 }}
             />
           </Pressable>
-
-          <Text style={{ fontFamily: "MontserratSemiBold" }}>
-            {customermobilenumber}
-          </Text>
-          <ListItem.Content>
-            <View
-              style={{
-                alignSelf: "flex-end",
-              }}
-            >
-              <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
-                {format(createdAt)}
-              </ListItem.Title>
-              <ListItem.Subtitle style={{ fontFamily: "MontserratSemiBold" }}>
-                {address}
-              </ListItem.Subtitle>
-            </View>
-          </ListItem.Content>
-        </ListItem>
-      </View>
-      <View style={{ flex: 0.62 }}>
-        <ScrollView
-          style={{ backgroundColor: "white", flex: 1, marginTop: 20 }}
+        </View>
+        <View
+          style={{
+            width: windowWidth / 2,
+            justifyContent: "center",
+            alignItems: "flex-end",
+            alignContent: "center",
+          }}
         >
-          <Text style={{ marginLeft: 16, fontSize: 18 }}>
-            {dishes.length} Items
+          <Text
+            style={{
+              marginTop: 30,
+              marginRight: 20,
+              color: "orange",
+              fontSize: 20,
+            }}
+          >
+            {status}
           </Text>
+        </View>
+      </View>
 
-          {dishes.map((item, i) => (
-            <Card key={i}>
-              <ListItem.Content style={{}}>
-                <View style={{ flexDirection: "row" }}>
-                  <ListItem.Title
-                    style={{ fontFamily: "MontserratSemiBold", fontSize: 20 }}
-                  >
-                    {item.attributes.dishName}
-                  </ListItem.Title>
-                  <ListItem.Subtitle
-                    style={{ marginLeft: 30, fontFamily: "MontserratSemiBold" }}
-                  >
-                    x {item.attributes.quantity}
-                  </ListItem.Subtitle>
-                </View>
+      <ScrollView style={{ flex: 0.45, backgroundColor: "white" }}>
+        <View style={{ flex: 1 }}>
+          <View style={{ flex: 0.15, height: 50, justifyContent: "center" }}>
+            <ListItem bottomDivider>
+              <ListItem.Content>
+                <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+                  {userName}
+                </ListItem.Title>
+                <ListItem.Subtitle>{orderNumber}</ListItem.Subtitle>
+              </ListItem.Content>
+              <Pressable onPress={() => navigation.navigate("chartList")}>
+                <Icon
+                  name="chat"
+                  color="black"
+                  size={18}
+                  style={{ marginRight: 10, padding: 6 }}
+                />
+              </Pressable>
+              <Pressable
+                onPress={() =>
+                  call({ number: `${customermobilenumber}`, prompt: false })
+                }
+              >
+                <Ionicons
+                  name="call-outline"
+                  size={18}
+                  color="black"
+                  style={{ marginRight: 10, padding: 6 }}
+                />
+              </Pressable>
 
+              <Text style={{ fontFamily: "MontserratSemiBold" }}>
+                {customermobilenumber}
+              </Text>
+              <ListItem.Content>
                 <View
                   style={{
                     alignSelf: "flex-end",
-                    //marginRight: 150,
+                  }}
+                >
+                  <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+                    {format(createdAt)}
+                  </ListItem.Title>
+                  <ListItem.Subtitle
+                    style={{ fontFamily: "MontserratSemiBold" }}
+                  >
+                    {address}
+                  </ListItem.Subtitle>
+                </View>
+              </ListItem.Content>
+            </ListItem>
+          </View>
+
+          {/* {LIST} */}
+          <View style={{ backgroundColor: "white" }}>
+            <ScrollView style={{ flex: 1 }}>
+              <View style={{ backgroundColor: "white" }}>
+                {dish.length === 1 ? (
+                  <Text style={{ marginLeft: 16, fontSize: 14 }}>
+                    {dish.length} Item
+                  </Text>
+                ) : (
+                  <Text style={{ marginLeft: 16, fontSize: 14 }}>
+                    {dish.length} Items
+                  </Text>
+                )}
+                <Border width={1} backgroundColor="grey" />
+              </View>
+
+              {dish.map((item, i) => (
+                <Pressable
+                  onPress={() => setFeatured(item) || setModalVisible(true)}
+                  // onPress={() => console.log(item)}
+                  key={i}
+                  style={{
+                    marginLeft: 10,
+                    marginRight: 10,
+                    borderBottomColor: "grey",
+                    borderBottomWidth: 1,
                   }}
                 >
                   <View
+                    key={i}
                     style={{
+                      backgroundColor: "white",
                       flexDirection: "row",
-                      width: "100%",
+                      height: 40,
+                      //  justifyContent: "space-around",
                     }}
                   >
-                    <Text
+                    <View
                       style={{
-                        marginRight: 50,
-                        fontFamily: "MontserratSemiBold",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        width: windowWidth / 2,
                       }}
                     >
-                      Subtotal
-                    </Text>
-                    <ListItem.Title
-                      style={{ fontFamily: "MontserratSemiBold" }}
-                    >
-                      Ksh {""}
-                      {item.attributes.dishPrice * item.attributes.quantity}
-                    </ListItem.Title>
-                  </View>
-                  <View style={{ flexDirection: "row" }}>
-                    <Text
+                      <Text style={{ fontFamily: "MontserratSemiBold" }}>
+                        {item.attributes.dishName}
+                      </Text>
+                    </View>
+                    <View
                       style={{
-                        marginRight: 82,
-                        fontFamily: "MontserratSemiBold",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        width: windowWidth / 4,
                       }}
                     >
-                      VAT
-                    </Text>
-                    <ListItem.Title
-                      style={{ fontFamily: "MontserratSemiBold" }}
+                      <Text style={{ fontFamily: "MontserratSemiBold" }}>
+                        KES{" "}
+                        {(
+                          (Number(item?.attributes?.dishPrice) +
+                            Number(item?.attributes?.totalAddition)) *
+                          item?.attributes?.quantity
+                        )
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        .00
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        width: windowWidth / 2,
+                      }}
                     >
-                      Ksh {""}
-                      VAT
-                      {/* {item.tax} */}
-                    </ListItem.Title>
+                      <Text style={{ fontFamily: "MontserratSemiBold" }}>
+                        Tap to view more
+                      </Text>
+                    </View>
                   </View>
-                </View>
-              </ListItem.Content>
-              <Text
-                style={{
-                  alignSelf: "flex-start",
-                  backgroundColor: "yellow",
-                  maxHeight: 100,
-                  maxWidth: "50%",
-                  fontSize: 18,
-                }}
-              >
-                {item.attributes.SpecialInstructions}
-              </Text>
-            </Card>
-          ))}
-        </ScrollView>
-      </View>
+                </Pressable>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
+      </ScrollView>
 
-      <View style={{ flex: 0.3 }}>
+      <View
+        style={{
+          flex: 0.35,
+        }}
+      >
         <Card>
           <View style={{ height: "100%" }}>
             <View>
@@ -168,18 +245,20 @@ const OrderHistoryDetailed = ({ route }) => {
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
-              <Text style={{ fontFamily: "MontserratSemiBold" }}>Subtotal</Text>
+              <Text style={{ fontFamily: "MontserratSemiBold" }}>Shipping</Text>
 
               <Text style={{ fontFamily: "MontserratSemiBold" }}>
-                KSH 392929
+                KES {shipping.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                .00
               </Text>
             </View>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
-              <Text style={{ fontFamily: "MontserratSemiBold" }}>Shipping</Text>
+              <Text style={{ fontFamily: "MontserratSemiBold" }}>Total</Text>
               <Text style={{ fontFamily: "MontserratSemiBold" }}>
-                KSH {shipping}
+                KES {totalPaid.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                .00
               </Text>
             </View>
             <View
@@ -208,10 +287,215 @@ const OrderHistoryDetailed = ({ route }) => {
       {/* <View style={{ flex: 0.2, height: "100%" }}>
         <Card></Card>
       </View> */}
-    </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Pressable onPress={() => setModalVisible(!modalVisible)}>
+              <AntDesign
+                name="close"
+                size={24}
+                color="black"
+                style={{
+                  marginLeft: 20,
+                  marginTop: 15,
+                  alignSelf: "flex-start",
+                }}
+              />
+            </Pressable>
+
+            <View
+              style={{
+                flex: 0.3,
+                backgroundColor: "white",
+                marginLeft: 10,
+                marginRight: 10,
+              }}
+            >
+              <ScrollView>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <View style={{ width: "50%" }}>
+                    <Text style={styles.price}>
+                      {featured?.attributes.dishName}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      width: "15%",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text>KES</Text>
+                  </View>
+                  <View
+                    style={{
+                      width: "35%",
+                      justifyContent: "flex-end",
+                      alignItems: "flex-end",
+                    }}
+                  >
+                    <Text>
+                      {" "}
+                      {featured?.attributes.dishPrice
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                      .00
+                    </Text>
+                  </View>
+                </View>
+
+                {featured?.attributes?.cartModifiers?.map((item, i) => (
+                  <View
+                    key={i}
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <View style={{ width: "50%" }}>
+                      <Text>{item.name}</Text>
+                    </View>
+                    <View
+                      style={{
+                        width: "15%",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Text>KES</Text>
+                    </View>
+                    <View
+                      style={{
+                        width: "35%",
+                        justifyContent: "flex-end",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <Text>
+                        {item?.value
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        .00
+                      </Text>
+                    </View>
+                  </View>
+                ))}
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <View
+                    style={{
+                      width: "25%",
+                    }}
+                  >
+                    <Text style={styles.subtotalTitle}>Subtotal</Text>
+                  </View>
+                  <View style={{ width: "20%" }}>
+                    <Text style={styles.title}>
+                      {"x" + featured?.attributes?.quantity}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      width: "25%",
+                      justifyContent: "center",
+                      alignContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text style={{ marginRight: 45 }}>KES</Text>
+                  </View>
+                  <View
+                    style={{
+                      width: "25%",
+                      justifyContent: "flex-end",
+                      alignItems: "flex-end",
+                    }}
+                  >
+                    <Text style={styles.subtotalPrice}>
+                      {(
+                        (Number(featured?.attributes?.dishPrice) +
+                          Number(featured?.attributes?.totalAddition)) *
+                        featured?.attributes?.quantity
+                      )
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                      .00
+                    </Text>
+                  </View>
+                </View>
+              </ScrollView>
+              {featured?.attributes?.SpecialInstructions !== "" ? (
+                <View>
+                  <Text>Special Instructions from {userName}</Text>
+                  <Text>{featured?.attributes?.SpecialInstructions}</Text>
+                </View>
+              ) : null}
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </SafeAreaView>
   );
 };
 
 export default OrderHistoryDetailed;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+  },
+  modalView: {
+    // marginTop: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    //padding: 35,
+    width: windowWidth,
+    height: windowHeight,
+    // alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+  },
+});

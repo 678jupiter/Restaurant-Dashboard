@@ -49,7 +49,10 @@ const OrderHistoryScreen = ({ navigation }) => {
       </View>
 
       <View>
-        <ListItem bottomDivider containerStyle={{ backgroundColor: "#edeff0" }}>
+        <ListItem
+          bottomDivider
+          containerStyle={{ backgroundColor: "#edeff0", height: 50 }}
+        >
           <ListItem.Title style={{ width: windowWidth / 7 }}>
             Status
           </ListItem.Title>
@@ -70,12 +73,15 @@ const OrderHistoryScreen = ({ navigation }) => {
       <View style={{ backgroundColor: "white", flex: 1 }}>
         {restaurantOrders?.data?.map((item, i) => (
           <ListItem
+            containerStyle={{
+              height: 50,
+            }}
             key={i}
             bottomDivider
             onPress={() =>
               navigation.navigate("orderHistory", {
                 userName: `${item.attributes.userName}`,
-                dishes: item.attributes.dishes,
+                dish: item.attributes.dishes,
                 orderNumber: `${item.attributes.mpesaReceiptNumber}`,
                 orderId: item.id,
                 customermobilenumber: item.attributes.customermobilenumber,
@@ -84,6 +90,8 @@ const OrderHistoryScreen = ({ navigation }) => {
                 address: item.attributes.address,
                 status: item.attributes.status,
                 totalPaid: item.attributes.totalPaid,
+                methodofPayment: item.attributes.methodOfPayment,
+                methodofDelivery: item.attributes.methodOfDelivery,
               })
             }
           >

@@ -41,23 +41,53 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
     <SafeAreaView style={{ backgroundColor: "white", flex: 1 }}>
       <View
         style={{
-          backgroundColor: "white",
           flex: 0.2,
           justifyContent: "center",
           alignContent: "center",
+          width: windowWidth,
+          flexDirection: "row",
+          backgroundColor: "white",
         }}
       >
-        <Pressable
-          onPress={() => navigation.goBack()}
-          style={{ alignSelf: "flex-start" }}
+        <View
+          style={{
+            width: windowWidth / 2,
+            justifyContent: "center",
+            alignItems: "flex-start",
+            alignContent: "center",
+          }}
         >
-          <Ionicons
-            name="arrow-back-sharp"
-            size={24}
-            color="black"
-            style={{ marginLeft: 10, marginTop: 20 }}
-          />
-        </Pressable>
+          <Pressable
+            onPress={() => navigation.goBack()}
+            style={{ alignSelf: "flex-start" }}
+          >
+            <Ionicons
+              name="arrow-back-sharp"
+              size={24}
+              color="black"
+              style={{ marginLeft: 10, marginTop: 25 }}
+            />
+          </Pressable>
+        </View>
+        <View
+          style={{
+            width: windowWidth / 2,
+            justifyContent: "center",
+            alignItems: "flex-end",
+            alignContent: "center",
+          }}
+        >
+          <Text
+            style={{
+              marginTop: 30,
+              marginRight: 20,
+              color: "orange",
+              fontSize: 20,
+            }}
+          >
+            {status}
+          </Text>
+        </View>
       </View>
       <ScrollView style={{ flex: 0.45, backgroundColor: "white" }}>
         <View style={{ flex: 1 }}>

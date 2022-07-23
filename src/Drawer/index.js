@@ -326,6 +326,7 @@ export default function StackNav() {
               name="orderHistory"
               component={OrderHistoryDetailed}
               options={{
+                headerShown: false,
                 animationTypeForReplace: "pop",
                 title: "Order History",
               }}
@@ -473,6 +474,7 @@ export default function StackNav() {
               name="deliveringDetailed"
               component={DeliveringDetailed}
               options={{
+                headerShown: false,
                 animationTypeForReplace: "pop",
                 title: "Ready",
               }}

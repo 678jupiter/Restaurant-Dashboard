@@ -27,8 +27,8 @@ const DeliveringDetailed = ({ route, navigation }) => {
     longitude: -122.406417,
   });
   const curAng = 45;
-  const latitudeDelta = 0.0922;
-  const longitudeDelta = 0.0421;
+  const latitudeDelta = Number(0.0922);
+  const longitudeDelta = Number(0.0421);
 
   const socket = io("https://socketitisha.herokuapp.com");
   function showRoom() {
@@ -126,7 +126,27 @@ const DeliveringDetailed = ({ route, navigation }) => {
     <View style={{ flex: 1, backgroundColor: "indigo" }}>
       <View
         style={{
-          flex: 0.1,
+          backgroundColor: "white",
+          flex: 0.15,
+          justifyContent: "center",
+          alignContent: "center",
+        }}
+      >
+        <Pressable
+          onPress={() => navigation.goBack()}
+          style={{ alignSelf: "flex-start" }}
+        >
+          <Ionicons
+            name="arrow-back-sharp"
+            size={24}
+            color="black"
+            style={{ marginLeft: 10, marginTop: 20 }}
+          />
+        </Pressable>
+      </View>
+      <View
+        style={{
+          flex: 0.05,
           backgroundColor: "white",
           flexDirection: "row",
           justifyContent: "space-around",
@@ -185,7 +205,7 @@ const DeliveringDetailed = ({ route, navigation }) => {
                 call({ number: `${customermobilenumber}`, prompt: false })
               }
               name="call-outline"
-              size={40}
+              size={18}
               color="black"
               style={{ marginRight: 10, padding: 10 }}
             />
@@ -205,7 +225,7 @@ const DeliveringDetailed = ({ route, navigation }) => {
                 call({ number: `${courierMobileNumber}`, prompt: false })
               }
               name="call-outline"
-              size={40}
+              size={18}
               color="black"
               style={{ marginRight: 10, padding: 10 }}
             />
