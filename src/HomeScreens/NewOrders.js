@@ -46,7 +46,7 @@ const NewOrders = ({ navigation }) => {
         style={{
           flex: 1,
           backgroundColor: "rgba(39, 39, 39, 1)",
-          paddingTop: 20,
+          //  paddingTop: 20,
         }}
       >
         <View style={{ marginLeft: 100, marginRight: 100 }}>
@@ -72,10 +72,11 @@ const NewOrders = ({ navigation }) => {
                     status: l.attributes.status,
                     totalPaid: l.attributes.totalPaid,
                     conversationId: l.attributes.conversationId,
+                    methodofPayment: l.attributes.methodOfPayment,
+                    methodofDelivery: l.attributes.methodOfDelivery,
                   })
                 }
                 // onPress={() => console.log(l)}
-                // onPress={() => AsyncStorage.clear()}
               >
                 <View
                   style={{

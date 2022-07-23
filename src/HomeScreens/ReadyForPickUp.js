@@ -60,19 +60,19 @@ const ReadyForPickUp = ({ navigation }) => {
         style={{
           flex: 1,
           backgroundColor: "rgba(39, 39, 39, 1)",
-          paddingTop: 20,
+          // paddingTop: 20,
         }}
       >
         <View
           style={{
             marginLeft: 100,
             marginRight: 100,
-            flex: 0.06,
+            flex: 0.07,
           }}
         >
           <Text style={{ color: "white", fontSize: 20 }}>Ready</Text>
         </View>
-        <View style={{ flex: 0.79 }}>
+        <View style={{ flex: 0.78 }}>
           <ScrollView
             style={{
               marginTop: 10,
@@ -98,6 +98,8 @@ const ReadyForPickUp = ({ navigation }) => {
                       address: l.attributes.address,
                       status: l.attributes.status,
                       totalPaid: l.attributes.totalPaid,
+                      methodofPayment: l.attributes.methodOfPayment,
+                      methodofDelivery: l.attributes.methodOfDelivery,
                     })
                   }
                   //onPress={() => console.log(l)}
@@ -127,7 +129,7 @@ const ReadyForPickUp = ({ navigation }) => {
                       alignItems: "center",
                       justifyContent: "space-between",
                       flexDirection: "row",
-                      marginTop: 6,
+                      //  marginTop: 6,
                     }}
                   >
                     <Text

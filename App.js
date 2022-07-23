@@ -107,7 +107,7 @@ async function schedulePushNotification() {
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "New Order Confimation",
-      body: "We have received your order",
+      body: "You have a new order",
       data: { data: "goes here" },
       sound: true,
     },

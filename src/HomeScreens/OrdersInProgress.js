@@ -45,7 +45,7 @@ const OrdersInProgress = ({ navigation }) => {
         style={{
           flex: 1,
           backgroundColor: "rgba(39, 39, 39, 1)",
-          paddingTop: 20,
+          //  paddingTop: 20,
         }}
       >
         <View style={{ marginLeft: 100, marginRight: 100 }}>
@@ -71,6 +71,8 @@ const OrdersInProgress = ({ navigation }) => {
                     address: l.attributes.address,
                     shipping: l.attributes.shipping,
                     totalPaid: l.attributes.totalPaid,
+                    methodofPayment: l.attributes.methodOfPayment,
+                    methodofDelivery: l.attributes.methodOfDelivery,
                   })
                 }
               >

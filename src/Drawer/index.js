@@ -107,7 +107,7 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen
         options={{
           // title: "",
-          headerShown: false,
+          headerShown: true,
           headerStatusBarHeight: 1,
 
           drawerIcon: ({ focused }) => (
@@ -124,7 +124,8 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen
         options={{
           title: "Ready For Pickup",
-          headerShown: false,
+          headerShown: true,
+          headerStatusBarHeight: 1,
 
           drawerIcon: ({ focused }) => (
             <MaterialIcons
@@ -140,7 +141,8 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen
         options={{
           title: "",
-          headerShown: false,
+          headerShown: true,
+          headerStatusBarHeight: 1,
 
           drawerIcon: ({ focused }) => (
             <MaterialIcons
@@ -172,7 +174,8 @@ function DrawerNav({ navigation }) {
       <Drawer.Screen
         options={{
           title: "",
-          headerShown: false,
+          headerShown: true,
+          headerStatusBarHeight: 1,
 
           drawerIcon: ({ focused }) => (
             <Feather
@@ -223,6 +226,7 @@ export default function StackNav() {
                 animationTypeForReplace: "pop",
                 title: "New order",
                 headerStatusBarHeight: 1,
+                headerShown: false,
               }}
             />
             <Stack.Screen
@@ -231,6 +235,7 @@ export default function StackNav() {
               options={{
                 animationTypeForReplace: "pop",
                 title: "Orders In Progress",
+                headerShown: false,
               }}
             />
             <Stack.Screen
@@ -461,6 +466,7 @@ export default function StackNav() {
               options={{
                 animationTypeForReplace: "pop",
                 title: "Ready",
+                headerShown: false,
               }}
             />
             <Stack.Screen

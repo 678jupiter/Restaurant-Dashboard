@@ -43,13 +43,11 @@ const Delivering = ({ navigation }) => {
         style={{
           flex: 1,
           backgroundColor: "rgba(39, 39, 39, 1)",
-          paddingTop: 20,
+          // paddingTop: 20,
         }}
       >
         <View style={{ marginLeft: 100, marginRight: 100 }}>
-          <Text style={{ color: "white", fontSize: 22, fontWeight: "800" }}>
-            Delivering
-          </Text>
+          <Text style={{ color: "white", fontSize: 20 }}>Delivering</Text>
         </View>
         <ScrollView
           style={{ marginTop: 10, marginLeft: 100, marginRight: 100 }}
@@ -81,27 +79,25 @@ const Delivering = ({ navigation }) => {
                 >
                   <Text
                     style={{
-                      fontSize: 20,
-                      fontWeight: "bold",
+                      fontSize: 15,
                       marginLeft: 10,
-                      color: "black",
                     }}
                   >
                     {l.attributes.userName}
                   </Text>
-                  <Text style={{ marginRight: 10, color: "black" }}>
-                    {l.attributes.status}
-                  </Text>
+                  <Text style={{ marginRight: 10 }}>{l.attributes.status}</Text>
                 </View>
                 <View
                   style={{
                     alignItems: "center",
                     justifyContent: "space-between",
                     flexDirection: "row",
-                    marginTop: 6,
+                    //  marginTop: 6,
                   }}
                 >
-                  <Text style={{ marginLeft: 10, paddingBottom: 10 }}>
+                  <Text
+                    style={{ marginLeft: 10, paddingBottom: 10, fontSize: 10 }}
+                  >
                     {l.attributes.mpesaReceiptNumber}
                   </Text>
                 </View>
