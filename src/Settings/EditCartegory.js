@@ -23,7 +23,7 @@ const EditCartegory = ({ route }) => {
   const { Cname, cId, img } = route.params;
   const [isModalVisible, setModalVisible] = useState(false);
   const [imgUrl, setImageUrl] = useState("");
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(img);
   const [name, setName] = useState(Cname);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");

@@ -5,6 +5,10 @@ import {
   View,
   Text,
   Dimensions,
+  Keyboard,
+  SafeAreaView,
+  Pressable,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Input } from "@rneui/themed";
@@ -20,29 +24,27 @@ import { useSelector } from "react-redux";
 import { FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { dfhs } from "@env";
-const modifierGp = [
-  {
-    Title: "Choice of Spice",
-    id: "0",
-  },
-  {
-    Title: "Choice of Drink",
-    id: "2",
-  },
-  {
-    Title: "Choice of Fruit",
-    id: "3",
-  },
-  {
-    Title: "Choice of Sugar",
-    id: "4",
-  },
-];
+import { Ionicons } from "@expo/vector-icons";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
-const CreateNewDish = () => {
+const CreateNewDish = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
+  const [keyboardStatus, setKeyboardStatus] = useState(undefined);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setKeyboardStatus("Keyboard Shown");
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardStatus("Keyboard Hidden");
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -150,20 +152,15 @@ const CreateNewDish = () => {
       authAxios2
         .post("upload", formData)
         .then((res) => {
-          const [
-            {
-              formats: {
-                medium: { url },
-              },
-            },
-          ] = res.data;
+          console.log(res.data);
+          const [{ url }] = res.data;
           var imageId = url;
           setImageUrl(imageId);
           setLoading(false);
         })
         .catch((error) => {
           setLoading(false);
-
+          console.log(error);
           setMessage(() => (
             <Text>There was an error while uploading the image. </Text>
           ));
@@ -199,13 +196,7 @@ const CreateNewDish = () => {
       authAxios2
         .post("upload", formData)
         .then((res) => {
-          const [
-            {
-              formats: {
-                medium: { url },
-              },
-            },
-          ] = res.data;
+          const [{ url }] = res.data;
           var imageId = url;
           setImageUrl(imageId);
           setLoading(false);
@@ -286,139 +277,161 @@ const CreateNewDish = () => {
   };
 
   return (
-    <View
+    <SafeAreaView
       style={{
         flex: 1,
-        // justifyContent: "center",
-        // alignItems: "center",
+        backgroundColor: "white",
       }}
     >
-      <View
-        style={{
-          flex: 0.9,
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
-        <View style={{ justifyContent: "space-evenly" }}>
-          <View style={{ width: windowWidth / 3 }}>
-            <Input
-              placeholder="Item Name"
-              onChangeText={(text) => setName(text)}
-            />
-          </View>
-          <View style={{ width: windowWidth / 3 }}>
-            <Input
-              placeholder="Item Description"
-              onChangeText={(text) => setDescription(text)}
-            />
-          </View>
-          <View style={{ width: windowWidth / 3 }}>
-            <Input
-              keyboardType={"numeric"}
-              placeholder="Item Price"
-              onChangeText={(text) => setPrice(text)}
-            />
-          </View>
-          <View style={{ width: windowWidth / 3 }}>
-            <Picker
-              selectedValue={selectedLanguage}
-              onValueChange={(itemValue, itemIndex) =>
-                setCartegoryId(itemValue.id)
-              }
-            >
-              {cartegories?.map((i) => (
-                <Picker.Item key={i.id} label={i.attributes.name} value={i} />
-              ))}
-            </Picker>
-          </View>
-        </View>
+      <View style={{ flex: 0.15, justifyContent: "center" }}>
+        <Pressable
+          onPress={() => navigation.goBack()}
+          style={{ alignSelf: "flex-start" }}
+        >
+          <Ionicons
+            name="arrow-back-sharp"
+            size={24}
+            color="black"
+            style={{ marginLeft: 10, marginTop: 25 }}
+          />
+        </Pressable>
+      </View>
+      <ScrollView style={{ flex: 1 }}>
         <View
           style={{
-            justifyContent: "space-evenly",
-            width: windowWidth / 3,
+            flex: 0.9,
+            flexDirection: "row",
+            justifyContent: "center",
+            backgroundColor: "white",
           }}
         >
-          <View
-            style={{
-              width: windowWidth / 8,
-              alignSelf: "center",
-            }}
-          >
-            <Input
-              keyboardType={"numeric"}
-              placeholder="Vat"
-              onChangeText={(text) => setTax(text)}
-            />
+          <View style={{ justifyContent: "space-evenly" }}>
+            <View style={{ width: windowWidth / 3 }}>
+              <Input
+                placeholder="Item Name"
+                onChangeText={(text) => setName(text)}
+              />
+            </View>
+            <View style={{ width: windowWidth / 3 }}>
+              <Input
+                placeholder="Item Description"
+                onChangeText={(text) => setDescription(text)}
+              />
+            </View>
+            <View style={{ width: windowWidth / 3 }}>
+              <Input
+                keyboardType={"numeric"}
+                placeholder="Item Price"
+                onChangeText={(text) => setPrice(text)}
+              />
+            </View>
+            <View style={{ width: windowWidth / 3 }}>
+              <Picker
+                selectedValue={selectedLanguage}
+                onValueChange={(itemValue, itemIndex) =>
+                  setCartegoryId(itemValue.id) || setSelectedLanguage(itemValue)
+                }
+              >
+                {cartegories?.map((i) => (
+                  <Picker.Item key={i.id} label={i.attributes.name} value={i} />
+                ))}
+              </Picker>
+            </View>
           </View>
           <View
             style={{
-              alignItems: "center",
+              justifyContent: "space-evenly",
               width: windowWidth / 3,
             }}
           >
-            <ImageBackground
-              source={{
-                //  uri: `${userData.image}`,
-                uri: image,
+            <View
+              style={{
+                width: windowWidth / 8,
+                alignSelf: "center",
               }}
-              style={styles.avatar}
             >
-              <TouchableOpacity
-                style={{
-                  top: 140,
-
-                  paddingVertical: 13,
-                  alignItems: "center",
-                  opacity: 0.8,
-                  backgroundColor: "black",
+              <Input
+                keyboardType={"numeric"}
+                placeholder="Vat"
+                onChangeText={(text) => setTax(text)}
+              />
+            </View>
+            <View
+              style={{
+                alignItems: "center",
+                width: windowWidth / 3,
+              }}
+            >
+              <ImageBackground
+                source={{
+                  //  uri: `${userData.image}`,
+                  uri: image,
                 }}
-                onPress={toggleModal}
+                style={styles.avatar}
               >
-                <View>
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontFamily: "CircularStdBold",
-                      fontSize: 14,
-                    }}
-                  >
-                    Upload
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </ImageBackground>
+                <TouchableOpacity
+                  style={{
+                    top: 78,
+
+                    paddingVertical: 3,
+                    alignItems: "center",
+                    opacity: 0.8,
+                    backgroundColor: "black",
+                    justifyContent: "center",
+                  }}
+                  onPress={toggleModal}
+                >
+                  <View>
+                    <Text
+                      style={{
+                        color: "#fff",
+                        fontFamily: "CircularStdBold",
+                        fontSize: 14,
+                      }}
+                    >
+                      Upload
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </ImageBackground>
+            </View>
           </View>
         </View>
-      </View>
-      <View
-        style={{
-          alignItems: "center",
-          flex: 0.2,
-          justifyContent: "center",
-        }}
-      >
-        <Text style={{ textAlign: "center", fontSize: 13, color: "#EF4444" }}>
-          {message}
-        </Text>
-        <Button
-          onPress={() => handleSubmit()}
-          loading={loading}
-          title="Submit"
-          buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}
-          containerStyle={{
-            width: windowWidth / 3,
-            marginHorizontal: 30,
-            marginVertical: 10,
-          }}
-          titleStyle={{
-            color: "white",
-            fontWeight: "900",
-            fontSize: 20,
-          }}
-        />
-      </View>
-
+        {keyboardStatus === "Keyboard Shown" ? null : (
+          <View
+            style={{
+              alignItems: "center",
+              flex: 0.2,
+              justifyContent: "center",
+            }}
+          >
+            <Text
+              style={{ textAlign: "center", fontSize: 13, color: "#EF4444" }}
+            >
+              {message}
+            </Text>
+            <Button
+              onPress={() => handleSubmit()}
+              loading={loading}
+              title="Submit"
+              buttonStyle={{
+                backgroundColor: "rgba(39, 39, 39, 1)",
+                height: 80,
+              }}
+              containerStyle={{
+                width: windowWidth / 3,
+                marginHorizontal: 30,
+                marginVertical: 10,
+              }}
+              titleStyle={{
+                color: "white",
+                fontWeight: "900",
+                fontSize: 20,
+              }}
+            />
+          </View>
+        )}
+      </ScrollView>
       <ModalBottom
         onBackdropPress={toggleModal}
         isVisible={isModalVisible}
@@ -434,7 +447,7 @@ const CreateNewDish = () => {
         </TouchableOpacity>
         <Space height={20} />
       </ModalBottom>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -448,8 +461,8 @@ const styles = StyleSheet.create({
   avatar: {
     overflow: "hidden",
     borderRadius: 20,
-    width: 180,
-    height: 180,
+    width: 100,
+    height: 100,
     backgroundColor: "grey",
   },
 });

@@ -8,10 +8,14 @@ import {
   Modal,
   Pressable,
   FlatList,
-  Touchable,
+  Keyboard,
+  SafeAreaView,
+  ScrollView,
+  ActivityIndicator,
+  Animated,
 } from "react-native";
 import { gql, useQuery } from "@apollo/client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ButtonGroup, Input } from "@rneui/themed";
 import { Button } from "@rneui/base";
 import { IconText, ModalBottom } from "../../components";
@@ -26,6 +30,8 @@ import { colors } from "../../config";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { dfhs } from "@env";
+import { Ionicons } from "@expo/vector-icons";
+
 const CARTEGORY_ID = gql`
   query ($id: ID!) {
     dish(id: $id) {
@@ -56,38 +62,35 @@ const CARTEGORY_ID = gql`
     }
   }
 `;
-const modifierGp = [
-  {
-    Title: "Choice of Spice",
-    id: "0",
-  },
-  {
-    Title: "Choice of Drink",
-    id: "2",
-  },
-  {
-    Title: "Choice of Fruit",
-    id: "3",
-  },
-  {
-    Title: "Choice of Sugar",
-    id: "4",
-  },
-];
+
 const windowHeight = Dimensions.get("window").height;
 const windowWidth = Dimensions.get("window").width;
 const EditDish = ({ route }) => {
   const navigation = useNavigation();
+  const offset = useRef(new Animated.Value(0)).current;
+  const [keyboardStatus, setKeyboardStatus] = useState(undefined);
 
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setKeyboardStatus("Keyboard Shown");
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardStatus("Keyboard Hidden");
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
   const { Pname, Pprice, Pimage, Ptax, dId, Pdescription } = route.params;
-  console.log(Pimage);
 
   const [isModalVisible, setModalVisible] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
   const [cartegoryId, setCartegoryId] = useState("");
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(Pimage);
   const [imgUrl, setImageUrl] = useState("");
   const [name, setName] = useState(Pname);
   const [description, setDescription] = useState(Pdescription);
@@ -297,8 +300,38 @@ const EditDish = ({ route }) => {
     variables: { id },
   });
 
-  if (loading) return <Text>Loading...</Text>;
-  if (error) return `Error! ${error}`;
+  if (loading) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ActivityIndicator size="large" color="black" />
+        </View>
+      </SafeAreaView>
+    );
+  }
+  if (error) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text>Network error... Please connect to the internet</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   if (data) {
     // console.log(data.dish.data.attributes.restaurants.data);
@@ -365,13 +398,25 @@ const EditDish = ({ route }) => {
     };
 
     return (
-      <View
+      <SafeAreaView
         style={{
           flex: 1,
-          // justifyContent: "center",
-          // alignItems: "center",
+          backgroundColor: "white",
         }}
       >
+        <View style={{ flex: 0.15, justifyContent: "center" }}>
+          <Pressable
+            onPress={() => navigation.goBack()}
+            style={{ alignSelf: "flex-start" }}
+          >
+            <Ionicons
+              name="arrow-back-sharp"
+              size={24}
+              color="black"
+              style={{ marginLeft: 10, marginTop: 25 }}
+            />
+          </Pressable>
+        </View>
         <View
           style={{
             flex: 0.9,
@@ -379,121 +424,134 @@ const EditDish = ({ route }) => {
             flexDirection: "row",
           }}
         >
-          <View style={{ justifyContent: "space-evenly" }}>
-            <View style={{ width: windowWidth / 3 }}>
-              <Input
-                placeholder="Item Name"
-                defaultValue={Pname}
-                onChangeText={(text) => setName(text)}
-                textAlign="center"
-              />
-            </View>
-            <View style={{ width: windowWidth / 3 }}>
-              <Input
-                placeholder="Item Description"
-                defaultValue={Pdescription}
-                onChangeText={(text) => setDescription(text)}
-                textAlign="center"
-              />
-            </View>
-            <View style={{ width: windowWidth / 3 }}>
-              <Input
-                keyboardType={"numeric"}
-                placeholder="Item Price"
-                defaultValue={angile}
-                onChangeText={(text) => setPrice(text)}
-                textAlign="center"
-              />
-            </View>
-            {cartegoryName === "" ? (
-              <Pressable
-                onPress={() => closeModal(true)}
-                style={{ width: windowWidth / 3, alignItems: "center" }}
-              >
-                <Text
-                  style={{
-                    fontSize: 18,
-                    fontWeight: "300",
-                    fontStyle: "italic",
-                  }}
-                >
-                  {id.attributes.name}
-                </Text>
-                <Border height={1} backgroundColor={colors.dark_gray} />
-                <Text style={{ color: colors.slate, fontSize: 20 }}>
-                  Press to edit cartegory
-                </Text>
-              </Pressable>
-            ) : (
-              <Pressable
-                onPress={() => closeModal(true)}
-                style={{ width: windowWidth / 3, alignItems: "center" }}
-              >
-                <Text
-                  style={{
-                    fontSize: 18,
-                    fontWeight: "300",
-                    fontStyle: "italic",
-                  }}
-                >
-                  {cartegoryName}
-                </Text>
-                <Text style={{ color: colors.slate, fontSize: 20 }}>
-                  Press to edit cartegory
-                </Text>
-                <Border height={1} backgroundColor={colors.slate} />
-              </Pressable>
+          <ScrollView
+            showsVerticalScrollIndicator={true}
+            showsHorizontalScrollIndicator={true}
+            scrollEventThrottle={16}
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { y: offset } } }],
+              { useNativeDriver: false }
             )}
-          </View>
-          <View style={{ justifyContent: "space-evenly" }}>
-            <View style={{ width: windowWidth / 3 }}>
-              <Input
-                keyboardType={"numeric"}
-                placeholder="Vat"
-                onChangeText={(text) => setTax(text)}
-                defaultValue={Ptax}
-                textAlign="center"
-              />
-            </View>
-            <View
-              style={{
-                alignItems: "center",
-                width: windowWidth / 3,
-              }}
-            >
-              <ImageBackground
-                source={{
-                  //  uri: `${userData.image}`,
-                  uri: image,
-                }}
-                style={styles.avatar}
-              >
-                <TouchableOpacity
-                  style={{
-                    top: 140,
-
-                    paddingVertical: 13,
-                    alignItems: "center",
-                    opacity: 0.8,
-                    backgroundColor: "black",
-                  }}
-                  onPress={toggleModal}
+          >
+            <View style={{ justifyContent: "space-evenly" }}>
+              <View style={{ width: windowWidth / 3 }}>
+                <Input
+                  placeholder="Item Name"
+                  defaultValue={Pname}
+                  onChangeText={(text) => setName(text)}
+                  textAlign="center"
+                />
+              </View>
+              <View style={{ width: windowWidth / 3 }}>
+                <Input
+                  placeholder="Item Description"
+                  defaultValue={Pdescription}
+                  onChangeText={(text) => setDescription(text)}
+                  textAlign="center"
+                />
+              </View>
+              <View style={{ width: windowWidth / 3 }}>
+                <Input
+                  keyboardType={"numeric"}
+                  placeholder="Item Price"
+                  defaultValue={angile}
+                  onChangeText={(text) => setPrice(text)}
+                  textAlign="center"
+                />
+              </View>
+              {cartegoryName === "" ? (
+                <Pressable
+                  onPress={() => closeModal(true)}
+                  style={{ width: windowWidth / 3, alignItems: "center" }}
                 >
-                  <View>
-                    <Text
-                      style={{
-                        color: "#fff",
-                        fontFamily: "CircularStdBold",
-                        fontSize: 14,
-                      }}
-                    >
-                      Edit
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </ImageBackground>
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      fontWeight: "300",
+                      fontStyle: "italic",
+                    }}
+                  >
+                    {id.attributes.name}
+                  </Text>
+                  <Border height={1} backgroundColor={colors.dark_gray} />
+                  <Text style={{ color: colors.slate, fontSize: 20 }}>
+                    Press to edit cartegory
+                  </Text>
+                </Pressable>
+              ) : (
+                <Pressable
+                  onPress={() => closeModal(true)}
+                  style={{ width: windowWidth / 3, alignItems: "center" }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 18,
+                      //fontWeight: "300",
+                      // fontStyle: "italic",
+                    }}
+                  >
+                    {cartegoryName}
+                  </Text>
+                  <Text style={{ color: colors.slate, fontSize: 20 }}>
+                    Press to edit cartegory
+                  </Text>
+                  <Border height={1} backgroundColor={colors.slate} />
+                </Pressable>
+              )}
             </View>
-          </View>
+          </ScrollView>
+          <ScrollView>
+            <View style={{ justifyContent: "space-evenly" }}>
+              <View style={{ width: windowWidth / 3 }}>
+                <Input
+                  keyboardType={"numeric"}
+                  placeholder="Vat"
+                  onChangeText={(text) => setTax(text)}
+                  defaultValue={Ptax}
+                  textAlign="center"
+                />
+              </View>
+              <View
+                style={{
+                  alignItems: "center",
+                  width: windowWidth / 3,
+                }}
+              >
+                <ImageBackground
+                  source={{
+                    //  uri: `${userData.image}`,
+                    uri: image,
+                  }}
+                  style={styles.avatar}
+                >
+                  <TouchableOpacity
+                    style={{
+                      top: 140,
+
+                      paddingVertical: 13,
+                      alignItems: "center",
+                      opacity: 0.8,
+                      backgroundColor: "black",
+                    }}
+                    onPress={toggleModal}
+                  >
+                    <View>
+                      <Text
+                        style={{
+                          color: "#fff",
+                          fontFamily: "CircularStdBold",
+                          fontSize: 14,
+                        }}
+                      >
+                        Edit
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </ImageBackground>
+              </View>
+            </View>
+          </ScrollView>
+
           <View
             style={{
               justifyContent: "space-evenly",
@@ -533,33 +591,40 @@ const EditDish = ({ route }) => {
             />
           </View>
         </View>
-        <View
-          style={{
-            alignItems: "center",
-            flex: 0.2,
-            justifyContent: "center",
-          }}
-        >
-          <Text style={{ textAlign: "center", fontSize: 13, color: "#EF4444" }}>
-            {message}
-          </Text>
-          <Button
-            onPress={() => handleSubmit()}
-            loading={loading2}
-            title="Submit"
-            buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}
-            containerStyle={{
-              width: windowWidth / 3,
-              marginHorizontal: 30,
-              marginVertical: 10,
+        {keyboardStatus === "Keyboard Shown" ? null : (
+          <View
+            style={{
+              alignItems: "center",
+              flex: 0.2,
+              justifyContent: "center",
             }}
-            titleStyle={{
-              color: "white",
-              fontWeight: "900",
-              fontSize: 20,
-            }}
-          />
-        </View>
+          >
+            <Text
+              style={{ textAlign: "center", fontSize: 13, color: "#EF4444" }}
+            >
+              {message}
+            </Text>
+            <Button
+              onPress={() => handleSubmit()}
+              loading={loading2}
+              title="Submit"
+              buttonStyle={{
+                backgroundColor: "rgba(39, 39, 39, 1)",
+                height: 80,
+              }}
+              containerStyle={{
+                width: windowWidth / 3,
+                marginHorizontal: 30,
+                marginVertical: 10,
+              }}
+              titleStyle={{
+                color: "white",
+                fontWeight: "900",
+                fontSize: 20,
+              }}
+            />
+          </View>
+        )}
 
         <Modal
           mode="dropdown"
@@ -584,6 +649,7 @@ const EditDish = ({ route }) => {
                   onValueChange={(itemValue, itemIndex) =>
                     setCartegoryId(itemValue.id) ||
                     setCartegoryName(itemValue.attributes.name) ||
+                    setSelectedLanguage(itemValue) ||
                     refetch()
                   }
                 >
@@ -614,7 +680,7 @@ const EditDish = ({ route }) => {
           </TouchableOpacity>
           <Space height={20} />
         </ModalBottom>
-      </View>
+      </SafeAreaView>
     );
   }
 };

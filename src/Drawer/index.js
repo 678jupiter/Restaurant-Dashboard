@@ -296,6 +296,7 @@ export default function StackNav() {
               options={{
                 animationTypeForReplace: "pop",
                 title: "New Item",
+                headerShown: false,
               }}
             />
             <Stack.Screen
@@ -320,6 +321,7 @@ export default function StackNav() {
               options={{
                 animationTypeForReplace: "pop",
                 title: "Edit Item",
+                headerShown: false,
               }}
             />
             <Stack.Screen
