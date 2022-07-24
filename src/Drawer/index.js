@@ -305,6 +305,7 @@ export default function StackNav() {
               options={{
                 animationTypeForReplace: "pop",
                 title: "Modifiers",
+                headerShown: false,
               }}
             />
             <Stack.Screen
@@ -313,6 +314,7 @@ export default function StackNav() {
               options={{
                 animationTypeForReplace: "pop",
                 title: "Edit Modifier",
+                headerShown: false,
               }}
             />
             <Stack.Screen

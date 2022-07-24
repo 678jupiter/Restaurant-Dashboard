@@ -13,6 +13,7 @@ import {
   View,
   Modal,
 } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 import React, { Component, useEffect } from "react";
 import { Input } from "@rneui/base";
 import { CheckBox } from "@rneui/themed";
@@ -38,6 +39,7 @@ export class EditModifier extends Component {
     choice: "",
     numerTo: 1,
     modalVisible: false,
+    modalVisible2: false,
     custom_fields: [],
     fetchingData: false,
   };
@@ -87,16 +89,23 @@ export class EditModifier extends Component {
     this.setState({ prevModifires: newarr });
   };
   getPrevMofifires = () => {
-    const userData = useSelector((state) => state.user.usermeta);
+    const navigation = this.props;
+    const {
+      modifierId,
+      numberofitemstochoose,
+      title,
+      isRequired,
+      child,
+      userSample,
+    } = navigation.route.params;
+    // const userData = useSelector((state) => state.user.usermeta);
     const authAxios = axios.create({
       baseURL: `${dfhs}`,
       headers: {
-        Authorization: `Bearer ${userData.jwt}`,
+        Authorization: `Bearer ${userSample}`,
       },
     });
-    const navigation = this.props;
-    const { modifierId, numberofitemstochoose, title, isRequired, child } =
-      navigation.route.params;
+
     this.setState({ fetchingData: true });
     authAxios
       .get(`modifiers/${modifierId}`)
@@ -140,8 +149,14 @@ export class EditModifier extends Component {
 
   render() {
     const navigation = this.props;
-    const { modifierId, numberofitemstochoose, title, isRequired, child } =
-      navigation.route.params;
+    const {
+      modifierId,
+      numberofitemstochoose,
+      title,
+      isRequired,
+      child,
+      userSample,
+    } = navigation.route.params;
     // console.log(child);
 
     //console.log(this.state.custom_fields);
@@ -212,11 +227,11 @@ export class EditModifier extends Component {
         updateItemModifier();
       }
     };
-    const userData = useSelector((state) => state.user.usermeta);
+    // const userData = useSelector((state) => state.user.usermeta);
     const authAxios = axios.create({
       baseURL: `${dfhs}`,
       headers: {
-        Authorization: `Bearer ${userData.jwt}`,
+        Authorization: `Bearer ${userSample}`,
       },
     });
     const updateItemModifier = () => {
@@ -245,6 +260,25 @@ export class EditModifier extends Component {
 
     return (
       <SafeAreaView style={styles.safe}>
+        <View
+          style={{
+            flex: 0.15,
+            justifyContent: "center",
+            backgroundColor: "white",
+          }}
+        >
+          <Pressable
+            onPress={() => this.props.navigation.goBack()}
+            style={{ alignSelf: "flex-start" }}
+          >
+            <Ionicons
+              name="arrow-back-sharp"
+              size={24}
+              color="black"
+              style={{ marginLeft: 10, marginTop: 25 }}
+            />
+          </Pressable>
+        </View>
         {this.setState.fetchingData ? (
           <View
             style={{ alignItems: "center", flex: 1, justifyContent: "center" }}
@@ -253,25 +287,39 @@ export class EditModifier extends Component {
           </View>
         ) : (
           <>
-            <View style={styles.header}></View>
             <View style={styles.title}>
-              <Text style={{ fontSize: 18, fontWeight: "600" }}>Title</Text>
-              <Space width={10} />
-              <View style={{ width: windowWidth / 1.3 }}>
-                <Input
-                  placeholder="Choice of Spice"
-                  onChangeText={(text) => this.setState({ choice: text })}
-                  defaultValue={this.state.choice}
-                />
-              </View>
+              <Pressable
+                style={{ flexDirection: "row" }}
+                onPress={() => this.setState({ modalVisible2: true })}
+              >
+                <Text style={{ fontSize: 18, fontWeight: "600" }}>Title</Text>
+                <Space width={10} />
+                <View style={{ width: windowWidth / 1.3 }}>
+                  <Text
+                    style={{
+                      borderBottomColor: "grey",
+                      borderBottomWidth: 1,
+                    }}
+                  >
+                    {this.state.choice}
+                  </Text>
+                </View>
+              </Pressable>
             </View>
             <View style={styles.question}>
-              <Text style={{ fontSize: 18, fontWeight: "600" }}>
+              <Text style={{ fontSize: 14, fontWeight: "600" }}>
                 How many items can the customer choose?
               </Text>
               <Space width={70} />
 
-              <View style={{ width: windowWidth / 12 }}>
+              <View
+                style={{
+                  width: windowWidth / 12,
+                  height: "100%",
+                  backgroundColor: "white",
+                  justifyContent: "center",
+                }}
+              >
                 <TextInput
                   // placeholder="1"
                   style={styles.numberInput}
@@ -287,7 +335,7 @@ export class EditModifier extends Component {
                 checked={this.state.required}
                 checkedColor="#0F0"
                 checkedTitle="Required"
-                containerStyle={{ width: "40%" }}
+                containerStyle={{ width: "40%", height: "100%" }}
                 size={30}
                 textStyle={{}}
                 title="Required"
@@ -303,7 +351,7 @@ export class EditModifier extends Component {
                 checked={this.state.optional}
                 checkedColor="#0F0"
                 checkedTitle="Optional"
-                containerStyle={{ width: "40%" }}
+                containerStyle={{ width: "40%", height: "100%" }}
                 size={30}
                 textStyle={{}}
                 title="Optional"
@@ -338,7 +386,7 @@ export class EditModifier extends Component {
                           alignItems: "center",
                           justifyContent: "space-between",
                           flexDirection: "row",
-                          //  marginTop: 15,
+                          //marginTop: 15,
                         }}
                       >
                         <View
@@ -351,7 +399,7 @@ export class EditModifier extends Component {
                         >
                           <Text
                             style={{
-                              fontSize: 20,
+                              fontSize: 18,
                               // fontWeight: "bold",
                               marginLeft: 10,
                               color: "black",
@@ -370,7 +418,7 @@ export class EditModifier extends Component {
                         >
                           <Text
                             style={{
-                              fontSize: 20,
+                              fontSize: 18,
                               // fontWeight: "bold",
                               marginLeft: 10,
                               color: "black",
@@ -382,7 +430,7 @@ export class EditModifier extends Component {
                             onPress={() => this.updateCache(item)}
                             style={{ marginRight: 20, marginLeft: 20 }}
                           >
-                            <EvilIcons name="trash" size={30} color="black" />
+                            <EvilIcons name="trash" size={20} color="black" />
                           </TouchableOpacity>
                         </View>
                       </View>
@@ -405,23 +453,28 @@ export class EditModifier extends Component {
                 ))}
               </ScrollView>
             </View>
-            <View style={styles.add}>
-              <TouchableOpacity
-                style={{ flexDirection: "row", alignItems: "center" }}
-                onPress={() => this.openModal()}
-              >
-                <Ionicons name="add-sharp" size={28} color="#2196F3" />
-                <Text style={{ color: "#2196F3", fontSize: 18 }}>
-                  ADD ANOTHER ITEM
-                </Text>
-              </TouchableOpacity>
-            </View>
+
             <View style={styles.savecancel}>
+              <View>
+                <TouchableOpacity
+                  style={{ flexDirection: "row", alignItems: "center" }}
+                  onPress={() => this.openModal()}
+                >
+                  <Ionicons name="add-sharp" size={28} color="#2196F3" />
+                  <Text style={{ color: "#2196F3", fontSize: 18 }}>
+                    ADD ANOTHER ITEM
+                  </Text>
+                </TouchableOpacity>
+              </View>
               <View
                 style={{
                   alignSelf: "flex-end",
                   marginRight: 50,
                   flexDirection: "row",
+                  justifyContent: "center",
+                  alignContent: "center",
+                  alignItems: "center",
+                  marginBottom: 25,
                 }}
               >
                 <Pressable
@@ -437,7 +490,7 @@ export class EditModifier extends Component {
                     padding: 10,
                     elevation: 2,
                     width: 120,
-                    height: 60,
+                    height: 40,
                     justifyContent: "center",
                   }}
                 >
@@ -461,7 +514,7 @@ export class EditModifier extends Component {
                       padding: 10,
                       elevation: 2,
                       width: 120,
-                      height: 60,
+                      height: 40,
                       justifyContent: "center",
                     }}
                   >
@@ -488,7 +541,7 @@ export class EditModifier extends Component {
                       padding: 10,
                       elevation: 2,
                       width: 120,
-                      height: 60,
+                      height: 40,
                       justifyContent: "center",
                     }}
                   >
@@ -644,6 +697,40 @@ export class EditModifier extends Component {
                 </View>
               </View>
             </Modal>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={this.state.modalVisible2}
+            >
+              <View style={styles.centeredView2}>
+                <View style={styles.modalView2}>
+                  <View>
+                    <Pressable
+                      onPress={() => this.setState({ modalVisible2: false })}
+                    >
+                      <AntDesign
+                        name="close"
+                        size={24}
+                        color="black"
+                        style={{
+                          //marginLeft: 20,
+                          // marginTop: 15,
+                          alignSelf: "flex-start",
+                        }}
+                      />
+                    </Pressable>
+                  </View>
+
+                  <View style={{ width: windowWidth / 1.3 }}>
+                    <Input
+                      placeholder="Choice of Spice"
+                      onChangeText={(text) => this.setState({ choice: text })}
+                      defaultValue={this.state.choice}
+                    />
+                  </View>
+                </View>
+              </View>
+            </Modal>
           </>
         )}
       </SafeAreaView>
@@ -653,19 +740,21 @@ export class EditModifier extends Component {
 
 export default EditModifier;
 const styles = StyleSheet.create({
-  safe: { flex: 1 },
+  safe: { flex: 1, backgroundColor: "white" },
   header: { flex: 0.07 },
   title: {
     flex: 0.06,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
+    alignContent: "center",
   },
   question: {
     flex: 0.08,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
+    backgroundColor: "white",
   },
   requied: {
     flex: 0.13,
@@ -673,10 +762,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
+    backgroundColor: "white",
   },
   available: {
     flex: 0.52,
-    // backgroundColor: "yellow",
+    // backgroundColor: "white",
   },
   add: {
     flex: 0.05,
@@ -684,12 +774,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   savecancel: {
-    flex: 0.09,
+    flex: 0.16,
     justifyContent: "center",
+    backgroundColor: "white",
+    alignContent: "center",
   },
   layout: {
     backgroundColor: "white",
     shadowColor: "#000",
+    // marginTop: 10,
 
     shadowOffset: {
       width: 0,
@@ -701,7 +794,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     width: windowWidth / 2,
-    height: 50,
+    height: 30,
     justifyContent: "center",
     alignContent: "center",
   },
@@ -748,7 +841,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    height: 40,
+    height: 30,
     margin: 12,
     borderWidth: 1,
     //padding: 10,
@@ -762,6 +855,32 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    height: 100,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignContent: "center",
+  },
+  centeredView2: {
+    //flex: 1,
+    justifyContent: "center",
+    //alignItems: "center",
+    //marginTop: 120,
+    backgroundColor: "white",
+  },
+  modalView2: {
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,

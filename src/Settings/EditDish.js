@@ -580,6 +580,7 @@ const EditDish = ({ route }) => {
                           isRequired: item.attributes.isRequired,
                           child: item.attributes.modifierChild,
                           modifierId: item.id,
+                          userSample: userData.jwt,
                         })
                       }
                     >
