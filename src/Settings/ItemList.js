@@ -110,15 +110,18 @@ const ItemList = ({ navigation }) => {
           value={search}
           containerStyle={{
             backgroundColor: "#fff",
+            height: 50,
             borderBottomColor: "transparent",
             borderTopColor: "transparent",
+            justifyContent: "center",
           }}
-          inputContainerStyle={{ backgroundColor: "#F5F5F5" }}
+          inputContainerStyle={{ backgroundColor: "#F5F5F5", height: 40 }}
           lightTheme={true}
         />
         <ScrollView>
           {filteredDataSource?.data?.map((l, i) => (
             <ListItem
+              containerStyle={{ height: 60 }}
               key={i}
               bottomDivider
               onPress={() =>
@@ -180,10 +183,12 @@ const ItemList = ({ navigation }) => {
               )}
             </ListItem>
           ))}
+          <View style={{ height: 60 }}></View>
         </ScrollView>
         <ScrollView>
           {selected?.map((l, i) => (
             <ListItem
+              containerStyle={{ height: 60 }}
               key={i}
               bottomDivider
               onPress={() =>
@@ -197,7 +202,7 @@ const ItemList = ({ navigation }) => {
                 })
               }
             >
-              <Avatar source={{ uri: `${BASEURL}${l.attributes.image}` }} />
+              <Avatar source={{ uri: `${l.attributes.image}` }} />
               <ListItem.Content>
                 <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
                   {l.attributes.name}
@@ -245,6 +250,7 @@ const ItemList = ({ navigation }) => {
               )}
             </ListItem>
           ))}
+          <View style={{ height: 60 }}></View>
         </ScrollView>
       </View>
     );

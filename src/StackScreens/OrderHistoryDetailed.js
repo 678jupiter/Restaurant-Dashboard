@@ -39,7 +39,7 @@ const OrderHistoryDetailed = ({ route, navigation }) => {
   } = route.params;
   console.log(dish);
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <View
         style={{
           flex: 0.2,
@@ -166,7 +166,7 @@ const OrderHistoryDetailed = ({ route, navigation }) => {
                   // onPress={() => console.log(item)}
                   key={i}
                   style={{
-                    marginLeft: 10,
+                    marginLeft: 15,
                     marginRight: 10,
                     borderBottomColor: "grey",
                     borderBottomWidth: 1,
@@ -233,15 +233,14 @@ const OrderHistoryDetailed = ({ route, navigation }) => {
       <View
         style={{
           flex: 0.35,
+          backgroundColor: "white",
         }}
       >
-        <Card>
+        <View style={{ marginLeft: 15 }}>
+          <Text style={{ fontFamily: "MontserratSemiBold" }}>Paid</Text>
+        </View>
+        <Card containerStyle={{ marginBottom: 2 }}>
           <View style={{ height: "100%" }}>
-            <View>
-              <Text style={{ fontFamily: "MontserratSemiBold", fontSize: 25 }}>
-                Paid
-              </Text>
-            </View>
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
@@ -261,26 +260,8 @@ const OrderHistoryDetailed = ({ route, navigation }) => {
                 .00
               </Text>
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text style={{ fontFamily: "MontserratSemiBold" }}>Total</Text>
-              <Text style={{ fontFamily: "MontserratSemiBold" }}>KSH 2000</Text>
-            </View>
+
             <Card.Divider />
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
-              <Text style={{ fontFamily: "MontserratSemiBold" }}>
-                Paid by Customer
-              </Text>
-              <Text style={{ fontFamily: "MontserratSemiBold" }}>
-                KES {totalPaid}
-              </Text>
-            </View>
           </View>
         </Card>
       </View>

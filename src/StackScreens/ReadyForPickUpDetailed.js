@@ -164,7 +164,7 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
                   // onPress={() => console.log(item)}
                   key={i}
                   style={{
-                    marginLeft: 10,
+                    marginLeft: 15,
                     marginRight: 10,
                     borderBottomColor: "grey",
                     borderBottomWidth: 1,

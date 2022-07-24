@@ -1,4 +1,10 @@
-import { ActivityIndicator, ScrollView, StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { ListItem, Avatar, SearchBar } from "@rneui/themed";
 import { Switch } from "@rneui/themed";
@@ -93,7 +99,7 @@ const Cartegories = ({ navigation }) => {
 
   if (cartegoriesList.length !== 0) {
     return (
-      <View style={{ paddingTop: 20 }}>
+      <SafeAreaView style={{}}>
         <SearchBar
           onChangeText={(text) => searchFilterFunction(text)}
           onClear={(text) => searchFilterFunction("")}
@@ -101,15 +107,42 @@ const Cartegories = ({ navigation }) => {
           value={search}
           containerStyle={{
             backgroundColor: "#fff",
+            height: 50,
             borderBottomColor: "transparent",
             borderTopColor: "transparent",
           }}
-          inputContainerStyle={{ backgroundColor: "#F5F5F5" }}
+          inputContainerStyle={{ backgroundColor: "#F5F5F5", height: 40 }}
           lightTheme={true}
         />
         <ScrollView>
           {filteredDataSource?.data?.map((l, i) => (
             <ListItem
+              containerStyle={{ height: 60 }}
+              key={i}
+              bottomDivider
+              onPress={() =>
+                navigation.navigate("editCartegory", {
+                  Cname: l.attributes.name,
+                  img: l.attributes.image,
+                  cId: l.id,
+                })
+              }
+            >
+              <Avatar source={{ uri: `${l.attributes.image}` }} />
+              <ListItem.Content>
+                <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
+                  {l.attributes.name}
+                </ListItem.Title>
+              </ListItem.Content>
+            </ListItem>
+          ))}
+          <View style={{ height: 60 }}></View>
+        </ScrollView>
+
+        <ScrollView>
+          {selected?.map((l, i) => (
+            <ListItem
+              containerStyle={{ height: 60 }}
               key={i}
               bottomDivider
               onPress={() =>
@@ -129,32 +162,9 @@ const Cartegories = ({ navigation }) => {
               </ListItem.Content>
             </ListItem>
           ))}
+          <View style={{ height: 60 }}></View>
         </ScrollView>
-
-        <ScrollView>
-          {selected?.map((l, i) => (
-            <ListItem
-              key={i}
-              bottomDivider
-              onPress={() =>
-                navigation.navigate("editCartegory", {
-                  Cname: l.attributes.name,
-                  img: l.attributes.image,
-                  cId: l.id,
-                })
-              }
-              // onPress={() => AsyncStorage.clear()}
-            >
-              <Avatar source={{ uri: `${BASEURL}${l.attributes.image}` }} />
-              <ListItem.Content>
-                <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
-                  {l.attributes.name}
-                </ListItem.Title>
-              </ListItem.Content>
-            </ListItem>
-          ))}
-        </ScrollView>
-      </View>
+      </SafeAreaView>
     );
   } else {
     return (

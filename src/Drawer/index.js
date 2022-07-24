@@ -244,13 +244,13 @@ export default function StackNav() {
               options={({ navigation }) => ({
                 animationTypeForReplace: "pop",
                 //headerShown: false,
+                headerStatusBarHeight: 0.2,
                 title: "Cartegories",
                 headerRight: () => (
                   <View
                     style={{
                       alignItems: "stretch",
                       flexDirection: "row",
-                      backgroundColor: "#dcffee",
                       marginRight: 16,
                     }}
                   >
@@ -341,25 +341,16 @@ export default function StackNav() {
               options={({ navigation }) => ({
                 animationTypeForReplace: "pop",
                 //headerShown: false,
+                headerStatusBarHeight: 0.2,
                 title: "Available Items",
                 headerRight: () => (
                   <View
                     style={{
                       alignItems: "stretch",
                       flexDirection: "row",
-                      backgroundColor: "#dcffee",
                       marginRight: 16,
                     }}
                   >
-                    <Ionicons
-                      name="search"
-                      size={28}
-                      color="black"
-                      style={{
-                        marginRight: 30,
-                        padding: 10,
-                      }}
-                    />
                     <TouchableWithoutFeedback
                       onPress={() => navigation.navigate("createNewDish")}
                     >

@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect } from "react";
 import { ListItem, Icon } from "@rneui/themed";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,19 +21,17 @@ const OrderHistoryScreen = ({ navigation }) => {
   );
   if (restaurantOrders.length === 0) {
     return (
-      <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
-        <ActivityIndicator size="large" color={colors.colors} />
-      </View>
+      <SafeAreaView
+        style={{ justifyContent: "center", alignItems: "center", flex: 1 }}
+      >
+        <ActivityIndicator size="large" color="black" />
+      </SafeAreaView>
     );
   }
   return (
-    <View
+    <SafeAreaView
       style={{
         flex: 1,
-        paddingTop: 20,
-        // marginRight: 30,
-        // marginBottom: 30,
-        // marginLeft: 30,
       }}
     >
       <View
@@ -45,7 +43,7 @@ const OrderHistoryScreen = ({ navigation }) => {
           paddingLeft: 10,
         }}
       >
-        <Text>OrderHistory</Text>
+        <Text>Order History</Text>
       </View>
 
       <View>
@@ -143,7 +141,7 @@ const OrderHistoryScreen = ({ navigation }) => {
           </ListItem>
         ))}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

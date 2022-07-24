@@ -5,6 +5,8 @@ import {
   View,
   Text,
   Dimensions,
+  ScrollView,
+  SafeAreaView,
 } from "react-native";
 import React, { useState } from "react";
 import { Input, Icon } from "@rneui/themed";
@@ -22,7 +24,7 @@ const windowWidth = Dimensions.get("window").width;
 const EditCartegory = ({ route }) => {
   const { Cname, cId, img } = route.params;
   const [isModalVisible, setModalVisible] = useState(false);
-  const [imgUrl, setImageUrl] = useState("");
+  const [imgUrl, setImageUrl] = useState(img);
   const [image, setImage] = useState(img);
   const [name, setName] = useState(Cname);
   const [loading, setLoading] = useState(false);
@@ -78,13 +80,7 @@ const EditCartegory = ({ route }) => {
         .then((res) => {
           setLoading(false);
 
-          const [
-            {
-              formats: {
-                medium: { url },
-              },
-            },
-          ] = res.data;
+          const [{ url }] = res.data;
           var imageId = url;
           setImageUrl(imageId);
         })
@@ -127,13 +123,7 @@ const EditCartegory = ({ route }) => {
         .then((res) => {
           setLoading(false);
 
-          const [
-            {
-              formats: {
-                medium: { url },
-              },
-            },
-          ] = res.data;
+          const [{ url }] = res.data;
           var imageId = url;
           setImageUrl(imageId);
         })
@@ -166,9 +156,9 @@ const EditCartegory = ({ route }) => {
     await authAxios
       .put(`restaurants/${cId}`, {
         data: {
-          name: q,
+          name: name,
 
-          image: imgUrl,
+          image: JSON.stringify(imgUrl),
         },
       })
       .then((res) => {
@@ -199,67 +189,85 @@ const EditCartegory = ({ route }) => {
       });
   };
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <View style={{ width: windowWidth / 3 }}>
-        <Input
-          defaultValue={Cname}
-          placeholder="Name a Cartegory"
-          onChangeText={(text) => setName(text)}
-          textAlign="center"
-        />
-      </View>
-      <Space height={30} />
-
-      <ImageBackground
-        source={{
-          uri: image,
+    <SafeAreaView
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "white",
+      }}
+    >
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          justifyContent: "center",
+          backgroundColor: "white",
+          alignItems: "center",
         }}
-        style={styles.avatar}
       >
-        <TouchableOpacity
-          style={{
-            top: 140,
-            backgroundColor: "black",
-            paddingVertical: 13,
-            alignItems: "center",
-            opacity: 0.8,
+        <View style={{ width: windowWidth / 3 }}>
+          <Input
+            defaultValue={Cname}
+            placeholder="Name a Cartegory"
+            onChangeText={(text) => setName(text)}
+            textAlign="center"
+          />
+        </View>
+        <Space height={30} />
+
+        <ImageBackground
+          source={{
+            uri: image,
           }}
-          onPress={toggleModal}
+          style={styles.avatar}
         >
-          <View>
-            <Text
-              style={{
-                color: "#fff",
-                fontFamily: "CircularStdBold",
-                fontSize: 14,
-              }}
-            >
-              Edit
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </ImageBackground>
-      <Space height={30} />
-      <Text style={{ textAlign: "center", fontSize: 13, color: "#EF4444" }}>
-        {message}
-      </Text>
-      <Button
-        onPress={() => handleSubmit()}
-        loading={loading}
-        title="Submit"
-        buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}
-        containerStyle={{
-          width: windowWidth / 3,
-          marginHorizontal: 30,
-          marginVertical: 10,
-        }}
-        titleStyle={{
-          color: "white",
-          marginHorizontal: 20,
-          fontWeight: "900",
-          fontSize: 20,
-        }}
-      />
+          <TouchableOpacity
+            style={{
+              top: 100,
+              backgroundColor: "black",
+              paddingVertical: 10,
+              alignItems: "center",
+              opacity: 0.8,
+            }}
+            onPress={toggleModal}
+          >
+            <View>
+              <Text
+                style={{
+                  color: "#fff",
+                  fontFamily: "CircularStdBold",
+                  fontSize: 14,
+                }}
+              >
+                Edit
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </ImageBackground>
+        <Space height={30} />
+        <Text style={{ textAlign: "center", fontSize: 13, color: "#EF4444" }}>
+          {message}
+        </Text>
+        <Button
+          onPress={() => handleSubmit()}
+          loading={loading}
+          title="Submit"
+          buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}
+          containerStyle={{
+            width: windowWidth / 4,
+            marginHorizontal: 30,
+            marginVertical: 10,
+            height: 50,
+            justifyContent: "center",
+          }}
+          titleStyle={{
+            color: "white",
+            marginHorizontal: 20,
+            fontWeight: "900",
+            fontSize: 20,
+          }}
+        />
+      </ScrollView>
       <ModalBottom
         onBackdropPress={toggleModal}
         isVisible={isModalVisible}
@@ -275,7 +283,7 @@ const EditCartegory = ({ route }) => {
         </TouchableOpacity>
         <Space height={20} />
       </ModalBottom>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -289,8 +297,8 @@ const styles = StyleSheet.create({
   avatar: {
     overflow: "hidden",
     borderRadius: 20,
-    width: 180,
-    height: 180,
+    width: 130,
+    height: 130,
     backgroundColor: "grey",
   },
 });
