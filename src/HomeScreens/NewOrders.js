@@ -135,7 +135,7 @@ const NewOrders = ({ navigation }) => {
           paddingTop: 20,
         }}
       >
-        <Text style={{ color: "white", fontSize: 40 }}>No New Orders.</Text>
+        <Text style={{ color: "white", fontSize: 30 }}>No New Orders.</Text>
       </View>
     );
   }

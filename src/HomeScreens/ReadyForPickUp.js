@@ -202,7 +202,7 @@ const ReadyForPickUp = ({ navigation }) => {
           paddingTop: 20,
         }}
       >
-        <Text style={{ color: "white", fontSize: 40 }}>No Ready Orders.</Text>
+        <Text style={{ color: "white", fontSize: 30 }}>No Ready Orders.</Text>
       </View>
     );
   }

@@ -132,7 +132,7 @@ const OrdersInProgress = ({ navigation }) => {
           paddingTop: 20,
         }}
       >
-        <Text style={{ color: "white", fontSize: 40 }}>
+        <Text style={{ color: "white", fontSize: 30 }}>
           No Orders In Progress
         </Text>
       </View>

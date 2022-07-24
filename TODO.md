@@ -6,15 +6,11 @@ Day 2
 
 # Push Nortification Socket.io
 
+# Mpesa Confimation message
+
 # Messaging Socket.io Rest Icon notification
 
-# Live Api
-
-# Testings
-
 # Spellings
-
-# Images on all edit pages
 
 # CI/CD
 

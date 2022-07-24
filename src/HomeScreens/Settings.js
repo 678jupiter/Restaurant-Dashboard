@@ -29,9 +29,19 @@ const SettingScreen = ({ navigation }) => {
         <Pressable onPress={() => navigation.navigate("itemList")}>
           <Card
             containerStyle={{
-              width: 100,
+              borderColor: "rgba(39, 39, 39, 1)",
+              borderRadius: 2,
+              width: 110,
               height: 100,
               backgroundColor: "#dcffee",
+              shadowColor: "white",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
             }}
           >
             <Card.Title
@@ -54,9 +64,19 @@ const SettingScreen = ({ navigation }) => {
         <Pressable onPress={() => navigation.navigate("cartegories")}>
           <Card
             containerStyle={{
-              width: 100,
+              borderColor: "rgba(39, 39, 39, 1)",
+              borderRadius: 2,
+              width: 110,
               height: 100,
               backgroundColor: "#dcffee",
+              shadowColor: "white",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
             }}
           >
             <Card.Title
@@ -87,9 +107,19 @@ const SettingScreen = ({ navigation }) => {
         <Pressable onPress={() => navigation.navigate("specialOffers")}>
           <Card
             containerStyle={{
-              width: 100,
+              borderColor: "rgba(39, 39, 39, 1)",
+              borderRadius: 2,
+              width: 110,
               height: 100,
               backgroundColor: "#dcffee",
+              shadowColor: "white",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
             }}
           >
             <Card.Title
@@ -106,9 +136,19 @@ const SettingScreen = ({ navigation }) => {
         <Pressable onPress={() => navigation.navigate("settings")}>
           <Card
             containerStyle={{
-              width: 100,
+              borderColor: "rgba(39, 39, 39, 1)",
+              borderRadius: 2,
+              width: 110,
               height: 100,
               backgroundColor: "#dcffee",
+              shadowColor: "white",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
             }}
           >
             <Card.Title
