@@ -105,7 +105,7 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
                 <Icon
                   name="chat"
                   color="black"
-                  size={20}
+                  size={18}
                   style={{ marginRight: 10, padding: 6 }}
                 />
               </Pressable>
@@ -116,7 +116,7 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
               >
                 <Ionicons
                   name="call-outline"
-                  size={20}
+                  size={18}
                   color="black"
                   style={{ marginRight: 10, padding: 6 }}
                 />
@@ -310,7 +310,7 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
             >
               <Ionicons
                 name="call-outline"
-                size={20}
+                size={18}
                 color="black"
                 style={{ marginRight: 10, padding: 10 }}
               />
