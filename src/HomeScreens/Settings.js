@@ -29,13 +29,13 @@ const SettingScreen = ({ navigation }) => {
         <Pressable onPress={() => navigation.navigate("itemList")}>
           <Card
             containerStyle={{
-              width: 80,
-              height: 80,
+              width: 100,
+              height: 100,
               backgroundColor: "#dcffee",
             }}
           >
             <Card.Title
-              style={{ fontFamily: "MontserratSemiBold", fontSize: 10 }}
+              style={{ fontFamily: "MontserratSemiBold", fontSize: 15 }}
             >
               Items
             </Card.Title>
@@ -46,7 +46,7 @@ const SettingScreen = ({ navigation }) => {
                 // marginTop: 17,
               }}
             >
-              <FontAwesome5 name="clipboard-list" size={12} color="#5cb1ff" />
+              <FontAwesome5 name="clipboard-list" size={24} color="#5cb1ff" />
             </View>
           </Card>
         </Pressable>
@@ -54,13 +54,13 @@ const SettingScreen = ({ navigation }) => {
         <Pressable onPress={() => navigation.navigate("cartegories")}>
           <Card
             containerStyle={{
-              width: 80,
-              height: 80,
+              width: 100,
+              height: 100,
               backgroundColor: "#dcffee",
             }}
           >
             <Card.Title
-              style={{ fontFamily: "MontserratSemiBold", fontSize: 10 }}
+              style={{ fontFamily: "MontserratSemiBold", fontSize: 15 }}
             >
               Cartegories
             </Card.Title>
@@ -68,10 +68,10 @@ const SettingScreen = ({ navigation }) => {
               style={{
                 position: "relative",
                 alignItems: "center",
-                // marginTop: 12,
+                // marginTop: 24,
               }}
             >
-              <MaterialIcons name="post-add" size={12} color="#5cb1ff" />
+              <MaterialIcons name="post-add" size={32} color="#5cb1ff" />
             </View>
           </Card>
         </Pressable>
@@ -87,18 +87,18 @@ const SettingScreen = ({ navigation }) => {
         <Pressable onPress={() => navigation.navigate("specialOffers")}>
           <Card
             containerStyle={{
-              width: 80,
-              height: 80,
+              width: 100,
+              height: 100,
               backgroundColor: "#dcffee",
             }}
           >
             <Card.Title
-              style={{ fontFamily: "MontserratSemiBold", fontSize: 10 }}
+              style={{ fontFamily: "MontserratSemiBold", fontSize: 15 }}
             >
               Special Offers
             </Card.Title>
             <View style={{ position: "relative", alignItems: "center" }}>
-              <MaterialIcons name="local-offer" size={12} color="#5cb1ff" />
+              <MaterialIcons name="local-offer" size={24} color="#5cb1ff" />
             </View>
           </Card>
         </Pressable>
@@ -106,13 +106,13 @@ const SettingScreen = ({ navigation }) => {
         <Pressable onPress={() => navigation.navigate("settings")}>
           <Card
             containerStyle={{
-              width: 80,
-              height: 80,
+              width: 100,
+              height: 100,
               backgroundColor: "#dcffee",
             }}
           >
             <Card.Title
-              style={{ fontFamily: "MontserratSemiBold", fontSize: 10 }}
+              style={{ fontFamily: "MontserratSemiBold", fontSize: 15 }}
             >
               Settings
             </Card.Title>
@@ -123,7 +123,7 @@ const SettingScreen = ({ navigation }) => {
                 marginTop: 8,
               }}
             >
-              <Ionicons name="ios-settings" size={12} color="#5cb1ff" />
+              <Ionicons name="ios-settings" size={26} color="#5cb1ff" />
             </View>
           </Card>
         </Pressable>

@@ -92,7 +92,7 @@ function DrawerNav({ navigation }) {
         options={{
           headerShown: true,
           headerStatusBarHeight: 1,
-          title: "",
+          title: "New Orders",
           drawerIcon: ({ focused }) => (
             <MaterialIcons
               name="fiber-new"
@@ -118,12 +118,12 @@ function DrawerNav({ navigation }) {
             />
           ),
         }}
-        name="Orders in progress"
+        name="Orders In Progress"
         component={OrdersInProgress}
       />
       <Drawer.Screen
         options={{
-          title: "Ready For Pickup",
+          title: "Orders Ready For Pickup",
           headerShown: true,
           headerStatusBarHeight: 1,
 
@@ -140,7 +140,7 @@ function DrawerNav({ navigation }) {
       />
       <Drawer.Screen
         options={{
-          title: "",
+          title: "Orders Being Delivered",
           headerShown: true,
           headerStatusBarHeight: 1,
 
@@ -173,7 +173,7 @@ function DrawerNav({ navigation }) {
       />
       <Drawer.Screen
         options={{
-          title: "",
+          title: "Settings",
           headerShown: true,
           headerStatusBarHeight: 1,
 

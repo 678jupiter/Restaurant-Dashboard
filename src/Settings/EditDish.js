@@ -147,6 +147,7 @@ const EditDish = ({ route }) => {
           onPress={() =>
             navigation.navigate("modifiers", {
               dishId: dId,
+              userSample: userData.jwt,
             })
           }
         >
@@ -467,8 +468,8 @@ const EditDish = ({ route }) => {
                   <Text
                     style={{
                       fontSize: 18,
-                      fontWeight: "300",
-                      fontStyle: "italic",
+                      //fontWeight: "300",
+                      // fontStyle: "italic",
                     }}
                   >
                     {id.attributes.name}
@@ -598,6 +599,7 @@ const EditDish = ({ route }) => {
               alignItems: "center",
               flex: 0.2,
               justifyContent: "center",
+              alignContent: "center",
             }}
           >
             <Text
@@ -611,12 +613,13 @@ const EditDish = ({ route }) => {
               title="Submit"
               buttonStyle={{
                 backgroundColor: "rgba(39, 39, 39, 1)",
-                height: 80,
+                height: 50,
               }}
               containerStyle={{
-                width: windowWidth / 3,
+                width: windowWidth / 4,
                 marginHorizontal: 30,
                 marginVertical: 10,
+                marginBottom: 20,
               }}
               titleStyle={{
                 color: "white",

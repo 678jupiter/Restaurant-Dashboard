@@ -53,7 +53,7 @@ const Delivering = ({ navigation }) => {
           style={{ marginTop: 10, marginLeft: 100, marginRight: 100 }}
         >
           {result.map((l, i) => (
-            <View key={l.id}>
+            <View key={l.id} style={{ height: 50 }}>
               <TouchableOpacity
                 style={{ backgroundColor: "white", flex: 1 }}
                 onPress={() =>

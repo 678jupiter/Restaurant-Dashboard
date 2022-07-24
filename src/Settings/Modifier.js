@@ -112,11 +112,12 @@ export class NewModifier extends Component {
         return;
       }
       this.setState({ isSubmitting: true });
+      console.log(this.state.numerTo);
       authAxios
         .post(`modifiers`, {
           data: {
             Title: this.state.choice,
-            Numberofitemstochoose: this.state.numerTo,
+            Numberofitemstochoose: Number(this.state.numerTo),
             isRequired: this.state.tick,
             dishes: dishId,
             modifierChild: this.state.custom_fields,

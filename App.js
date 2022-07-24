@@ -13,6 +13,7 @@ import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import { GETTY } from "@env";
 import * as NavigationBar from "expo-navigation-bar";
+
 import {
   ApolloClient,
   InMemoryCache,
@@ -91,11 +92,7 @@ export default function App() {
               {/* <Push /> */}
             </ApolloProvider>
           </PersistGate>
-          <StatusBar
-            barStyle="dark-content"
-            backgroundColor={colors.light_gray}
-            translucent
-          />
+          <StatusBar barStyle="light-content" backgroundColor="black" />
         </Provider>
         <FlashMessage position="top" />
       </SafeAreaProvider>
