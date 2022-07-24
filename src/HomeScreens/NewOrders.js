@@ -74,9 +74,10 @@ const NewOrders = ({ navigation }) => {
                     conversationId: l.attributes.conversationId,
                     methodofPayment: l.attributes.methodOfPayment,
                     methodofDelivery: l.attributes.methodOfDelivery,
+                    verificationMessage: l.attributes.verificationMessage,
                   })
                 }
-                // onPress={() => console.log(l)}
+                //onPress={() => console.log(l)}
               >
                 <View
                   style={{

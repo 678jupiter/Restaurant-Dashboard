@@ -108,7 +108,7 @@ async function schedulePushNotification() {
       data: { data: "goes here" },
       sound: true,
     },
-    trigger: { seconds: 1 },
+    trigger: { seconds: 1, repeats: false },
   });
 }
 

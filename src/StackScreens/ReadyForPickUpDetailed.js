@@ -22,6 +22,7 @@ const windowHeight = Dimensions.get("window").height;
 
 const ReadyForPickUpDetailed = ({ navigation, route }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
   const [featured, setFeatured] = useState(null);
   const {
     totalPaid,
@@ -36,6 +37,7 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
     shipping,
     methodofPayment,
     methodofDelivery,
+    verificationMessage,
   } = route.params;
   return (
     <SafeAreaView style={{ backgroundColor: "white", flex: 1 }}>
@@ -257,6 +259,13 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
             <Text style={{ fontFamily: "MontserratSemiBold" }}>
               {methodofPayment}
             </Text>
+            <Text
+              onPress={() => setModalVisible2(true)}
+              style={{ color: "blue" }}
+            >
+              {" "}
+              {""}VERIFY
+            </Text>
           </View>
         </View>
         <View style={{ width: windowWidth / 2, marginRight: 20 }}>
@@ -474,6 +483,43 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
           </View>
         </View>
       </Modal>
+      <Modal animationType="slide" transparent={true} visible={modalVisible2}>
+        <View style={styles.centeredView2}>
+          <View style={styles.modalView2}>
+            <Pressable onPress={() => setModalVisible2(!modalVisible2)}>
+              <AntDesign
+                name="close"
+                size={24}
+                color="black"
+                style={{
+                  marginLeft: 20,
+                  marginTop: 15,
+                  alignSelf: "flex-start",
+                }}
+              />
+            </Pressable>
+
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: "white",
+                marginLeft: 10,
+                marginRight: 10,
+                height: 200,
+                alignContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ fontFamily: "MontserratSemiBold" }}>
+                Paid using {methodofPayment}
+              </Text>
+              <Text style={{ height: "100%", width: "80%" }}>
+                {verificationMessage}
+              </Text>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -521,5 +567,27 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
+  },
+  centeredView2: {
+    flex: 1,
+    alignContent: "center",
+    alignItems: "center",
+  },
+  modalView2: {
+    // marginTop: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    //padding: 35,
+    width: windowWidth / 2,
+    height: windowHeight / 2,
+    //alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });

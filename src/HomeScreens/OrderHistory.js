@@ -90,6 +90,7 @@ const OrderHistoryScreen = ({ navigation }) => {
                 totalPaid: item.attributes.totalPaid,
                 methodofPayment: item.attributes.methodOfPayment,
                 methodofDelivery: item.attributes.methodOfDelivery,
+                verificationMessage: item.attributes.verificationMessage,
               })
             }
           >

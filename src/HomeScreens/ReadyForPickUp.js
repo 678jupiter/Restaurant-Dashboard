@@ -100,6 +100,7 @@ const ReadyForPickUp = ({ navigation }) => {
                       totalPaid: l.attributes.totalPaid,
                       methodofPayment: l.attributes.methodOfPayment,
                       methodofDelivery: l.attributes.methodOfDelivery,
+                      verificationMessage: l.attributes.verificationMessage,
                     })
                   }
                   //onPress={() => console.log(l)}

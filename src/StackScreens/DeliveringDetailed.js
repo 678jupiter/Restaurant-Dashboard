@@ -21,6 +21,7 @@ const DeliveringDetailed = ({ route, navigation }) => {
     customermobilenumber,
     courierName,
     courierMobileNumber,
+    verificationMessage,
   } = route.params;
   const [curPos, setcurPos] = useState({
     latitude: 37.795835,

@@ -1,16 +1,20 @@
-# Setting
-
 # Arriving Courier
 
-Day 2
+MVP
 
-# Push Nortification Socket.io
+# Setting
 
 # Mpesa Confimation message
+
+# error messages
 
 # Messaging Socket.io Rest Icon notification
 
 # Spellings
+
+# SWITCH
+
+# Loading
 
 # CI/CD
 

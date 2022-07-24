@@ -36,6 +36,7 @@ const OrderHistoryDetailed = ({ route, navigation }) => {
     shipping,
     methodofPayment,
     methodofDelivery,
+    verificationMessage,
   } = route.params;
   console.log(dish);
   return (

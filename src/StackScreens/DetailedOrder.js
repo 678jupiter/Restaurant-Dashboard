@@ -28,6 +28,7 @@ const windowHeight = Dimensions.get("window").height;
 
 const DetailedOrder = ({ route, navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
   const [featured, setFeatured] = useState(null);
 
   const dispatch = useDispatch();
@@ -45,8 +46,8 @@ const DetailedOrder = ({ route, navigation }) => {
     conversationId,
     methodofPayment,
     methodofDelivery,
+    verificationMessage,
   } = route.params;
-  console.log(methodofDelivery);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [loading3, setLoading3] = useState(false);
@@ -63,7 +64,7 @@ const DetailedOrder = ({ route, navigation }) => {
   }
   useEffect(() => {
     let isCancelled = false;
-    const input = `${conversationId}`;
+    const input = JSON.stringify(conversationId);
     const notInit = () => {
       socket.emit("enter_user_order_channel", input, showRoom);
     };
@@ -74,10 +75,13 @@ const DetailedOrder = ({ route, navigation }) => {
   }, []);
 
   const clientNotification = () => {
-    let roomName = `${conversationId}`;
-    let message = "message";
-    socket.emit("order_status_changes", message, roomName, () => {
-      console.log("rest emit");
+    const input = JSON.stringify(conversationId);
+
+    let roomName = input;
+
+    const inputM = conversationId;
+    socket.emit("order_status_change", inputM, roomName, () => {
+      console.log("Just emitted");
     });
   };
 
@@ -102,7 +106,6 @@ const DetailedOrder = ({ route, navigation }) => {
   };
 
   const Cooking = async () => {
-    // clientNotification();
     setLoading1(true);
     await authAxios
       .put(`restaurant-orders/${orderId}`, {
@@ -113,9 +116,9 @@ const DetailedOrder = ({ route, navigation }) => {
       .then(function (response) {
         dispatch(fetchOrders());
         setLoading1(false);
-
         sendConfirmationMessage();
-        navigation.navigate("Orders in progress", {
+        clientNotification();
+        navigation.navigate("Orders In Progress", {
           userName,
           dish,
           orderNumber,
@@ -245,7 +248,7 @@ const DetailedOrder = ({ route, navigation }) => {
             style={{
               marginTop: 30,
               marginRight: 20,
-              color: "orange",
+              color: "green",
               fontSize: 20,
             }}
           >
@@ -420,6 +423,13 @@ const DetailedOrder = ({ route, navigation }) => {
 
             <Text style={{ fontFamily: "MontserratSemiBold" }}>
               {methodofPayment}
+            </Text>
+            <Text
+              onPress={() => setModalVisible2(true)}
+              style={{ color: "blue" }}
+            >
+              {" "}
+              {""}VERIFY
             </Text>
           </View>
         </View>
@@ -672,6 +682,43 @@ const DetailedOrder = ({ route, navigation }) => {
           </View>
         </View>
       </Modal>
+      <Modal animationType="slide" transparent={true} visible={modalVisible2}>
+        <View style={styles.centeredView2}>
+          <View style={styles.modalView2}>
+            <Pressable onPress={() => setModalVisible2(!modalVisible2)}>
+              <AntDesign
+                name="close"
+                size={24}
+                color="black"
+                style={{
+                  marginLeft: 20,
+                  marginTop: 15,
+                  alignSelf: "flex-start",
+                }}
+              />
+            </Pressable>
+
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: "white",
+                marginLeft: 10,
+                marginRight: 10,
+                height: 200,
+                alignContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ fontFamily: "MontserratSemiBold" }}>
+                Paid using {methodofPayment}
+              </Text>
+              <Text style={{ height: "100%", width: "80%" }}>
+                {verificationMessage}
+              </Text>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -725,5 +772,28 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
+  },
+
+  centeredView2: {
+    flex: 1,
+    alignContent: "center",
+    alignItems: "center",
+  },
+  modalView2: {
+    // marginTop: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    //padding: 35,
+    width: windowWidth / 2,
+    height: windowHeight / 2,
+    //alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });

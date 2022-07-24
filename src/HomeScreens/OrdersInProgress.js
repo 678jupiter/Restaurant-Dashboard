@@ -73,6 +73,7 @@ const OrdersInProgress = ({ navigation }) => {
                     totalPaid: l.attributes.totalPaid,
                     methodofPayment: l.attributes.methodOfPayment,
                     methodofDelivery: l.attributes.methodOfDelivery,
+                    verificationMessage: l.attributes.verificationMessage,
                   })
                 }
               >
