@@ -39,7 +39,6 @@ const OrderHistoryDetailed = ({ route, navigation }) => {
     methodofDelivery,
     verificationMessage,
   } = route.params;
-  console.log(dish);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <View

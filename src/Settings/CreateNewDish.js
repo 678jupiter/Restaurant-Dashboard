@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   Pressable,
   ScrollView,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Input } from "@rneui/themed";
@@ -115,7 +116,11 @@ const CreateNewDish = ({ navigation }) => {
           setCartegories(data);
         })
         .catch(function (error) {
-          console.log(error);
+          if (error.message === "Network Error") {
+            Alert.alert(
+              "Your device has no internet connection. Please connect and try again."
+            );
+          }
         });
     };
     getCartegories();
@@ -161,9 +166,15 @@ const CreateNewDish = ({ navigation }) => {
         .catch((error) => {
           setLoading(false);
           console.log(error);
-          setMessage(() => (
-            <Text>There was an error while uploading the image. </Text>
-          ));
+          if (error.message === "Network Error") {
+            Alert.alert(
+              "Your device has no internet connection. Please connect and try again."
+            );
+          } else {
+            setMessage(() => (
+              <Text>There was an error while uploading the image. </Text>
+            ));
+          }
         });
     }
   };
@@ -203,9 +214,15 @@ const CreateNewDish = ({ navigation }) => {
         })
         .catch((error) => {
           setLoading(false);
-          setMessage(() => (
-            <Text>There was an error while uploading the image. </Text>
-          ));
+          if (error.message === "Network Error") {
+            Alert.alert(
+              "Your device has no internet connection. Please connect and try again."
+            );
+          } else {
+            setMessage(() => (
+              <Text>There was an error while uploading the image. </Text>
+            ));
+          }
         });
     }
   };
@@ -263,16 +280,22 @@ const CreateNewDish = ({ navigation }) => {
       })
       .catch((error) => {
         setLoading(false);
-        showMessage({
-          message: "Update failed, try again.",
-          // description: "All fields are required",
-          type: "warning",
-          backgroundColor: "orange",
-          color: "#fff",
-          icon: "warning",
-          //position: "right",
-          statusBarHeight: "34",
-        });
+        if (error.message === "Network Error") {
+          Alert.alert(
+            "Your device has no internet connection. Please connect and try again."
+          );
+        } else {
+          showMessage({
+            message: "Update failed, try again.",
+            // description: "All fields are required",
+            type: "warning",
+            backgroundColor: "orange",
+            color: "#fff",
+            icon: "warning",
+            //position: "right",
+            statusBarHeight: "34",
+          });
+        }
       });
   };
 

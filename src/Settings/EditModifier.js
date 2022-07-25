@@ -139,7 +139,13 @@ export class EditModifier extends Component {
         this.setState({ fetchingData: false });
       })
       .catch((error) => {
-        console.log(error);
+        if (error.message === "Network Error") {
+          Alert.alert(
+            "Your device has no internet connection. Please connect and try again."
+          );
+        } else {
+          console.log(error);
+        }
       });
   };
 
@@ -253,8 +259,14 @@ export class EditModifier extends Component {
           this.setState({ isSubmitting: false });
         })
         .catch((error) => {
-          console.log(error);
           this.setState({ isSubmitting: false });
+          if (error.message === "Network Error") {
+            Alert.alert(
+              "Your device has no internet connection. Please connect and try again."
+            );
+          } else {
+            console.log(error);
+          }
         });
     };
 

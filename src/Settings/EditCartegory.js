@@ -7,6 +7,7 @@ import {
   Dimensions,
   ScrollView,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { Input, Icon } from "@rneui/themed";
@@ -87,7 +88,15 @@ const EditCartegory = ({ route }) => {
         .catch((error) => {
           setLoading(false);
 
-          console.log(error);
+          if (error.message === "Network Error") {
+            Alert.alert(
+              "Your device has no internet connection. Please connect and try again."
+            );
+          } else {
+            setMessage(() => (
+              <Text>There was an error while uploading the image. </Text>
+            ));
+          }
         });
     }
   };
@@ -130,7 +139,15 @@ const EditCartegory = ({ route }) => {
         .catch((error) => {
           setLoading(false);
 
-          console.log("2" + error);
+          if (error.message === "Network Error") {
+            Alert.alert(
+              "Your device has no internet connection. Please connect and try again."
+            );
+          } else {
+            setMessage(() => (
+              <Text>There was an error while uploading the image. </Text>
+            ));
+          }
         });
     }
   };
@@ -176,16 +193,22 @@ const EditCartegory = ({ route }) => {
       })
       .catch((error) => {
         setLoading(false);
-        showMessage({
-          message: "Edit failed, try again.",
-          // description: "All fields are required",
-          type: "warning",
-          backgroundColor: "orange",
-          color: "#fff",
-          icon: "warning",
-          //position: "right",
-          statusBarHeight: "34",
-        });
+        if (error.message === "Network Error") {
+          Alert.alert(
+            "Your device has no internet connection. Please connect and try again."
+          );
+        } else {
+          showMessage({
+            message: "Edit failed, try again.",
+            // description: "All fields are required",
+            type: "warning",
+            backgroundColor: "orange",
+            color: "#fff",
+            icon: "warning",
+            //position: "right",
+            statusBarHeight: "34",
+          });
+        }
       });
   };
   return (

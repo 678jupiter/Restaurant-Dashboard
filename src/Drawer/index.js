@@ -39,6 +39,7 @@ import OrderHistoryDetailed from "../StackScreens/OrderHistoryDetailed";
 import EditOffer from "../Settings/EditOffer";
 import Modifiers from "../Settings/Modifier";
 import EditModifier from "../Settings/EditModifier";
+import NewOfferModifier from "../Settings/OfferModifier";
 
 function DrawerNav({ navigation }) {
   const windowWidth = Dimensions.get("window").width;
@@ -305,6 +306,15 @@ export default function StackNav() {
               options={{
                 animationTypeForReplace: "pop",
                 title: "Modifiers",
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="offermodifier"
+              component={NewOfferModifier}
+              options={{
+                animationTypeForReplace: "pop",
+                title: "Modifier",
                 headerShown: false,
               }}
             />

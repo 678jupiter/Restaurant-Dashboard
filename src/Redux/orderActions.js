@@ -1,5 +1,6 @@
 import { orderActions } from "./ordersSlice";
 import { dfhs } from "@env";
+import { Alert } from "react-native";
 
 export const fetchOrders = () => {
   console.log("Redux fetch");
@@ -13,7 +14,11 @@ export const fetchOrders = () => {
       const restaurantData = await fetchHandler();
       dispatch(orderActions.getOrders(restaurantData));
     } catch (error) {
-      console.log(error);
+      if (error.message === "Network request failed") {
+        console.log("good error");
+
+        Alert.alert("Opps. Your device is not connected to the Internet");
+      }
     }
   };
 };

@@ -16,6 +16,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { dfhs } from "@env";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const Cartegories = ({ navigation }) => {
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     let isCancelled = false;
@@ -44,19 +45,17 @@ const Cartegories = ({ navigation }) => {
     React.useCallback(() => {
       let isCancelled = false;
       const result = async () => {
+        setLoading(true);
         await axios
           .get(`${dfhs}restaurants/?populate=*`)
           .then(function (res) {
-            // handle success
-
             setFilteredDataSource(res.data);
             setMasterDataSource(res.data);
+            setLoading(false);
           })
           .catch(function (error) {
             console.log(error);
-          })
-          .then(function () {
-            // always executed
+            setLoading(false);
           });
       };
       result();

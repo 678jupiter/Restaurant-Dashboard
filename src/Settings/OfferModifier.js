@@ -27,7 +27,7 @@ import { AntDesign } from "@expo/vector-icons";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export class NewModifier extends Component {
+export class NewOfferModifier extends Component {
   state = {
     custom_fields: [{ meta_name: "", meta_value: "0" }],
     required: false,
@@ -119,7 +119,7 @@ export class NewModifier extends Component {
             Title: this.state.choice,
             Numberofitemstochoose: Number(this.state.numerTo),
             isRequired: this.state.tick,
-            dishes: dishId,
+            special_offers: dishId,
             modifierChild: this.state.custom_fields,
           },
         })
@@ -450,7 +450,7 @@ export class NewModifier extends Component {
   }
 }
 
-export default NewModifier;
+export default NewOfferModifier;
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: "white" },
   header: { flex: 0.07 },

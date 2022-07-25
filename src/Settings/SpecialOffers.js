@@ -1,9 +1,9 @@
 import {
   ActivityIndicator,
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
-  Touchable,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -12,7 +12,6 @@ import { Switch } from "@rneui/themed";
 import { dfhs } from "@env";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchItems } from "../Redux/itemsActions";
-import { BASEURL } from "../config";
 import axios from "axios";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -46,16 +45,19 @@ const SpecialOffers = ({ navigation }) => {
       .get(`special-offers/?populate=*`)
       .then(function (res) {
         // handle success
-
         setFilteredDataSource(res.data);
         setMasterDataSource(res.data);
       })
       .catch(function (error) {
         // handle error
-        console.log(error);
-      })
-      .then(function () {
-        // always executed
+        console.log("1");
+        if (error.message === "Network Error") {
+          Alert.alert(
+            "Your device has no internet connection. Please connect and try again."
+          );
+        } else {
+          console.log(error);
+        }
       });
   };
 
@@ -114,14 +116,17 @@ const SpecialOffers = ({ navigation }) => {
             backgroundColor: "#fff",
             borderBottomColor: "transparent",
             borderTopColor: "transparent",
+            justifyContent: "center",
+            height: 50,
           }}
-          inputContainerStyle={{ backgroundColor: "#F5F5F5" }}
+          inputContainerStyle={{ backgroundColor: "#F5F5F5", height: 40 }}
           lightTheme={true}
         />
         <ScrollView>
           {filteredDataSource?.data?.map((l, i) => (
             <ListItem
               key={i}
+              containerStyle={{ height: 60 }}
               bottomDivider
               onPress={() =>
                 navigation.navigate("editOffer", {
@@ -134,7 +139,7 @@ const SpecialOffers = ({ navigation }) => {
                 })
               }
             >
-              <Avatar source={{ uri: `${BASEURL}${l.attributes.image}` }} />
+              <Avatar source={{ uri: `${l.attributes.image}` }} />
               <ListItem.Content>
                 <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
                   {l.attributes.name}
@@ -158,7 +163,13 @@ const SpecialOffers = ({ navigation }) => {
                         result();
                       })
                       .catch(function (error) {
-                        console.log(error);
+                        if (error.message === "Network Error") {
+                          Alert.alert(
+                            "Your device has no internet connection. Please connect and try again."
+                          );
+                        } else {
+                          console.log(error);
+                        }
                       });
                   }}
                 />
@@ -176,7 +187,13 @@ const SpecialOffers = ({ navigation }) => {
                         result();
                       })
                       .catch(function (error) {
-                        console.log(error);
+                        if (error.message === "Network Error") {
+                          Alert.alert(
+                            "Your device has no internet connection. Please connect and try again."
+                          );
+                        } else {
+                          console.log(error);
+                        }
                       });
                   }}
                 />
@@ -188,19 +205,21 @@ const SpecialOffers = ({ navigation }) => {
           {selected?.map((l, i) => (
             <ListItem
               key={i}
+              containerStyle={{ height: 60 }}
               bottomDivider
-              onPress={() =>
-                navigation.navigate("editOffer", {
-                  Pname: l.attributes.name,
-                  Pdescription: l.attributes.description,
-                  Pprice: l.attributes.price,
-                  Pimage: l.attributes.image,
-                  Ptax: l.attributes.Tax,
-                  dId: l.id,
-                })
-              }
+              // onPress={() =>
+              //   navigation.navigate("editOffer", {
+              //     Pname: l.attributes.name,
+              //     Pdescription: l.attributes.description,
+              //     Pprice: l.attributes.price,
+              //     Pimage: l.attributes.image,
+              //     Ptax: l.attributes.Tax,
+              //     dId: l.id,
+              //   })
+              onPress={() => console.log(l)}
+              //}
             >
-              <Avatar source={{ uri: `${BASEURL}${l.attributes.image}` }} />
+              <Avatar source={{ uri: `${l.attributes.image}` }} />
               <ListItem.Content>
                 <ListItem.Title style={{ fontFamily: "MontserratSemiBold" }}>
                   {l.attributes.name}
@@ -223,7 +242,13 @@ const SpecialOffers = ({ navigation }) => {
                         dispatch(fetchItems());
                       })
                       .catch(function (error) {
-                        console.log(error);
+                        if (error.message === "Network Error") {
+                          Alert.alert(
+                            "Your device has no internet connection. Please connect and try again."
+                          );
+                        } else {
+                          console.log(error);
+                        }
                       });
                   }}
                 />
@@ -241,7 +266,13 @@ const SpecialOffers = ({ navigation }) => {
                         dispatch(fetchItems());
                       })
                       .catch(function (error) {
-                        console.log(error);
+                        if (error.message === "Network Error") {
+                          Alert.alert(
+                            "Your device has no internet connection. Please connect and try again."
+                          );
+                        } else {
+                          console.log(error);
+                        }
                       });
                   }}
                 />

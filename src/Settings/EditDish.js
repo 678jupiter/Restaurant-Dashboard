@@ -13,6 +13,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Animated,
+  Alert,
 } from "react-native";
 import { gql, useQuery } from "@apollo/client";
 import React, { useEffect, useRef, useState } from "react";
@@ -171,7 +172,13 @@ const EditDish = ({ route }) => {
           setCartegories(data);
         })
         .catch(function (error) {
-          console.log(error);
+          if (error.message === "Network Error") {
+            Alert.alert(
+              "Your device has no internet connection. Please connect and try again."
+            );
+          } else {
+            console.log(error);
+          }
         });
     };
     getCartegories();
@@ -221,10 +228,15 @@ const EditDish = ({ route }) => {
         })
         .catch((error) => {
           setLoading(false);
-
-          setMessage(() => (
-            <Text>There was an error while uploading the image. </Text>
-          ));
+          if (error.message === "Network Error") {
+            Alert.alert(
+              "Your device has no internet connection. Please connect and try again."
+            );
+          } else {
+            setMessage(() => (
+              <Text>There was an error while uploading the image. </Text>
+            ));
+          }
         });
     }
   };
@@ -273,9 +285,15 @@ const EditDish = ({ route }) => {
         })
         .catch((error) => {
           setLoading(false);
-          setMessage(() => (
-            <Text>There was an error while uploading the image. </Text>
-          ));
+          if (error.message === "Network Error") {
+            Alert.alert(
+              "Your device has no internet connection. Please connect and try again."
+            );
+          } else {
+            setMessage(() => (
+              <Text>There was an error while uploading the image. </Text>
+            ));
+          }
         });
     }
   };
@@ -385,16 +403,22 @@ const EditDish = ({ route }) => {
         })
         .catch((error) => {
           setLoading(false);
-          showMessage({
-            message: "Edit failed, try again.",
-            // description: "All fields are required",
-            type: "warning",
-            backgroundColor: "orange",
-            color: "#fff",
-            icon: "warning",
-            //position: "right",
-            statusBarHeight: "34",
-          });
+          if (error.message === "Network Error") {
+            Alert.alert(
+              "Your device has no internet connection. Please connect and try again."
+            );
+          } else {
+            showMessage({
+              message: "Edit failed, try again.",
+              // description: "All fields are required",
+              type: "warning",
+              backgroundColor: "orange",
+              color: "#fff",
+              icon: "warning",
+              //position: "right",
+              statusBarHeight: "34",
+            });
+          }
         });
     };
 

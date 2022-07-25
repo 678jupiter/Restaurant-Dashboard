@@ -130,6 +130,11 @@ const DetailedOrder = ({ route, navigation }) => {
         setLoading1(false);
         console.log(error);
         console.log("Str");
+        if (error.message === "Network Error") {
+          Alert.alert(
+            "Your device has no internet connection. Please connect and try again."
+          );
+        }
       });
   };
   const ReadyForPickUp = async () => {
@@ -154,6 +159,11 @@ const DetailedOrder = ({ route, navigation }) => {
       .catch(function (error) {
         setLoading2(false);
         console.log(error);
+        if (error.message === "Network Error") {
+          Alert.alert(
+            "Your device has no internet connection. Please connect and try again."
+          );
+        }
       });
   };
   const Decline = () => {
@@ -173,6 +183,11 @@ const DetailedOrder = ({ route, navigation }) => {
       .catch(function (error) {
         setLoading3(false);
         console.log(error);
+        if (error.message === "Network Error") {
+          Alert.alert(
+            "Your device has no internet connection. Please connect and try again."
+          );
+        }
       });
   };
   const createTwoButtonAlert = () =>
@@ -270,7 +285,7 @@ const DetailedOrder = ({ route, navigation }) => {
                 <Icon
                   name="chat"
                   color="black"
-                  size={20}
+                  size={18}
                   style={{ marginRight: 10, padding: 6 }}
                 />
               </Pressable>
@@ -281,7 +296,7 @@ const DetailedOrder = ({ route, navigation }) => {
               >
                 <Ionicons
                   name="call-outline"
-                  size={20}
+                  size={18}
                   color="black"
                   style={{ marginRight: 10, padding: 6 }}
                 />

@@ -16,12 +16,21 @@ import { colors } from "../config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { format } from "timeago.js";
 const NewOrders = ({ navigation }) => {
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     let isCancelled = false;
-    dispatch(fetchOrders());
+    // setLoading(true);
+    dispatch(fetchOrders())
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     return () => {
       isCancelled = true;
+      setLoading(false);
     };
   }, [dispatch]);
 
@@ -31,9 +40,31 @@ const NewOrders = ({ navigation }) => {
   const userData = useSelector((state) => state.user.usermeta);
   if (restaurantOrders.length === 0) {
     return (
-      <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
+      <SafeAreaView
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+          backgroundColor: "rgba(39, 39, 39, 1)",
+        }}
+      >
+        <Text style={{ color: "white", fontSize: 30 }}>No New Orders.</Text>
+      </SafeAreaView>
+    );
+  }
+
+  if (loading === true) {
+    return (
+      <SafeAreaView
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+          backgroundColor: "rgba(39, 39, 39, 1)",
+        }}
+      >
         <ActivityIndicator size="large" color={colors.blurple} />
-      </View>
+      </SafeAreaView>
     );
   }
   const i = restaurantOrders.data;

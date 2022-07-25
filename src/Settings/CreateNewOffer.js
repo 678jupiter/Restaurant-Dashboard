@@ -5,6 +5,8 @@ import {
   View,
   Text,
   Dimensions,
+  Keyboard,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Input } from "@rneui/themed";
@@ -17,10 +19,26 @@ import { dfhs } from "@env";
 import mime from "mime";
 import { showMessage } from "react-native-flash-message";
 import { useSelector } from "react-redux";
+import { ScrollView } from "react-native-gesture-handler";
 
 const windowWidth = Dimensions.get("window").width;
-const CreateNewOffer = () => {
+const CreateNewOffer = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
+  const [keyboardStatus, setKeyboardStatus] = useState(undefined);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setKeyboardStatus("Keyboard Shown");
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardStatus("Keyboard Hidden");
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
@@ -82,13 +100,7 @@ const CreateNewOffer = () => {
       authAxios2
         .post("upload", formData)
         .then((res) => {
-          const [
-            {
-              formats: {
-                medium: { url },
-              },
-            },
-          ] = res.data;
+          const [{ url }] = res.data;
           var imageId = url;
           setImageUrl(imageId);
           setLoading(false);
@@ -96,9 +108,15 @@ const CreateNewOffer = () => {
         .catch((error) => {
           setLoading(false);
 
-          setMessage(() => (
-            <Text>There was an error while uploading the image. </Text>
-          ));
+          if (error.message === "Network Error") {
+            Alert.alert(
+              "Your device has no internet connection. Please connect and try again."
+            );
+          } else {
+            setMessage(() => (
+              <Text>There was an error while uploading the image. </Text>
+            ));
+          }
         });
     }
   };
@@ -131,22 +149,22 @@ const CreateNewOffer = () => {
       authAxios2
         .post("upload", formData)
         .then((res) => {
-          const [
-            {
-              formats: {
-                medium: { url },
-              },
-            },
-          ] = res.data;
+          const [{ url }] = res.data;
           var imageId = url;
           setImageUrl(imageId);
           setLoading(false);
         })
         .catch((error) => {
           setLoading(false);
-          setMessage(() => (
-            <Text>There was an error while uploading the image. </Text>
-          ));
+          if (error.message === "Network Error") {
+            Alert.alert(
+              "Your device has no internet connection. Please connect and try again."
+            );
+          } else {
+            setMessage(() => (
+              <Text>There was an error while uploading the image. </Text>
+            ));
+          }
         });
     }
   };
@@ -173,15 +191,14 @@ const CreateNewOffer = () => {
     }
     setLoading(true);
     setMessage("");
-
     await authAxios
-      .post("special-offers", {
+      .post(`special-offers`, {
         data: {
           name: name,
           description: description,
           price: price,
           image: imgUrl,
-          itemQuantity: 10000,
+          // itemQuantity: 10000,
           dishVisibility: true,
           Tax: tax,
         },
@@ -198,19 +215,27 @@ const CreateNewOffer = () => {
           //position: "right",
           statusBarHeight: "34",
         });
+        navigation.goBack();
       })
       .catch((error) => {
+        console.log(error);
         setLoading(false);
-        showMessage({
-          message: "Update failed, try again.",
-          // description: "All fields are required",
-          type: "warning",
-          backgroundColor: "orange",
-          color: "#fff",
-          icon: "warning",
-          //position: "right",
-          statusBarHeight: "34",
-        });
+        if (error.message === "Network Error") {
+          Alert.alert(
+            "Your device has no internet connection. Please connect and try again."
+          );
+        } else {
+          showMessage({
+            message: "Update failed, try again.",
+            // description: "All fields are required",
+            type: "warning",
+            backgroundColor: "orange",
+            color: "#fff",
+            icon: "warning",
+            //position: "right",
+            statusBarHeight: "34",
+          });
+        }
       });
   };
 
@@ -222,105 +247,112 @@ const CreateNewOffer = () => {
         // alignItems: "center",
       }}
     >
-      <View
-        style={{
-          flex: 0.9,
-          justifyContent: "space-around",
-          flexDirection: "row",
-        }}
-      >
-        <View style={{ justifyContent: "space-evenly" }}>
-          <View style={{ width: windowWidth / 3 }}>
-            <Input
-              placeholder="Item Name"
-              onChangeText={(text) => setName(text)}
-            />
+      <ScrollView style={{ flex: 1 }}>
+        <View
+          style={{
+            flex: 0.9,
+            justifyContent: "space-around",
+            flexDirection: "row",
+          }}
+        >
+          <View style={{ justifyContent: "space-evenly" }}>
+            <View style={{ width: windowWidth / 3 }}>
+              <Input
+                placeholder="Item Name"
+                onChangeText={(text) => setName(text)}
+              />
+            </View>
+            <View style={{ width: windowWidth / 3 }}>
+              <Input
+                placeholder="Item Description"
+                onChangeText={(text) => setDescription(text)}
+              />
+            </View>
+            <View style={{ width: windowWidth / 3 }}>
+              <Input
+                placeholder="Item Price"
+                onChangeText={(text) => setPrice(text)}
+                keyboardType="numeric"
+              />
+            </View>
           </View>
-          <View style={{ width: windowWidth / 3 }}>
-            <Input
-              placeholder="Item Description"
-              onChangeText={(text) => setDescription(text)}
-            />
-          </View>
-          <View style={{ width: windowWidth / 3 }}>
-            <Input
-              placeholder="Item Price"
-              onChangeText={(text) => setPrice(text)}
-              keyboardType="numeric"
-            />
-          </View>
-        </View>
-        <View style={{ justifyContent: "space-evenly" }}>
-          <View style={{ width: windowWidth / 3 }}>
-            <Input placeholder="Tax" onChangeText={(text) => setTax(text)} />
-          </View>
-          <View
-            style={{
-              alignItems: "center",
-            }}
-          >
-            <ImageBackground
-              source={{
-                //  uri: `${userData.image}`,
-                uri: image,
+          <View style={{ justifyContent: "space-evenly" }}>
+            <View style={{ width: windowWidth / 3 }}>
+              <Input
+                placeholder="Tax"
+                onChangeText={(text) => setTax(text)}
+                keyboardType="numeric"
+              />
+            </View>
+            <View
+              style={{
+                alignItems: "center",
               }}
-              style={styles.avatar}
             >
-              <TouchableOpacity
-                style={{
-                  top: 140,
-
-                  paddingVertical: 13,
-                  alignItems: "center",
-                  opacity: 0.8,
-                  backgroundColor: "black",
+              <ImageBackground
+                source={{
+                  //  uri: `${userData.image}`,
+                  uri: image,
                 }}
-                onPress={toggleModal}
+                style={styles.avatar}
               >
-                <View>
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontFamily: "CircularStdBold",
-                      fontSize: 14,
-                    }}
-                  >
-                    Upload
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </ImageBackground>
+                <TouchableOpacity
+                  style={{
+                    top: 140,
+
+                    paddingVertical: 13,
+                    alignItems: "center",
+                    opacity: 0.8,
+                    backgroundColor: "black",
+                  }}
+                  onPress={toggleModal}
+                >
+                  <View>
+                    <Text
+                      style={{
+                        color: "#fff",
+                        fontFamily: "CircularStdBold",
+                        fontSize: 14,
+                      }}
+                    >
+                      Upload
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </ImageBackground>
+            </View>
           </View>
         </View>
-      </View>
-      <View
-        style={{
-          alignItems: "center",
-          flex: 0.2,
-          justifyContent: "center",
-        }}
-      >
-        <Text style={{ textAlign: "center", fontSize: 13, color: "#EF4444" }}>
-          {message}
-        </Text>
-        <Button
-          onPress={() => handleSubmit()}
-          loading={loading}
-          title="Submit"
-          buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}
-          containerStyle={{
-            width: windowWidth / 3,
-            marginHorizontal: 30,
-            marginVertical: 10,
+      </ScrollView>
+      {keyboardStatus === "Keyboard Shown" ? null : (
+        <View
+          style={{
+            alignItems: "center",
+            flex: 0.2,
+            justifyContent: "center",
           }}
-          titleStyle={{
-            color: "white",
-            fontWeight: "900",
-            fontSize: 20,
-          }}
-        />
-      </View>
-
+        >
+          <Text style={{ textAlign: "center", fontSize: 13, color: "#EF4444" }}>
+            {message}
+          </Text>
+          <Button
+            onPress={() => handleSubmit()}
+            loading={loading}
+            title="Submit"
+            buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 80 }}
+            containerStyle={{
+              width: windowWidth / 4,
+              marginHorizontal: 30,
+              marginVertical: 10,
+            }}
+            titleStyle={{
+              color: "white",
+              fontWeight: "900",
+              fontSize: 20,
+            }}
+          />
+        </View>
+      )}
       <ModalBottom
         onBackdropPress={toggleModal}
         isVisible={isModalVisible}

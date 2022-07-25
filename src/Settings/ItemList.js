@@ -1,5 +1,7 @@
 import {
   ActivityIndicator,
+  Alert,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -32,6 +34,7 @@ const ItemList = ({ navigation }) => {
   const [filteredDataSource, setFilteredDataSource] = useState();
   const [masterDataSource, setMasterDataSource] = useState();
   const [selected, SetSelected] = useState();
+  const [loading, setLoading] = useState(false);
 
   const userData = useSelector((state) => state.user.usermeta);
   const authAxios = axios.create({
@@ -41,24 +44,53 @@ const ItemList = ({ navigation }) => {
     },
   });
 
+  const getDishes = async () => {
+    setFilteredDataSource(null);
+    setMasterDataSource(null);
+    setLoading(true);
+    await axios
+      .get(`${dfhs}dishes/?populate=*`)
+      .then(function (res) {
+        setFilteredDataSource(res.data);
+        setMasterDataSource(res.data);
+        setLoading(false);
+      })
+      .catch(function (error) {
+        console.log(error);
+        setLoading(false);
+        if (error.message === "Network request failed") {
+          console.log("good error");
+
+          Alert.alert("Opps. Your device is not connected to the Internet");
+        }
+      });
+  };
   useFocusEffect(
     React.useCallback(() => {
       let isCancelled = false;
       const result = async () => {
+        setLoading(true);
         await axios
           .get(`${dfhs}dishes/?populate=*`)
           .then(function (res) {
-            // handle success
-            // console.log(res);
-
             setFilteredDataSource(res.data);
             setMasterDataSource(res.data);
+            setLoading(false);
           })
           .catch(function (error) {
-            console.log(error);
-          })
-          .then(function () {
-            // always executed
+            setLoading(false);
+
+            console.log(error.message);
+            if (error.message === "Network request failed") {
+              console.log("good error");
+
+              Alert.alert("Opps. Your device is not connected to the Internet");
+            }
+            if (error.message === "Network Error") {
+              console.log("good error");
+
+              Alert.alert("Opps. Your device is not connected to the Internet");
+            }
           });
       };
       result();
@@ -97,6 +129,17 @@ const ItemList = ({ navigation }) => {
       <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
         <ActivityIndicator size="large" color={colors.light_gray} />
       </View>
+    );
+  }
+  if (loading === true) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+        <View
+          style={{ justifyContent: "center", alignItems: "center", flex: 1 }}
+        >
+          <ActivityIndicator size="large" color="black" />
+        </View>
+      </SafeAreaView>
     );
   }
 
@@ -156,9 +199,16 @@ const ItemList = ({ navigation }) => {
                       })
                       .then(function (response) {
                         dispatch(fetchItems());
+                        getDishes();
                       })
                       .catch(function (error) {
-                        console.log(error);
+                        if (error.message === "Network Error") {
+                          Alert.alert(
+                            "Your device has no internet connection. Please connect and try again."
+                          );
+                        } else {
+                          console.log(error);
+                        }
                       });
                   }}
                 />
@@ -174,9 +224,16 @@ const ItemList = ({ navigation }) => {
                       })
                       .then(function (response) {
                         dispatch(fetchItems());
+                        getDishes();
                       })
                       .catch(function (error) {
-                        console.log(error);
+                        if (error.message === "Network Error") {
+                          Alert.alert(
+                            "Your device has no internet connection. Please connect and try again."
+                          );
+                        } else {
+                          console.log(error);
+                        }
                       });
                   }}
                 />
@@ -223,9 +280,16 @@ const ItemList = ({ navigation }) => {
                       })
                       .then(function (response) {
                         dispatch(fetchItems());
+                        getDishes();
                       })
                       .catch(function (error) {
-                        console.log(error);
+                        if (error.message === "Network Error") {
+                          Alert.alert(
+                            "Your device has no internet connection. Please connect and try again."
+                          );
+                        } else {
+                          console.log(error);
+                        }
                       });
                   }}
                 />
@@ -241,9 +305,16 @@ const ItemList = ({ navigation }) => {
                       })
                       .then(function (response) {
                         dispatch(fetchItems());
+                        getDishes();
                       })
                       .catch(function (error) {
-                        console.log(error);
+                        if (error.message === "Network Error") {
+                          Alert.alert(
+                            "Your device has no internet connection. Please connect and try again."
+                          );
+                        } else {
+                          console.log(error);
+                        }
                       });
                   }}
                 />

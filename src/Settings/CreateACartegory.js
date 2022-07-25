@@ -5,6 +5,7 @@ import {
   View,
   Text,
   Dimensions,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { Input, Icon } from "@rneui/themed";
@@ -89,9 +90,15 @@ const CreateACartegory = () => {
         })
         .catch((error) => {
           setLoading(false);
-          setMessage(() => (
-            <Text>There was an error while uploading the image. </Text>
-          ));
+          if (error.message === "Network Error") {
+            Alert.alert(
+              "Your device has no internet connection. Please connect and try again."
+            );
+          } else {
+            setMessage(() => (
+              <Text>There was an error while uploading the image. </Text>
+            ));
+          }
 
           console.log(error);
         });
@@ -141,10 +148,15 @@ const CreateACartegory = () => {
         })
         .catch((error) => {
           setLoading(false);
-
-          setMessage(() => (
-            <Text>There was an error while uploading the image. </Text>
-          ));
+          if (error.message === "Network Error") {
+            Alert.alert(
+              "Your device has no internet connection. Please connect and try again."
+            );
+          } else {
+            setMessage(() => (
+              <Text>There was an error while uploading the image. </Text>
+            ));
+          }
         });
     }
   };
@@ -187,16 +199,22 @@ const CreateACartegory = () => {
       })
       .catch((error) => {
         console.log(error);
-        showMessage({
-          message: "Update failed, try again.",
-          // description: "All fields are required",
-          type: "warning",
-          backgroundColor: "orange",
-          color: "#fff",
-          icon: "warning",
-          //position: "right",
-          statusBarHeight: "34",
-        });
+        if (error.message === "Network Error") {
+          Alert.alert(
+            "Your device has no internet connection. Please connect and try again."
+          );
+        } else {
+          showMessage({
+            message: "Update failed, try again.",
+            // description: "All fields are required",
+            type: "warning",
+            backgroundColor: "orange",
+            color: "#fff",
+            icon: "warning",
+            //position: "right",
+            statusBarHeight: "34",
+          });
+        }
       });
   };
   return (

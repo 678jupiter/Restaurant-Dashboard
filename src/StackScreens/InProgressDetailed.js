@@ -72,7 +72,12 @@ const InProgressDetailed = ({ navigation, route }) => {
       })
       .catch(function (error) {
         setLoading(false);
-        console.log(error);
+        console.log(error.message);
+        if (error.message === "Network Error") {
+          Alert.alert(
+            "Your device has no internet connection. Please connect and try again."
+          );
+        }
       });
   };
   const buttonAlert = () =>
