@@ -36,9 +36,9 @@ const Settings = () => {
 
   const onChangeOpenMon = (event, selectedDate) => {
     let a = moment(selectedDate).format("HH:mm");
-    //console.log(selectedDate);
-    setModayOpening(a);
-    console.log(moment(selectedDate).format("HH:mm"));
+    if (event.type === "set") {
+      setModayOpening(a);
+    }
   };
   const openingMon = () => {
     DateTimePickerAndroid.open({
@@ -51,8 +51,9 @@ const Settings = () => {
 
   const onChangeCloseMon = (event, selectedDate) => {
     let a = moment(selectedDate).format("HH:mm");
-    setMonClossing(a);
-    console.log(moment(selectedDate).format("HH:mm"));
+    if (event.type === "set") {
+      setMonClossing(a);
+    }
   };
 
   const clossingMon = () => {
@@ -69,9 +70,9 @@ const Settings = () => {
 
   const onChangeOpenTuesday = (event, selectedDate) => {
     let a = moment(selectedDate).format("HH:mm");
-    //console.log(selectedDate);
-    setTuesdayOpening(a);
-    console.log(moment(selectedDate).format("HH:mm"));
+    if (event.type === "set") {
+      setTuesdayOpening(a);
+    }
   };
 
   const openingTuesday = () => {
@@ -85,8 +86,9 @@ const Settings = () => {
 
   const onChangeCloseTues = (event, selectedDate) => {
     let a = moment(selectedDate).format("HH:mm");
-    settusdayClosing(a);
-    console.log(moment(selectedDate).format("HH:mm"));
+    if (event.type === "set") {
+      settusdayClosing(a);
+    }
   };
 
   const clossingTuesday = () => {
@@ -103,8 +105,9 @@ const Settings = () => {
 
   const onChangeOpenWednesday = (event, selectedDate) => {
     let a = moment(selectedDate).format("HH:mm");
-    setWednesdayOpening(a);
-    console.log(moment(selectedDate).format("HH:mm"));
+    if (event.type === "set") {
+      setWednesdayOpening(a);
+    }
   };
 
   const openingWednesday = () => {
@@ -118,8 +121,10 @@ const Settings = () => {
 
   const onChangeCloseWed = (event, selectedDate) => {
     let a = moment(selectedDate).format("HH:mm");
-    setwednesdayClosing(a);
-    console.log(moment(selectedDate).format("HH:mm"));
+
+    if (event.type === "set") {
+      setwednesdayClosing(a);
+    }
   };
   const clossingWednesday = () => {
     DateTimePickerAndroid.open({
@@ -135,8 +140,9 @@ const Settings = () => {
 
   const onChangeOpenThursday = (event, selectedDate) => {
     let a = moment(selectedDate).format("HH:mm");
-    setThursdayOpening(a);
-    console.log(moment(selectedDate).format("HH:mm"));
+    if (event.type === "set") {
+      setThursdayOpening(a);
+    }
   };
 
   const openingThurday = () => {
@@ -150,8 +156,9 @@ const Settings = () => {
 
   const onChangeCloseThurs = (event, selectedDate) => {
     let a = moment(selectedDate).format("HH:mm");
-    setThursdayClosing(a);
-    console.log(moment(selectedDate).format("HH:mm"));
+    if (event.type === "set") {
+      setThursdayClosing(a);
+    }
   };
   const clossingThursday = () => {
     DateTimePickerAndroid.open({
@@ -167,8 +174,9 @@ const Settings = () => {
 
   const onChangeOpenFriday = (event, selectedDate) => {
     let a = moment(selectedDate).format("HH:mm");
-    setFridayOpening(a);
-    console.log(moment(selectedDate).format("HH:mm"));
+    if (event.type === "set") {
+      setFridayOpening(a);
+    }
   };
 
   const openingFriday = () => {
@@ -182,8 +190,9 @@ const Settings = () => {
 
   const onChangeCloseFrid = (event, selectedDate) => {
     let a = moment(selectedDate).format("HH:mm");
-    setFridayClosing(a);
-    console.log(moment(selectedDate).format("HH:mm"));
+    if (event.type === "set") {
+      setFridayClosing(a);
+    }
   };
   const clossingFriday = () => {
     DateTimePickerAndroid.open({
@@ -199,8 +208,9 @@ const Settings = () => {
 
   const onChangeOpenSartuday = (event, selectedDate) => {
     let a = moment(selectedDate).format("HH:mm");
-    setSatOpening(a);
-    console.log(moment(selectedDate).format("HH:mm"));
+    if (event.type === "set") {
+      setSatOpening(a);
+    }
   };
 
   const openingSartuday = () => {
@@ -214,8 +224,9 @@ const Settings = () => {
 
   const onChangeCloseSat = (event, selectedDate) => {
     let a = moment(selectedDate).format("HH:mm");
-    setSatClosing(a);
-    console.log(moment(selectedDate).format("HH:mm"));
+    if (event.type === "set") {
+      setSatClosing(a);
+    }
   };
   const clossingSat = () => {
     DateTimePickerAndroid.open({
@@ -231,8 +242,9 @@ const Settings = () => {
 
   const onChangeOpenSunday = (event, selectedDate) => {
     let a = moment(selectedDate).format("HH:mm");
-    setSundayOpening(a);
-    console.log(moment(selectedDate).format("HH:mm"));
+    if (event.type === "set") {
+      setSundayOpening(a);
+    }
   };
 
   const openingSunday = () => {
@@ -246,8 +258,9 @@ const Settings = () => {
 
   const onChangeCloseSun = (event, selectedDate) => {
     let a = moment(selectedDate).format("HH:mm");
-    setSundayClosing(a);
-    console.log(moment(selectedDate).format("HH:mm"));
+    if (event.type === "set") {
+      setSundayClosing(a);
+    }
   };
   const clossingSun = () => {
     DateTimePickerAndroid.open({
