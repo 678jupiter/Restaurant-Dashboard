@@ -26,6 +26,7 @@ import Push from "./lib/Push";
 import { useEffect } from "react";
 import EditArray from "./EditArray";
 import Layout from "./Layout";
+import Time from "./Time";
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -86,8 +87,9 @@ export default function App() {
         <Provider store={store}>
           <PersistGate persistor={persistor}>
             <ApolloProvider client={client}>
-              {/* <Layout /> */}
               <StackNav />
+              {/* <Layout /> */}
+              {/* <Time /> */}
               {/* <SocketNav /> */}
               {/* <Push /> */}
             </ApolloProvider>
