@@ -64,7 +64,7 @@ const Time = () => {
       },
       Tuesday: {
         openTime: {
-          min: "11",
+          min: "00",
           hour: "16",
         },
         closeTime: {
@@ -146,22 +146,26 @@ const Time = () => {
     function checkOpeningHour() {
       // open by the minute
       if (Number(hours) === Number(theDay.openTime.hour)) {
-        console.log(" Hours is equal to Hours");
-        checkOpeningMin();
-        // return true;
+        // console.log(" Hours is equal to Hours");
+
+        if (checkOpeningMin()) {
+          return true;
+        } else {
+          return false;
+        }
       }
 
       // clossed greater than
       if (Number(hours) < Number(theDay.openTime.hour)) {
         // dont chech minutes go direct
-        console.log("Clossed1 Hours");
+        // console.log("Clossed1 Hours");
         return false;
       }
 
       // open by the Hour
       if (Number(hours) > Number(theDay.openTime.hour)) {
         // dont chech minutes go direct
-        console.log("Open Hours");
+        // console.log("Open Hours");
         return true;
       }
     }
@@ -170,18 +174,20 @@ const Time = () => {
       console.log(Number(theDay.openTime.min));
       console.log(minutes);
       if (Number(minutes) < Number(theDay.openTime.min)) {
-        console.log("clossed by the minute");
+        // console.log("clossed by the minute");
         return false;
       }
       if (Number(minutes) >= Number(theDay.openTime.min)) {
-        console.log("open by the minute");
+        // console.log("open by the minute");
         return true;
       }
     }
 
     function timeValidation() {
-      if (checkOpeningHour()) {
-        // console.log("Hours Open");
+      if (!checkOpeningHour()) {
+        console.log("clossed");
+      } else {
+        console.log("opened");
       }
     }
     timeValidation();
