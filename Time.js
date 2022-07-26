@@ -27,144 +27,164 @@ const Time = () => {
       ];
       return days[date.getDay()];
     }
-    var day = date.getDate();
     var weekdate = getWeekDay(date);
-    var year = date.getFullYear();
-    var seconds = date.getSeconds();
     var minutes = date.getMinutes();
     var hours = date.getHours();
-    console.log(minutes);
     //variables for business
     var days = {
-      Sunday: {
-        openTime: 9,
-        closeTime: 15,
+      Friday: {
+        openTime: {
+          min: "06",
+          hour: "06",
+        },
+        closeTime: {
+          min: "30",
+          hour: "17",
+        },
       },
       Monday: {
-        openTime: 7,
-        closeTime: 17,
+        openTime: {
+          min: "30",
+          hour: "07",
+        },
+        closeTime: {
+          min: "00",
+          hour: "17",
+        },
+      },
+      Sunday: {
+        openTime: {
+          min: "00",
+          hour: "10",
+        },
+        closeTime: {
+          min: "00",
+          hour: "16",
+        },
       },
       Tuesday: {
         openTime: {
-          hour: "07",
-          min: "00",
+          min: "11",
+          hour: "16",
         },
         closeTime: {
-          hour: "17",
-          min: "32",
+          min: "57",
+          hour: "15",
+        },
+      },
+      Saturday: {
+        openTime: {
+          min: "33",
+          hour: "14",
+        },
+        closeTime: {
+          min: "30",
+          hour: "18",
+        },
+      },
+      Thursday: {
+        openTime: {
+          min: "07",
+          hour: "07",
+        },
+        closeTime: {
+          min: "30",
+          hour: "18",
         },
       },
       Wednesday: {
-        openTime: 7,
-        closeTime: 17,
-      },
-      Thursday: {
-        openTime: 7,
-        closeTime: 21,
-      },
-      Friday: {
-        openTime: 7,
-        closeTime: 21,
-      },
-      Saturday: {
-        openTime: 7,
-        closeTime: 21,
+        openTime: {
+          min: "08",
+          hour: "08",
+        },
+        closeTime: {
+          min: "30",
+          hour: "17",
+        },
       },
     };
     var theDay = days[weekdate];
-    var theTime = date.getHours();
+    function checkClosingHour() {
+      // open by the minute
+      if (Number(hours) === Number(theDay.closeTime.hour)) {
+        console.log(" Hours is equal to Hours");
+        checkClosingMin();
+        return true;
+      }
 
-    //function statement
-    // if (hours >= theDay.openTime && hours < theDay.closeTime) {
-    //   currentStatus = "open";
-    // }
+      // clossed greater than
+      if (Number(hours) > Number(theDay.closeTime.hour)) {
+        // dont chech minutes go direct
+        console.log("Clossed Hours");
+        return false;
+      }
+
+      // open by the Hour
+      if (Number(hours) < Number(theDay.closeTime.hour)) {
+        // dont chech minutes go direct
+        console.log("Open Hours");
+        return true;
+      }
+    }
+
+    function checkClosingMin() {
+      console.log(Number(theDay.closeTime.min));
+      console.log(minutes);
+      if (Number(minutes) <= Number(theDay.closeTime.min)) {
+        // True
+        console.log("open by the minute");
+        return false;
+      }
+      if (Number(minutes) > Number(theDay.closeTime.min)) {
+        console.log("clossed by the minute");
+        return false;
+      }
+    }
+
+    //    checkClosingHour();
 
     function checkOpeningHour() {
-      if (hours >= theDay.openTime.hour) {
-        return true;
-      } else {
+      // open by the minute
+      if (Number(hours) === Number(theDay.openTime.hour)) {
+        console.log(" Hours is equal to Hours");
+        checkOpeningMin();
+        // return true;
+      }
+
+      // clossed greater than
+      if (Number(hours) < Number(theDay.openTime.hour)) {
+        // dont chech minutes go direct
+        console.log("Clossed1 Hours");
         return false;
+      }
+
+      // open by the Hour
+      if (Number(hours) > Number(theDay.openTime.hour)) {
+        // dont chech minutes go direct
+        console.log("Open Hours");
+        return true;
       }
     }
 
     function checkOpeningMin() {
-      if (minutes >= theDay.openTime.min) {
-        return true;
-      } else {
+      console.log(Number(theDay.openTime.min));
+      console.log(minutes);
+      if (Number(minutes) < Number(theDay.openTime.min)) {
+        console.log("clossed by the minute");
         return false;
       }
-    }
-
-    function isOpenHourValid() {
-      if (!checkOpeningHour()) {
-        console.log("Closed Openning Hour");
-      } else {
-        // console.log("Valid");
-        // check opening minutes
-        isOpenMinValid();
-      }
-    }
-    function isOpenMinValid() {
-      if (!checkOpeningMin()) {
-        console.log("Closed");
-      } else {
-        console.log("Open");
-      }
-    }
-
-    function checkClosingHour() {
-      if (hours <= theDay.closeTime.hour) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-
-    function isCloseHourValid() {
-      if (!checkClosingHour()) {
-        console.log("Closed clossing Hour");
-      } else {
-        // check opening minutes
-        checkClossingMin();
-      }
-    }
-
-    function closiMin() {
-      if (minutes <= theDay.closeTime.min) {
+      if (Number(minutes) >= Number(theDay.openTime.min)) {
+        console.log("open by the minute");
         return true;
       }
-      if (minutes > theDay.closeTime.min) {
-        return false;
-      }
-    }
-    function checkClossingMin() {
-      console.log(theDay.closeTime.min);
-      if (!closiMin()) {
-        console.log("Clossed ");
-      }
-      if (closiMin()) {
-        console.log("Open ");
-      }
     }
 
-    isOpenHourValid();
-    //isCloseHourValid();
-
-    // function dd() {
-    //   if (
-    //     hours >= theDay.openTime.hour
-    //     //&&
-    //     //minutes >= theDay.openTime.min
-    //     //&&
-    //     //hours < theDay.closeTime.hour
-    //     //&&
-    //     //minutes < theDay.closeTime.min
-    //   ) {
-    //     currentStatus = "open";
-    //   }
-    // }
-
-    //console.log("The business is currently " + currentStatus);
+    function timeValidation() {
+      if (checkOpeningHour()) {
+        // console.log("Hours Open");
+      }
+    }
+    timeValidation();
   }
 
   const onChange = (event, selectedDate) => {
