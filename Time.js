@@ -64,12 +64,12 @@ const Time = () => {
       },
       Tuesday: {
         openTime: {
-          min: "00",
+          min: "37",
           hour: "16",
         },
         closeTime: {
           min: "57",
-          hour: "15",
+          hour: "16",
         },
       },
       Saturday: {
@@ -107,22 +107,25 @@ const Time = () => {
     function checkClosingHour() {
       // open by the minute
       if (Number(hours) === Number(theDay.closeTime.hour)) {
-        console.log(" Hours is equal to Hours");
-        checkClosingMin();
-        return true;
+        // console.log(" Hours is equal to Hours");
+        if (checkClosingMin()) {
+          return true;
+        } else {
+          return false;
+        }
       }
 
       // clossed greater than
       if (Number(hours) > Number(theDay.closeTime.hour)) {
         // dont chech minutes go direct
-        console.log("Clossed Hours");
+        // console.log("Clossed Hours");
         return false;
       }
 
       // open by the Hour
       if (Number(hours) < Number(theDay.closeTime.hour)) {
         // dont chech minutes go direct
-        console.log("Open Hours");
+        // console.log("Open Hours");
         return true;
       }
     }
@@ -133,15 +136,13 @@ const Time = () => {
       if (Number(minutes) <= Number(theDay.closeTime.min)) {
         // True
         console.log("open by the minute");
-        return false;
+        return true;
       }
       if (Number(minutes) > Number(theDay.closeTime.min)) {
         console.log("clossed by the minute");
         return false;
       }
     }
-
-    //    checkClosingHour();
 
     function checkOpeningHour() {
       // open by the minute
@@ -190,7 +191,15 @@ const Time = () => {
         console.log("opened");
       }
     }
-    timeValidation();
+
+    function timeValidation2() {
+      if (!checkClosingHour()) {
+        console.log("clossed");
+      } else {
+        console.log("opened");
+      }
+    }
+    timeValidation2();
   }
 
   const onChange = (event, selectedDate) => {
