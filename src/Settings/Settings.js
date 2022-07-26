@@ -13,9 +13,12 @@ import DatePicker, {
 import { ListItem, Avatar, Icon } from "@rneui/themed";
 import { Ionicons } from "@expo/vector-icons";
 import { Button } from "@rneui/base";
+import { dfhs } from "@env";
 import { ScrollView } from "react-native-gesture-handler";
 import { Space } from "../../components";
 import moment from "moment";
+import { useSelector } from "react-redux";
+import axios from "axios";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 const Settings = () => {
@@ -38,6 +41,7 @@ const Settings = () => {
     let a = moment(selectedDate).format("HH:mm");
     if (event.type === "set") {
       setModayOpening(a);
+      console.log(a);
     }
   };
   const openingMon = () => {
@@ -271,9 +275,64 @@ const Settings = () => {
     });
   };
 
+  var days = {
+    Sunday: {
+      openTime: sundayOpening,
+      closeTime: sundayClosing,
+    },
+    Monday: {
+      openTime: mondayOpening,
+      closeTime: mondayClosing,
+    },
+    Tuesday: {
+      openTime: tuesdatOpening,
+      closeTime: tuesdayClosing,
+    },
+    Wednesday: {
+      openTime: wednesdayOpening,
+      closeTime: fridayClosing,
+    },
+    Thursday: {
+      openTime: thursdayOpening,
+      closeTime: thursdayClosing,
+    },
+    Friday: {
+      openTime: fridayOpening,
+      closeTime: fridayClosing,
+    },
+    Saturday: {
+      openTime: satOpening,
+      closeTime: satClosing,
+    },
+  };
+  const userData = useSelector((state) => state.user.usermeta);
+  const authAxios = axios.create({
+    baseURL: `${dfhs}`,
+    headers: {
+      Authorization: `Bearer ${userData.jwt}`,
+    },
+  });
+
+  const updateTime = async () => {
+    await authAxios
+      .put(`my-restaurants/1`, {
+        data: {
+          Hours: days,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <View style={{ backgroundColor: "white", flex: 1 }}>
-      <ScrollView style={{ flex: 1, marginLeft: 10, marginRight: 10 }}>
+      <ScrollView
+        style={{ flex: 1, marginLeft: 10, marginRight: 10, marginBottom: 10 }}
+      >
         <View>
           <Space height={10} />
           <View
@@ -956,6 +1015,15 @@ const Settings = () => {
               </View>
             </View>
           </View>
+          <View style={{ alignItems: "center" }}>
+            <Button
+              type="outline"
+              onPress={() => updateTime()}
+              buttonStyle={{ width: 100 }}
+            >
+              <Text>SAVE</Text>
+            </Button>
+          </View>
         </View>
 
         <View
@@ -966,8 +1034,17 @@ const Settings = () => {
             marginTop: 10,
           }}
         >
-          <Button type="outline" onPress={() => setPauseModalVisible(true)}>
-            <Icon name="pause" color="rgba(39, 39, 39, 1)" size={60} />
+          <Button
+            type="outline"
+            onPress={() => setPauseModalVisible(true)}
+            buttonStyle={{
+              height: 60,
+              alignItems: "center",
+              justifyContent: "center",
+              alignContent: "center",
+            }}
+          >
+            <Icon name="pause" color="rgba(39, 39, 39, 1)" size={30} />
           </Button>
         </View>
       </ScrollView>

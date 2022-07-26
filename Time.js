@@ -15,7 +15,6 @@ const Time = () => {
     var currentStatus = "closed";
     //Establish Day of Week
     var date = new Date();
-    console.log(date);
     function getWeekDay(date) {
       var days = [
         "Sunday",
@@ -34,7 +33,7 @@ const Time = () => {
     var seconds = date.getSeconds();
     var minutes = date.getMinutes();
     var hours = date.getHours();
-
+    console.log(minutes);
     //variables for business
     var days = {
       Sunday: {
@@ -46,8 +45,14 @@ const Time = () => {
         closeTime: 17,
       },
       Tuesday: {
-        openTime: 7,
-        closeTime: 17,
+        openTime: {
+          hour: "12",
+          min: "05",
+        },
+        closeTime: {
+          hour: "12",
+          min: "32",
+        },
       },
       Wednesday: {
         openTime: 7,
@@ -70,12 +75,98 @@ const Time = () => {
     var theTime = date.getHours();
 
     //function statement
-    if (hours >= theDay.openTime && hours < theDay.closeTime) {
-      currentStatus = "open";
+    // if (hours >= theDay.openTime && hours < theDay.closeTime) {
+    //   currentStatus = "open";
+    // }
+
+    function checkOpeningHour() {
+      if (hours >= theDay.openTime.hour) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
-    console.log("The business is currently " + currentStatus);
+    function checkOpeningMin() {
+      if (minutes >= theDay.openTime.min) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    function isOpenHourValid() {
+      if (!checkOpeningHour()) {
+        console.log("Closed Openning Hour");
+      } else {
+        // console.log("Valid");
+        // check opening minutes
+        isOpenMinValid();
+      }
+    }
+    function isOpenMinValid() {
+      if (!checkOpeningMin()) {
+        console.log("Closed");
+      } else {
+        console.log("Open");
+      }
+    }
+
+    function checkClosingHour() {
+      if (hours <= theDay.closeTime.hour) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    function isCloseHourValid() {
+      if (!checkClosingHour()) {
+        console.log("Closed clossing Hour");
+      } else {
+        // check opening minutes
+        checkClossingMin();
+      }
+    }
+
+    function closiMin() {
+      if (minutes <= theDay.closeTime.min) {
+        return true;
+      }
+      if (minutes > theDay.closeTime.min) {
+        return false;
+      }
+    }
+    function checkClossingMin() {
+      console.log(theDay.closeTime.min);
+      if (!closiMin()) {
+        console.log("Clossed ");
+      }
+      if (closiMin()) {
+        console.log("Open ");
+      }
+    }
+
+    // isOpenHourValid();
+    isCloseHourValid();
+
+    // function dd() {
+    //   if (
+    //     hours >= theDay.openTime.hour
+    //     //&&
+    //     //minutes >= theDay.openTime.min
+    //     //&&
+    //     //hours < theDay.closeTime.hour
+    //     //&&
+    //     //minutes < theDay.closeTime.min
+    //   ) {
+    //     currentStatus = "open";
+    //   }
+    // }
+
+    //console.log("The business is currently " + currentStatus);
   }
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setDate(currentDate);
