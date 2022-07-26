@@ -46,11 +46,11 @@ const Time = () => {
       },
       Tuesday: {
         openTime: {
-          hour: "12",
-          min: "05",
+          hour: "07",
+          min: "00",
         },
         closeTime: {
-          hour: "12",
+          hour: "17",
           min: "32",
         },
       },
@@ -147,8 +147,8 @@ const Time = () => {
       }
     }
 
-    // isOpenHourValid();
-    isCloseHourValid();
+    isOpenHourValid();
+    //isCloseHourValid();
 
     // function dd() {
     //   if (

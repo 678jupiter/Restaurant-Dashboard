@@ -34,14 +34,31 @@ const Settings = () => {
     setReasonModal(true);
   };
 
-  const [mondayOpening, setModayOpening] = useState(0);
-  const [mondayClosing, setMonClossing] = useState(0);
+  const [mondayOpening, setModayOpening] = useState({
+    openTime: {
+      hour: "0",
+      min: "0",
+    },
+  });
+  const [mondayClosing, setMonClossing] = useState({
+    closeTime: {
+      hour: "0",
+      min: "0",
+    },
+  });
 
   const onChangeOpenMon = (event, selectedDate) => {
-    let a = moment(selectedDate).format("HH:mm");
+    let a = moment(selectedDate).format("HH");
+    let b = moment(selectedDate).format("mm");
+    console.log(b);
     if (event.type === "set") {
-      setModayOpening(a);
-      console.log(a);
+      setModayOpening({
+        openTime: {
+          hour: a,
+          min: b,
+        },
+      });
+      //console.log(a);
     }
   };
   const openingMon = () => {
@@ -54,9 +71,15 @@ const Settings = () => {
   };
 
   const onChangeCloseMon = (event, selectedDate) => {
-    let a = moment(selectedDate).format("HH:mm");
+    let a = moment(selectedDate).format("HH");
+    let b = moment(selectedDate).format("mm");
     if (event.type === "set") {
-      setMonClossing(a);
+      setMonClossing({
+        closeTime: {
+          hour: a,
+          min: b,
+        },
+      });
     }
   };
 
@@ -69,13 +92,29 @@ const Settings = () => {
     });
   };
 
-  const [tuesdatOpening, setTuesdayOpening] = useState(0);
-  const [tuesdayClosing, settusdayClosing] = useState(0);
+  const [tuesdatOpening, setTuesdayOpening] = useState({
+    openTime: {
+      hour: "0",
+      min: "0",
+    },
+  });
+  const [tuesdayClosing, settusdayClosing] = useState({
+    closeTime: {
+      hour: "0",
+      min: "0",
+    },
+  });
 
   const onChangeOpenTuesday = (event, selectedDate) => {
-    let a = moment(selectedDate).format("HH:mm");
+    let a = moment(selectedDate).format("HH");
+    let b = moment(selectedDate).format("mm");
     if (event.type === "set") {
-      setTuesdayOpening(a);
+      setTuesdayOpening({
+        openTime: {
+          hour: a,
+          min: b,
+        },
+      });
     }
   };
 
@@ -89,9 +128,15 @@ const Settings = () => {
   };
 
   const onChangeCloseTues = (event, selectedDate) => {
-    let a = moment(selectedDate).format("HH:mm");
+    let a = moment(selectedDate).format("HH");
+    let b = moment(selectedDate).format("mm");
     if (event.type === "set") {
-      settusdayClosing(a);
+      settusdayClosing({
+        closeTime: {
+          hour: a,
+          min: b,
+        },
+      });
     }
   };
 
@@ -104,13 +149,29 @@ const Settings = () => {
     });
   };
 
-  const [wednesdayOpening, setWednesdayOpening] = useState(0);
-  const [wednesdayClosing, setwednesdayClosing] = useState(0);
+  const [wednesdayOpening, setWednesdayOpening] = useState({
+    openTime: {
+      hour: "0",
+      min: "0",
+    },
+  });
+  const [wednesdayClosing, setwednesdayClosing] = useState({
+    closeTime: {
+      hour: "0",
+      min: "0",
+    },
+  });
 
   const onChangeOpenWednesday = (event, selectedDate) => {
-    let a = moment(selectedDate).format("HH:mm");
+    let a = moment(selectedDate).format("HH");
+    let b = moment(selectedDate).format("mm");
     if (event.type === "set") {
-      setWednesdayOpening(a);
+      setWednesdayOpening({
+        openTime: {
+          hour: a,
+          min: b,
+        },
+      });
     }
   };
 
@@ -124,10 +185,16 @@ const Settings = () => {
   };
 
   const onChangeCloseWed = (event, selectedDate) => {
-    let a = moment(selectedDate).format("HH:mm");
+    let a = moment(selectedDate).format("HH");
+    let b = moment(selectedDate).format("mm");
 
     if (event.type === "set") {
-      setwednesdayClosing(a);
+      setwednesdayClosing({
+        closeTime: {
+          hour: a,
+          min: b,
+        },
+      });
     }
   };
   const clossingWednesday = () => {
@@ -139,13 +206,29 @@ const Settings = () => {
     });
   };
 
-  const [thursdayOpening, setThursdayOpening] = useState(0);
-  const [thursdayClosing, setThursdayClosing] = useState(0);
+  const [thursdayOpening, setThursdayOpening] = useState({
+    openTime: {
+      hour: "0",
+      min: "0",
+    },
+  });
+  const [thursdayClosing, setThursdayClosing] = useState({
+    closeTime: {
+      hour: "0",
+      min: "0",
+    },
+  });
 
   const onChangeOpenThursday = (event, selectedDate) => {
-    let a = moment(selectedDate).format("HH:mm");
+    let a = moment(selectedDate).format("HH");
+    let b = moment(selectedDate).format("mm");
     if (event.type === "set") {
-      setThursdayOpening(a);
+      setThursdayOpening({
+        openTime: {
+          hour: a,
+          min: b,
+        },
+      });
     }
   };
 
@@ -159,9 +242,15 @@ const Settings = () => {
   };
 
   const onChangeCloseThurs = (event, selectedDate) => {
-    let a = moment(selectedDate).format("HH:mm");
+    let a = moment(selectedDate).format("HH");
+    let b = moment(selectedDate).format("mm");
     if (event.type === "set") {
-      setThursdayClosing(a);
+      setThursdayClosing({
+        closeTime: {
+          hour: a,
+          min: b,
+        },
+      });
     }
   };
   const clossingThursday = () => {
@@ -173,13 +262,29 @@ const Settings = () => {
     });
   };
 
-  const [fridayOpening, setFridayOpening] = useState(0);
-  const [fridayClosing, setFridayClosing] = useState(0);
+  const [fridayOpening, setFridayOpening] = useState({
+    openTime: {
+      hour: "0",
+      min: "0",
+    },
+  });
+  const [fridayClosing, setFridayClosing] = useState({
+    closeTime: {
+      hour: "0",
+      min: "0",
+    },
+  });
 
   const onChangeOpenFriday = (event, selectedDate) => {
-    let a = moment(selectedDate).format("HH:mm");
+    let a = moment(selectedDate).format("HH");
+    let b = moment(selectedDate).format("mm");
     if (event.type === "set") {
-      setFridayOpening(a);
+      setFridayOpening({
+        openTime: {
+          hour: a,
+          min: b,
+        },
+      });
     }
   };
 
@@ -193,9 +298,15 @@ const Settings = () => {
   };
 
   const onChangeCloseFrid = (event, selectedDate) => {
-    let a = moment(selectedDate).format("HH:mm");
+    let a = moment(selectedDate).format("HH");
+    let b = moment(selectedDate).format("mm");
     if (event.type === "set") {
-      setFridayClosing(a);
+      setFridayClosing({
+        closeTime: {
+          hour: a,
+          min: b,
+        },
+      });
     }
   };
   const clossingFriday = () => {
@@ -207,13 +318,29 @@ const Settings = () => {
     });
   };
 
-  const [satOpening, setSatOpening] = useState(0);
-  const [satClosing, setSatClosing] = useState(0);
+  const [satOpening, setSatOpening] = useState({
+    openTime: {
+      hour: "0",
+      min: "0",
+    },
+  });
+  const [satClosing, setSatClosing] = useState({
+    closeTime: {
+      hour: "0",
+      min: "0",
+    },
+  });
 
   const onChangeOpenSartuday = (event, selectedDate) => {
-    let a = moment(selectedDate).format("HH:mm");
+    let a = moment(selectedDate).format("HH");
+    let b = moment(selectedDate).format("mm");
     if (event.type === "set") {
-      setSatOpening(a);
+      setSatOpening({
+        openTime: {
+          hour: a,
+          min: b,
+        },
+      });
     }
   };
 
@@ -227,9 +354,15 @@ const Settings = () => {
   };
 
   const onChangeCloseSat = (event, selectedDate) => {
-    let a = moment(selectedDate).format("HH:mm");
+    let a = moment(selectedDate).format("HH");
+    let b = moment(selectedDate).format("mm");
     if (event.type === "set") {
-      setSatClosing(a);
+      setSatClosing({
+        closeTime: {
+          hour: a,
+          min: b,
+        },
+      });
     }
   };
   const clossingSat = () => {
@@ -241,13 +374,29 @@ const Settings = () => {
     });
   };
 
-  const [sundayOpening, setSundayOpening] = useState(0);
-  const [sundayClosing, setSundayClosing] = useState(0);
+  const [sundayOpening, setSundayOpening] = useState({
+    openTime: {
+      hour: "0",
+      min: "0",
+    },
+  });
+  const [sundayClosing, setSundayClosing] = useState({
+    closeTime: {
+      hour: "0",
+      min: "0",
+    },
+  });
 
   const onChangeOpenSunday = (event, selectedDate) => {
-    let a = moment(selectedDate).format("HH:mm");
+    let a = moment(selectedDate).format("HH");
+    let b = moment(selectedDate).format("mm");
     if (event.type === "set") {
-      setSundayOpening(a);
+      setSundayOpening({
+        openTime: {
+          hour: a,
+          min: b,
+        },
+      });
     }
   };
 
@@ -261,9 +410,15 @@ const Settings = () => {
   };
 
   const onChangeCloseSun = (event, selectedDate) => {
-    let a = moment(selectedDate).format("HH:mm");
+    let a = moment(selectedDate).format("HH");
+    let b = moment(selectedDate).format("mm");
     if (event.type === "set") {
-      setSundayClosing(a);
+      setSundayClosing({
+        closeTime: {
+          hour: a,
+          min: b,
+        },
+      });
     }
   };
   const clossingSun = () => {
@@ -277,32 +432,74 @@ const Settings = () => {
 
   var days = {
     Sunday: {
-      openTime: sundayOpening,
-      closeTime: sundayClosing,
+      openTime: {
+        hour: sundayOpening.openTime.hour,
+        min: sundayOpening.openTime.min,
+      },
+      closeTime: {
+        hour: sundayClosing.closeTime.hour,
+        min: sundayClosing.closeTime.min,
+      },
     },
     Monday: {
-      openTime: mondayOpening,
-      closeTime: mondayClosing,
+      openTime: {
+        hour: mondayOpening.openTime.hour,
+        min: mondayOpening.openTime.min,
+      },
+      closeTime: {
+        hour: mondayClosing.closeTime.hour,
+        min: mondayClosing.closeTime.min,
+      },
     },
     Tuesday: {
-      openTime: tuesdatOpening,
-      closeTime: tuesdayClosing,
+      openTime: {
+        hour: tuesdatOpening.openTime.hour,
+        min: tuesdatOpening.openTime.min,
+      },
+      closeTime: {
+        hour: tuesdayClosing.closeTime.hour,
+        min: tuesdayClosing.closeTime.min,
+      },
     },
     Wednesday: {
-      openTime: wednesdayOpening,
-      closeTime: fridayClosing,
+      openTime: {
+        hour: wednesdayOpening.openTime.hour,
+        min: wednesdayOpening.openTime.hour,
+      },
+      closeTime: {
+        hour: wednesdayClosing.closeTime.hour,
+        min: wednesdayClosing.closeTime.min,
+      },
     },
     Thursday: {
-      openTime: thursdayOpening,
-      closeTime: thursdayClosing,
+      openTime: {
+        hour: thursdayOpening.openTime.hour,
+        min: thursdayOpening.openTime.hour,
+      },
+      closeTime: {
+        hour: thursdayClosing.closeTime.hour,
+        min: thursdayClosing.closeTime.min,
+      },
     },
     Friday: {
-      openTime: fridayOpening,
-      closeTime: fridayClosing,
+      openTime: {
+        hour: fridayOpening.openTime.hour,
+        min: fridayOpening.openTime.hour,
+      },
+      closeTime: {
+        hour: fridayClosing.closeTime.hour,
+        min: fridayClosing.closeTime.min,
+      },
     },
     Saturday: {
-      openTime: satOpening,
-      closeTime: satClosing,
+      openTime: {
+        hour: satOpening.openTime.hour,
+        min: satOpening.openTime.hour,
+      },
+      closeTime: {
+        hour: satClosing.closeTime.hour,
+        min: satClosing.closeTime.min,
+      },
     },
   };
   const userData = useSelector((state) => state.user.usermeta);
@@ -413,7 +610,7 @@ const Settings = () => {
                     textAlign: "center",
                   }}
                 >
-                  {mondayOpening}
+                  {mondayOpening.openTime.hour}:{mondayOpening.openTime.min}
                 </Text>
               </View>
               <View style={{ width: "50%" }}>
@@ -444,7 +641,7 @@ const Settings = () => {
                     textAlign: "center",
                   }}
                 >
-                  {mondayClosing}
+                  {mondayClosing.closeTime.hour}:{mondayClosing.closeTime.min}
                 </Text>
               </View>
               <View
@@ -499,7 +696,7 @@ const Settings = () => {
                     textAlign: "center",
                   }}
                 >
-                  {tuesdatOpening}
+                  {tuesdatOpening.openTime.hour}:{tuesdatOpening.openTime.min}
                 </Text>
               </View>
               <View style={{ width: "50%" }}>
@@ -530,7 +727,7 @@ const Settings = () => {
                     textAlign: "center",
                   }}
                 >
-                  {tuesdayClosing}
+                  {tuesdayClosing.closeTime.hour}:{tuesdayClosing.closeTime.min}
                 </Text>
               </View>
               <View
@@ -592,7 +789,8 @@ const Settings = () => {
                     textAlign: "center",
                   }}
                 >
-                  {wednesdayOpening}
+                  {wednesdayOpening.openTime.hour}:
+                  {wednesdayOpening.openTime.min}
                 </Text>
               </View>
               <View style={{ width: "50%" }}>
@@ -623,7 +821,8 @@ const Settings = () => {
                     textAlign: "center",
                   }}
                 >
-                  {wednesdayClosing}
+                  {wednesdayClosing.closeTime.hour}:
+                  {wednesdayClosing.closeTime.min}
                 </Text>
               </View>
               <View
@@ -685,7 +884,7 @@ const Settings = () => {
                     textAlign: "center",
                   }}
                 >
-                  {thursdayOpening}
+                  {thursdayOpening.openTime.hour}:{thursdayOpening.openTime.min}
                 </Text>
               </View>
               <View style={{ width: "50%" }}>
@@ -716,7 +915,8 @@ const Settings = () => {
                     textAlign: "center",
                   }}
                 >
-                  {thursdayClosing}
+                  {thursdayClosing.closeTime.hour}:
+                  {thursdayClosing.closeTime.min}
                 </Text>
               </View>
               <View
@@ -778,7 +978,7 @@ const Settings = () => {
                     textAlign: "center",
                   }}
                 >
-                  {fridayOpening}
+                  {fridayOpening.openTime.hour}:{fridayOpening.openTime.min}
                 </Text>
               </View>
               <View style={{ width: "50%" }}>
@@ -809,7 +1009,7 @@ const Settings = () => {
                     textAlign: "center",
                   }}
                 >
-                  {fridayClosing}
+                  {fridayClosing.closeTime.hour}:{fridayClosing.closeTime.min}
                 </Text>
               </View>
               <View
@@ -871,7 +1071,7 @@ const Settings = () => {
                     textAlign: "center",
                   }}
                 >
-                  {satOpening}
+                  {satOpening.openTime.hour}:{satOpening.openTime.min}
                 </Text>
               </View>
               <View style={{ width: "50%" }}>
@@ -902,7 +1102,7 @@ const Settings = () => {
                     textAlign: "center",
                   }}
                 >
-                  {satClosing}
+                  {satClosing.closeTime.hour}:{satClosing.closeTime.min}
                 </Text>
               </View>
               <View
@@ -964,7 +1164,7 @@ const Settings = () => {
                     textAlign: "center",
                   }}
                 >
-                  {sundayOpening}
+                  {sundayOpening.openTime.hour}:{sundayOpening.openTime.min}
                 </Text>
               </View>
               <View style={{ width: "50%" }}>
@@ -995,7 +1195,7 @@ const Settings = () => {
                     textAlign: "center",
                   }}
                 >
-                  {sundayClosing}
+                  {sundayClosing.closeTime.hour}:{sundayClosing.closeTime.min}
                 </Text>
               </View>
               <View
