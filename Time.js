@@ -64,12 +64,12 @@ const Time = () => {
       },
       Tuesday: {
         openTime: {
-          min: "37",
-          hour: "16",
+          min: "00",
+          hour: "08",
         },
         closeTime: {
-          min: "57",
-          hour: "16",
+          min: "00",
+          hour: "14",
         },
       },
       Saturday: {
@@ -135,11 +135,11 @@ const Time = () => {
       console.log(minutes);
       if (Number(minutes) <= Number(theDay.closeTime.min)) {
         // True
-        console.log("open by the minute");
+        //  console.log("open by the minute");
         return true;
       }
       if (Number(minutes) > Number(theDay.closeTime.min)) {
-        console.log("clossed by the minute");
+        //console.log("clossed by the minute");
         return false;
       }
     }
@@ -186,20 +186,31 @@ const Time = () => {
 
     function timeValidation() {
       if (!checkOpeningHour()) {
-        console.log("clossed");
+        //console.log("clossed");
+        return false;
       } else {
-        console.log("opened");
+        //  console.log("opened");
+        return true;
       }
     }
 
     function timeValidation2() {
       if (!checkClosingHour()) {
-        console.log("clossed");
+        // console.log("clossed");
+        return false;
       } else {
-        console.log("opened");
+        // console.log("opened");
+        return true;
       }
     }
-    timeValidation2();
+    function wond() {
+      if (timeValidation() && timeValidation2()) {
+        console.log("open");
+      } else {
+        console.log("clossed");
+      }
+    }
+    wond();
   }
 
   const onChange = (event, selectedDate) => {
