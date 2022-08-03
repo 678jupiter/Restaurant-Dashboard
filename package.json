@@ -48,7 +48,6 @@
     "react-native-gesture-handler": "~2.2.1",
     "react-native-gifted-chat": "^1.0.1",
     "react-native-localize": "^2.2.2",
-    "react-native-maps": "0.30.2",
     "react-native-modal": "^13.0.1",
     "react-native-paper": "^4.12.1",
     "react-native-phone-call": "^1.2.0",

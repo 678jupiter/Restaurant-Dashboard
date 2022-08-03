@@ -133,6 +133,40 @@ const SettingScreen = ({ navigation }) => {
           </Card>
         </Pressable>
 
+        <Pressable onPress={() => navigation.navigate("CouriersList")}>
+          <Card
+            containerStyle={{
+              borderColor: "rgba(39, 39, 39, 1)",
+              borderRadius: 2,
+              width: 110,
+              height: 100,
+              backgroundColor: "#dcffee",
+              shadowColor: "white",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 4,
+              elevation: 5,
+            }}
+          >
+            <Card.Title
+              style={{ fontFamily: "MontserratSemiBold", fontSize: 15 }}
+            >
+              Couriers
+            </Card.Title>
+            <View
+              style={{
+                position: "relative",
+                alignItems: "center",
+                marginTop: 8,
+              }}
+            >
+              <FontAwesome5 name="people-carry" size={24} color="#5cb1ff" />
+            </View>
+          </Card>
+        </Pressable>
         <Pressable onPress={() => navigation.navigate("settings")}>
           <Card
             containerStyle={{

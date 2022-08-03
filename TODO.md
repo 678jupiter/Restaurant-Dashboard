@@ -4,8 +4,6 @@ MVP
 
 # DECLINED CONTACT CUSTOMER FOR REFUND
 
-# Before Ready For Delivery Check if There is any online drivers nearby
-
 # Arriving Courier
 
 # A Button to ask for another driver if driver does not sho up after a certain perion of time

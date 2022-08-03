@@ -40,6 +40,7 @@ import EditOffer from "../Settings/EditOffer";
 import Modifiers from "../Settings/Modifier";
 import EditModifier from "../Settings/EditModifier";
 import NewOfferModifier from "../Settings/OfferModifier";
+import CouriesList from "../Settings/CouriesList";
 
 function DrawerNav({ navigation }) {
   const windowWidth = Dimensions.get("window").width;
@@ -139,7 +140,7 @@ function DrawerNav({ navigation }) {
         name="Order Ready For PickUp"
         component={ReadyForPickUp}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         options={{
           title: "Orders Being Delivered",
           headerShown: true,
@@ -155,7 +156,7 @@ function DrawerNav({ navigation }) {
         }}
         name="delivering"
         component={Delivering}
-      />
+      /> */}
       <Drawer.Screen
         options={{
           title: "",
@@ -343,6 +344,15 @@ export default function StackNav() {
                 headerShown: false,
                 animationTypeForReplace: "pop",
                 title: "Order History",
+              }}
+            />
+            <Stack.Screen
+              name="CouriersList"
+              component={CouriesList}
+              options={{
+                headerShown: true,
+                animationTypeForReplace: "pop",
+                title: "Registed Couriers",
               }}
             />
             <Stack.Screen

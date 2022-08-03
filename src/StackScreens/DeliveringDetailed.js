@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
-import MapView from "react-native-maps";
+//import MapView from "react-native-maps";
 import { Ionicons } from "@expo/vector-icons";
 import io from "socket.io-client";
 import Arrow from "../../assets/arrow.png";
@@ -124,8 +124,8 @@ const DeliveringDetailed = ({ route, navigation }) => {
     }
   };
   return (
-    <View style={{ flex: 1, backgroundColor: "indigo" }}>
-      <View
+    <View style={{ flex: 1, backgroundColor: "white" }}>
+      {/* <View
         style={{
           backgroundColor: "white",
           flex: 0.15,
@@ -241,7 +241,7 @@ const DeliveringDetailed = ({ route, navigation }) => {
           </Pressable>
           <Text>{courierName}</Text>
         </View>
-      </View>
+      </View> */}
     </View>
   );
 };

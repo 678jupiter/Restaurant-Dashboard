@@ -105,6 +105,90 @@ const DetailedOrder = ({ route, navigation }) => {
       });
   };
 
+  const checkForActiveCouriers = () => {
+    setLoading1(true);
+
+    axios
+      .get("https://myfoodcms189.herokuapp.com/api/couriers")
+      .then((res) => {
+        const { data } = res.data;
+        console.log(data);
+        if (data.length > 0) {
+          const AvailableOnline = data.filter(
+            (item) => item.attributes.active === true
+          );
+          if (AvailableOnline.length === 0) {
+            Alert.alert(
+              "You can not continue, because there are no ONLINE courier"
+            );
+            setLoading1(false);
+          }
+          if (AvailableOnline.length > 0) {
+            alertCooking();
+            console.log("We have found couriers");
+          }
+          if (AvailableOnline.length === 0) {
+            Alert.alert(
+              "You can not continue, because there are no ONLINE courier"
+            );
+            setLoading1(false);
+          }
+        }
+        if (data.length < 0) {
+          Alert.alert(
+            "You can not continue, because there are no registered courier"
+          );
+          setLoading1(false);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading1(false);
+      });
+  };
+
+  const checkForActiveCouriers2 = () => {
+    setLoading2(true);
+
+    axios
+      .get("https://myfoodcms189.herokuapp.com/api/couriers")
+      .then((res) => {
+        const { data } = res.data;
+        console.log(data);
+        if (data.length > 0) {
+          const AvailableOnline = data.filter(
+            (item) => item.attributes.active === true
+          );
+          if (AvailableOnline.length === 0) {
+            Alert.alert(
+              "You can not continue, because there are no ONLINE courier"
+            );
+            setLoading2(false);
+          }
+          if (AvailableOnline.length > 0) {
+            alertReadyForPickUp();
+            console.log("We have found couriers");
+          }
+          if (AvailableOnline.length === 0) {
+            Alert.alert(
+              "You can not continue, because there are no ONLINE courier"
+            );
+            setLoading2(false);
+          }
+        }
+        if (data.length < 0) {
+          Alert.alert(
+            "You can not continue, because there are no registered courier"
+          );
+          setLoading2(false);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading2(false);
+      });
+  };
+
   const Cooking = async () => {
     setLoading1(true);
     await authAxios
@@ -199,21 +283,21 @@ const DetailedOrder = ({ route, navigation }) => {
       },
       { text: "OK", onPress: () => Decline() },
     ]);
-  const buttonAlert2 = () =>
+  const alertReadyForPickUp = () =>
     Alert.alert(`${userName}'s Order`, `Is Ready For PickUp`, [
       {
         text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
+        onPress: () => setLoading2(false),
         style: "cancel",
       },
       { text: "OK", onPress: () => ReadyForPickUp() },
     ]);
 
-  const buttonAlert3 = () =>
+  const alertCooking = () =>
     Alert.alert(`Accept`, `${userName}'s Order`, [
       {
         text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
+        onPress: () => setLoading1(false),
         style: "cancel",
       },
       { text: "OK", onPress: () => Cooking() },
@@ -498,7 +582,7 @@ const DetailedOrder = ({ route, navigation }) => {
             }}
           />
           <Button
-            onPress={() => buttonAlert2()}
+            onPress={() => checkForActiveCouriers2()}
             loading={loading2}
             title="READY FOR PICKUP"
             buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 50 }}
@@ -515,7 +599,7 @@ const DetailedOrder = ({ route, navigation }) => {
             }}
           />
           <Button
-            onPress={() => buttonAlert3()}
+            onPress={() => checkForActiveCouriers()}
             loading={loading1}
             title="CONFIRM"
             buttonStyle={{ backgroundColor: "rgba(39, 39, 39, 1)", height: 50 }}

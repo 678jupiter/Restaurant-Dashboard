@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { format } from "timeago.js";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import call from "react-native-phone-call";
+import { fetchOrders } from "../Redux/orderActions";
 
 const ReadyForPickUp = ({ navigation }) => {
   const [courierLoading, setCourierLoading] = useState(false);
@@ -22,13 +23,13 @@ const ReadyForPickUp = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [featured, setFeatured] = useState(null);
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   let isCancelled = false;
-  //   dispatch(fetchOrders());
-  //   return () => {
-  //     isCancelled = true;
-  //   };
-  // }, [dispatch]);
+  useEffect(() => {
+    let isCancelled = false;
+    dispatch(fetchOrders());
+    return () => {
+      isCancelled = true;
+    };
+  }, [dispatch]);
 
   const getCouriers = () => {
     setCourierLoading(true);
@@ -37,7 +38,6 @@ const ReadyForPickUp = ({ navigation }) => {
       .then((res) => {
         setCourierLoading(false);
         const { data } = res.data;
-        console.log(data);
         setCouriers(data);
       })
       .catch((error) => {
@@ -346,7 +346,7 @@ const ReadyForPickUp = ({ navigation }) => {
                   </View>
 
                   <Text style={styles.modalText}>
-                    {featured.attributes.distanceFromRestaurant} KM away
+                    {featured?.attributes.distanceFromRestaurant} KM away
                   </Text>
                 </View>
                 <View
@@ -396,20 +396,6 @@ const ReadyForPickUp = ({ navigation }) => {
 export default ReadyForPickUp;
 
 const styles = StyleSheet.create({
-  subtitleView: {
-    flexDirection: "column",
-    alignSelf: "flex-end",
-    justifyContent: "center",
-    alignContent: "flex-end",
-  },
-  ratingImage: {
-    height: 19.21,
-    width: 100,
-  },
-  ratingText: {
-    paddingLeft: 10,
-    color: "grey",
-  },
   centeredView: {
     flex: 1,
     justifyContent: "center",
