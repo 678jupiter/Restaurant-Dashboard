@@ -200,7 +200,11 @@ const DeliveringDetailed = ({ route, navigation }) => {
             alignItems: "center",
           }}
         >
-          <Pressable onPress={() => console.warn("Call")}>
+          <Pressable
+            onPress={() =>
+              call({ number: `${customermobilenumber}`, prompt: false })
+            }
+          >
             <Ionicons
               onPress={() =>
                 call({ number: `${customermobilenumber}`, prompt: false })
@@ -220,7 +224,11 @@ const DeliveringDetailed = ({ route, navigation }) => {
             alignItems: "center",
           }}
         >
-          <Pressable onPress={() => console.warn("Call")}>
+          <Pressable
+            onPress={() =>
+              call({ number: `${courierMobileNumber}`, prompt: false })
+            }
+          >
             <Ionicons
               onPress={() =>
                 call({ number: `${courierMobileNumber}`, prompt: false })

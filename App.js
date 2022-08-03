@@ -87,9 +87,9 @@ export default function App() {
         <Provider store={store}>
           <PersistGate persistor={persistor}>
             <ApolloProvider client={client}>
-              {/* <StackNav /> */}
+              <StackNav />
               {/* <Layout /> */}
-              <Time />
+              {/* <Time /> */}
               {/* <SocketNav /> */}
               {/* <Push /> */}
             </ApolloProvider>

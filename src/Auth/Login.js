@@ -18,8 +18,8 @@ import { useTogglePasswordVisibility } from "../../components/useTogglePasswordV
 import { useDispatch } from "react-redux";
 import { authActions } from "../Redux/authSlice";
 import { userActions } from "../Redux/userSlice";
-import { login } from "../../lib";
 import { isEmail } from "../../utils";
+import axios from "axios";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -61,49 +61,45 @@ const Login = () => {
     }
     handleMessage("");
     setIsSubmitting(true);
-    try {
-      setIsSubmitting(true);
-      await login(identifier, password)
-        .then((res) => {
-          dispatch(
-            userActions.addUser({
-              jwt: res.data.jwt,
-              id: res.data.user.id,
-              username: res.data.user.username,
-              email: res.data.user.email,
-              mobileNumber: res.data.user.mobileNumber,
-              secondName: res.data.user.secondName,
-              address: res.data.user.Address,
-              buildinginfo: res.data.user.Buildinginfo,
-              image: "",
-            })
-          );
-          dispatch(authActions.login());
-          handleMessage(message);
-          showMessage({
-            message: "Logged in.",
-            type: "success",
-            backgroundColor: secondaryColor,
-            color: "#fff",
-            icon: "success",
-            statusBarHeight: "32",
-          });
-          setMessage("");
-        })
-        .catch((error) => {
-          handleMessage(() => (
-            <Text style={styles.msgBox}>Invalid email or password!</Text>
-          ));
-
-          setIsSubmitting(false);
+    axios
+      .post(`https://myfoodcms189.herokuapp.com/api/auth/local/`, {
+        identifier: identifier,
+        password: password,
+      })
+      .then((res) => {
+        dispatch(
+          userActions.addUser({
+            jwt: res.data.jwt,
+            id: res.data.user.id,
+            username: res.data.user.username,
+            email: res.data.user.email,
+            mobileNumber: res.data.user.mobileNumber,
+            secondName: res.data.user.secondName,
+            address: res.data.user.Address,
+            buildinginfo: res.data.user.Buildinginfo,
+            image: "",
+          })
+        );
+        dispatch(authActions.login());
+        handleMessage(message);
+        showMessage({
+          message: "Logged in.",
+          type: "success",
+          backgroundColor: secondaryColor,
+          color: "#fff",
+          icon: "success",
+          statusBarHeight: "32",
         });
-    } catch (error) {
-      setIsSubmitting(false);
-      handleMessage(() => (
-        <Text style={styles.msgBox}>Incorrect credentials!</Text>
-      ));
-    }
-    // setIsSubmitting(false);
+        setMessage("");
+        setIsSubmitting(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        handleMessage(() => (
+          <Text style={styles.msgBox}>Invalid email or password!</Text>
+        ));
+        setIsSubmitting(false);
+      });
   };
   return (
     <SafeAreaView style={styles.page}>

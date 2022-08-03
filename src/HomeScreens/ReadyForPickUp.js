@@ -1,45 +1,53 @@
 import {
   ActivityIndicator,
   Image,
+  Modal,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card } from "@rneui/themed";
-import { Ionicons } from "@expo/vector-icons";
-import { fetchOrders } from "../Redux/orderActions";
 import { useDispatch, useSelector } from "react-redux";
 import { format } from "timeago.js";
-
-const drivers = [
-  {
-    name: "Amy Farha",
-    avatar_url:
-      "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-    subtitle: "AZ12AQW",
-  },
-  {
-    name: "Chris Jackson",
-    avatar_url:
-      "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
-    subtitle: "19HWR5",
-  },
-];
+import { AntDesign, Ionicons } from "@expo/vector-icons";
+import call from "react-native-phone-call";
 
 const ReadyForPickUp = ({ navigation }) => {
+  const [courierLoading, setCourierLoading] = useState(false);
+  const [couries, setCouriers] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [featured, setFeatured] = useState(null);
   const dispatch = useDispatch();
+  // useEffect(() => {
+  //   let isCancelled = false;
+  //   dispatch(fetchOrders());
+  //   return () => {
+  //     isCancelled = true;
+  //   };
+  // }, [dispatch]);
+
+  const getCouriers = () => {
+    setCourierLoading(true);
+    axios
+      .get("https://myfoodcms189.herokuapp.com/api/couriers")
+      .then((res) => {
+        setCourierLoading(false);
+        const { data } = res.data;
+        console.log(data);
+        setCouriers(data);
+      })
+      .catch((error) => {
+        setCourierLoading(false);
+        console.log(error);
+      });
+  };
   useEffect(() => {
-    let isCancelled = false;
-    dispatch(fetchOrders());
-    return () => {
-      isCancelled = true;
-    };
-  }, [dispatch]);
+    getCouriers();
+  }, []);
 
   const restaurantOrders = useSelector(
     (state) => state.orders.restaurantOrders
@@ -162,34 +170,210 @@ const ReadyForPickUp = ({ navigation }) => {
         </View>
 
         <View style={{ flex: 0.3 }}>
-          <ScrollView horizontal>
-            {drivers.map((item, i) => (
-              <Card containerStyle={{ width: 60, height: 60 }} key={i}>
+          {courierLoading ? (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ color: "white", marginRight: 10 }}>
+                  Loading couriers
+                </Text>
+
+                <ActivityIndicator color="white" size="large" />
+              </View>
+            </View>
+          ) : (
+            <ScrollView
+              horizontal
+              contentContainerStyle={{ backgroundColor: "white" }}
+            >
+              {couries?.map((item, i) => (
+                <Pressable
+                  key={i}
+                  onPress={() => setFeatured(item) || setModalVisible(true)}
+                >
+                  <View
+                    style={{
+                      width: 80,
+                      marginLeft: 2,
+                      alignItems: "center",
+                    }}
+                  >
+                    {item.attributes.active === true ? (
+                      <View
+                        style={{
+                          backgroundColor: "green",
+                          height: 10,
+                          width: 10,
+                          borderRadius: 10,
+                          alignSelf: "flex-end",
+                          marginRight: 4,
+                          marginTop: 2,
+                        }}
+                      ></View>
+                    ) : (
+                      <View
+                        style={{
+                          backgroundColor: "black",
+                          height: 10,
+                          width: 10,
+                          borderRadius: 10,
+                          alignSelf: "flex-end",
+                          marginRight: 4,
+                          marginTop: 2,
+                        }}
+                      ></View>
+                    )}
+
+                    <Text style={{}}>{item.attributes.firstName}</Text>
+                    <View
+                      style={{
+                        height: 100,
+                        width: 100,
+                        alignItems: "center",
+                      }}
+                    >
+                      <Image
+                        style={{
+                          width: "20%",
+                          height: "60%",
+                          aspectRatio: 1,
+                          borderRadius: 10,
+                        }}
+                        resizeMode="contain"
+                        source={{
+                          uri: `${item.attributes.image}`,
+                        }}
+                      />
+                    </View>
+                  </View>
+                </Pressable>
+              ))}
+            </ScrollView>
+          )}
+        </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View style={{ alignContent: "center" }}>
+                <Pressable onPress={() => setModalVisible(!modalVisible)}>
+                  <AntDesign
+                    name="close"
+                    size={24}
+                    color="black"
+                    style={{
+                      marginLeft: 20,
+                      marginTop: 15,
+                      alignSelf: "flex-start",
+                    }}
+                  />
+                </Pressable>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  // backgroundColor: "yellow",
+                  // justifyContent: "center",
+                }}
+              >
+                <View style={{ width: "50%" }}>
+                  <Text style={styles.modalText}>
+                    {featured?.attributes.firstName}{" "}
+                    {featured?.attributes.secondName}
+                  </Text>
+                  {featured?.attributes.active === true ? (
+                    <Text
+                      style={{
+                        color: "green",
+                        marginBottom: 15,
+                        textAlign: "center",
+                      }}
+                    >
+                      Active
+                    </Text>
+                  ) : (
+                    <Text style={styles.modalText}>Not Active</Text>
+                  )}
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Pressable
+                      onPress={() =>
+                        call({
+                          number: `${featured?.attributes.mobileNumber}`,
+                          prompt: false,
+                        })
+                      }
+                      style={{ marginBottom: 20, marginRight: 20 }}
+                    >
+                      <Ionicons
+                        onPress={() =>
+                          call({
+                            number: `${featured?.attributes.mobileNumber}`,
+                            prompt: false,
+                          })
+                        }
+                        name="call-outline"
+                        size={28}
+                        color="green"
+                      />
+                    </Pressable>
+                    <Text style={styles.modalText}>
+                      {featured?.attributes.mobileNumber}
+                    </Text>
+                  </View>
+
+                  <Text style={styles.modalText}>
+                    {featured.attributes.distanceFromRestaurant} KM away
+                  </Text>
+                </View>
                 <View
                   style={{
-                    position: "relative",
+                    width: "50%",
+                    backgroundColor: "white",
                     alignItems: "center",
                     justifyContent: "center",
                   }}
                 >
                   <Image
                     style={{
-                      width: "100%",
-                      height: 80,
+                      width: "20%",
+                      height: "60%",
+                      aspectRatio: 1,
+                      borderRadius: 10,
                     }}
                     resizeMode="contain"
                     source={{
-                      uri: "https://avatars0.githubusercontent.com/u/32242596?s=460&u=1ea285743fc4b083f95d6ee0be2e7bb8dcfc676e&v=4",
+                      uri: `${featured?.attributes.image}`,
                     }}
                   />
-                  <Text>{item.name}</Text>
-                  <Text>Arriving</Text>
-                  <Text>{item.subtitle}</Text>
                 </View>
-              </Card>
-            ))}
-          </ScrollView>
-        </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   } else {
@@ -225,5 +409,48 @@ const styles = StyleSheet.create({
   ratingText: {
     paddingLeft: 10,
     color: "grey",
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    //  marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    height: "80%",
+    width: "80%",
+    //padding: 35,
+    // alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
   },
 });
