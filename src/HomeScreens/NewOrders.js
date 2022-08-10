@@ -15,24 +15,21 @@ import { fetchOrders } from "../Redux/orderActions";
 import { colors } from "../config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { format } from "timeago.js";
+import { useFocusEffect } from "@react-navigation/native";
 const NewOrders = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  useEffect(() => {
-    let isCancelled = false;
-    // setLoading(true);
-    dispatch(fetchOrders())
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    return () => {
-      isCancelled = true;
-      setLoading(false);
-    };
-  }, [dispatch]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      let isActive = true;
+      console.log("UseEffect");
+      dispatch(fetchOrders());
+      return () => {
+        isActive = false;
+      };
+    }, [navigation])
+  );
 
   const restaurantOrders = useSelector(
     (state) => state.orders.restaurantOrders

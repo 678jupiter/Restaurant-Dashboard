@@ -19,10 +19,11 @@ import { Pressable } from "react-native";
 import call from "react-native-phone-call";
 import { format } from "timeago.js";
 import { AntDesign } from "@expo/vector-icons";
-import { dfhs } from "@env";
 import io from "socket.io-client";
 import { Border } from "../../components";
 import { colors } from "../config";
+import { dfhs, socks } from "@env";
+
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -48,6 +49,7 @@ const DetailedOrder = ({ route, navigation }) => {
     methodofDelivery,
     verificationMessage,
   } = route.params;
+  console.log(totalPaid);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [loading3, setLoading3] = useState(false);
@@ -58,7 +60,7 @@ const DetailedOrder = ({ route, navigation }) => {
       Authorization: `Bearer ${userData.jwt}`,
     },
   });
-  const socket = io("https://socketitisha.herokuapp.com");
+  const socket = io(`${socks}`);
   function showRoom() {
     console.log("Joined Room");
   }
@@ -85,31 +87,31 @@ const DetailedOrder = ({ route, navigation }) => {
     });
   };
 
-  const sendConfirmationMessage = async () => {
-    await axios
-      .post(`https://msgintisha.herokuapp.com/api/messages`, {
-        sender: userData.id,
-        text: `Your order ${orderId} is being processed.`,
-        conversationId: conversationId,
-        user: {
-          _id: userData.username,
-          name: userData.username,
-          avatar: "https://placeimg.com/140/140/any",
-        },
-      })
-      .then((res) => {
-        console.log("Message Sent");
-      })
-      .catch((error) => {
-        console.log("message server");
-      });
-  };
+  // const sendConfirmationMessage = async () => {
+  //   await axios
+  //     .post(``, {
+  //       sender: userData.id,
+  //       text: `Your order ${orderId} is being processed.`,
+  //       conversationId: conversationId,
+  //       user: {
+  //         _id: userData.username,
+  //         name: userData.username,
+  //         avatar: "https://placeimg.com/140/140/any",
+  //       },
+  //     })
+  //     .then((res) => {
+  //       console.log("Message Sent");
+  //     })
+  //     .catch((error) => {
+  //       console.log("message server");
+  //     });
+  // };
 
   const checkForActiveCouriers = () => {
     setLoading1(true);
 
     axios
-      .get("https://myfoodcms189.herokuapp.com/api/couriers")
+      .get(`${dfhs}couriers`)
       .then((res) => {
         const { data } = res.data;
         console.log(data);
@@ -151,7 +153,7 @@ const DetailedOrder = ({ route, navigation }) => {
     setLoading2(true);
 
     axios
-      .get("https://myfoodcms189.herokuapp.com/api/couriers")
+      .get(`${dfhs}couriers`)
       .then((res) => {
         const { data } = res.data;
         console.log(data);
@@ -200,7 +202,7 @@ const DetailedOrder = ({ route, navigation }) => {
       .then(function (response) {
         dispatch(fetchOrders());
         setLoading1(false);
-        sendConfirmationMessage();
+        // sendConfirmationMessage();
         clientNotification();
         navigation.navigate("Orders In Progress", {
           userName,

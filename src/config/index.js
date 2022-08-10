@@ -6,5 +6,3 @@ export const colors = {
   dark_gray: "#425466",
   slate: "#0A2540",
 };
-
-export const BASEURL = "http://localhost:1337";

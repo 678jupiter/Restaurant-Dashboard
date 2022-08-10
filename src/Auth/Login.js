@@ -20,6 +20,7 @@ import { authActions } from "../Redux/authSlice";
 import { userActions } from "../Redux/userSlice";
 import { isEmail } from "../../utils";
 import axios from "axios";
+import { dfhs } from "@env";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -62,7 +63,7 @@ const Login = () => {
     handleMessage("");
     setIsSubmitting(true);
     axios
-      .post(`https://myfoodcms189.herokuapp.com/api/auth/local/`, {
+      .post(`${dfhs}auth/local/`, {
         identifier: identifier,
         password: password,
       })

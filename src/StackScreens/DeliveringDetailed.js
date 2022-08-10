@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import io from "socket.io-client";
 import Arrow from "../../assets/arrow.png";
 import call from "react-native-phone-call";
+import { socks } from "@env";
 
 const DeliveringDetailed = ({ route, navigation }) => {
   const courierCords = [
@@ -31,7 +32,7 @@ const DeliveringDetailed = ({ route, navigation }) => {
   const latitudeDelta = Number(0.0922);
   const longitudeDelta = Number(0.0421);
 
-  const socket = io("https://socketitisha.herokuapp.com");
+  const socket = io(`${socks}`);
   function showRoom() {
     console.log("Joined Room");
   }

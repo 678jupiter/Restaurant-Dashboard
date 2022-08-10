@@ -16,6 +16,7 @@ import { format } from "timeago.js";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import call from "react-native-phone-call";
 import { fetchOrders } from "../Redux/orderActions";
+import { dfhs } from "@env";
 
 const ReadyForPickUp = ({ navigation }) => {
   const [courierLoading, setCourierLoading] = useState(false);
@@ -34,7 +35,7 @@ const ReadyForPickUp = ({ navigation }) => {
   const getCouriers = () => {
     setCourierLoading(true);
     axios
-      .get("https://myfoodcms189.herokuapp.com/api/couriers")
+      .get(`${dfhs}couriers`)
       .then((res) => {
         setCourierLoading(false);
         const { data } = res.data;

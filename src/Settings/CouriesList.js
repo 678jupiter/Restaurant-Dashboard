@@ -13,6 +13,7 @@ import axios from "axios";
 import { ScrollView } from "react-native";
 import { ListItem, Avatar } from "@rneui/themed";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { dfhs } from "@env";
 
 const CouriesList = () => {
   const [loading, setLoading] = useState(false);
@@ -22,7 +23,7 @@ const CouriesList = () => {
   const getCouriers = () => {
     setLoading(true);
     axios
-      .get("https://myfoodcms189.herokuapp.com/api/couriers")
+      .get(`${dfhs}couriers`)
       .then((res) => {
         setLoading(false);
         const { data } = res.data;

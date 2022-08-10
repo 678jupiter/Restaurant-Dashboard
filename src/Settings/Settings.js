@@ -1,16 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
-  Pressable,
   Text,
   Modal,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
-import DatePicker, {
-  DateTimePickerAndroid,
-} from "@react-native-community/datetimepicker";
-import { ListItem, Avatar, Icon } from "@rneui/themed";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import { Icon } from "@rneui/themed";
 import { Ionicons } from "@expo/vector-icons";
 import { Button } from "@rneui/base";
 import { dfhs } from "@env";
@@ -22,12 +20,145 @@ import axios from "axios";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 const Settings = () => {
+  const [loading, setLoading] = useState(false);
   const [PauseModalVisible, setPauseModalVisible] = useState(false);
   const [reasonModal, setReasonModal] = useState(false);
   useState(false);
   const [clossingHoursModailVisible, setClossingHoursModailVisible] =
     useState(false);
   const [holidayModal, setHoliday] = useState(false);
+
+  const userData = useSelector((state) => state.user.usermeta);
+  const authAxios = axios.create({
+    baseURL: `${dfhs}`,
+    headers: {
+      Authorization: `Bearer ${userData.jwt}`,
+    },
+  });
+
+  const updateTime = async () => {
+    setLoading(true);
+    await authAxios
+      .put(`my-restaurants/1`, {
+        data: {
+          Hours: days,
+        },
+      })
+      .then((res) => {
+        getPreviousHours();
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.log(error);
+      });
+  };
+
+  const getPreviousHours = async () => {
+    setLoading(true);
+    await authAxios
+      .get(`my-restaurants/1`)
+      .then((res) => {
+        const {
+          data: {
+            attributes: { Hours },
+          },
+        } = res.data;
+        // setModayOpening(Hours.Monday.openTime);
+        setModayOpening({
+          openTime: {
+            hour: Hours.Monday.openTime.hour,
+            min: Hours.Monday.openTime.min,
+          },
+        });
+        setMonClossing({
+          closeTime: {
+            hour: Hours.Monday.closeTime.hour,
+            min: Hours.Monday.closeTime.min,
+          },
+        });
+        setTuesdayOpening({
+          openTime: {
+            hour: Hours.Tuesday.openTime.hour,
+            min: Hours.Tuesday.openTime.min,
+          },
+        });
+        settusdayClosing({
+          closeTime: {
+            hour: Hours.Tuesday.closeTime.hour,
+            min: Hours.Tuesday.closeTime.min,
+          },
+        });
+        setWednesdayOpening({
+          openTime: {
+            hour: Hours.Wednesday.openTime.hour,
+            min: Hours.Wednesday.openTime.min,
+          },
+        });
+        setwednesdayClosing({
+          closeTime: {
+            hour: Hours.Wednesday.closeTime.hour,
+            min: Hours.Wednesday.closeTime.min,
+          },
+        });
+        setThursdayOpening({
+          openTime: {
+            hour: Hours.Thursday.openTime.hour,
+            min: Hours.Thursday.openTime.min,
+          },
+        });
+        setThursdayClosing({
+          closeTime: {
+            hour: Hours.Thursday.closeTime.hour,
+            min: Hours.Thursday.closeTime.min,
+          },
+        });
+        setFridayOpening({
+          openTime: {
+            hour: Hours.Friday.openTime.hour,
+            min: Hours.Friday.openTime.min,
+          },
+        });
+        setFridayClosing({
+          closeTime: {
+            hour: Hours.Friday.closeTime.hour,
+            min: Hours.Friday.closeTime.min,
+          },
+        });
+        setSatOpening({
+          openTime: {
+            hour: Hours.Saturday.openTime.hour,
+            min: Hours.Saturday.openTime.min,
+          },
+        });
+        setSatClosing({
+          closeTime: {
+            hour: Hours.Saturday.closeTime.hour,
+            min: Hours.Saturday.closeTime.min,
+          },
+        });
+        setSundayOpening({
+          openTime: {
+            hour: Hours.Sunday.openTime.hour,
+            min: Hours.Sunday.openTime.min,
+          },
+        });
+        setSundayClosing({
+          closeTime: {
+            hour: Hours.Sunday.closeTime.hour,
+            min: Hours.Sunday.closeTime.min,
+          },
+        });
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    getPreviousHours();
+  }, []);
 
   const moveToNextModal = () => {
     setPauseModalVisible(!PauseModalVisible);
@@ -502,262 +633,155 @@ const Settings = () => {
       },
     },
   };
-  const userData = useSelector((state) => state.user.usermeta);
-  const authAxios = axios.create({
-    baseURL: `${dfhs}`,
-    headers: {
-      Authorization: `Bearer ${userData.jwt}`,
-    },
-  });
-
-  const updateTime = async () => {
-    await authAxios
-      .put(`my-restaurants/1`, {
-        data: {
-          Hours: days,
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
   return (
     <View style={{ backgroundColor: "white", flex: 1 }}>
-      <ScrollView
-        style={{ flex: 1, marginLeft: 10, marginRight: 10, marginBottom: 10 }}
-      >
-        <View>
-          <Space height={10} />
-          <View
-            style={{
-              backgroundColor: "white",
-              flexDirection: "row",
-              justifyContent: "center",
-            }}
-          >
-            <Text
-              style={{
-                width: windowWidth / 3,
-                textAlign: "center",
-                fontSize: 20,
-              }}
-            >
-              Days
-            </Text>
-            <Text
-              style={{
-                width: windowWidth / 3,
-                textAlign: "center",
-                fontSize: 20,
-              }}
-            >
-              Opening Hours
-            </Text>
-            <Text
-              style={{
-                width: windowWidth / 3,
-                textAlign: "center",
-                fontSize: 20,
-              }}
-            >
-              Closing Hours
-            </Text>
-          </View>
-          <Space height={10} />
-          <View
-            style={{
-              flexDirection: "row",
-              height: 30,
-              alignItems: "center",
-            }}
-          >
+      {loading ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator size="large" color="black" />
+        </View>
+      ) : (
+        <ScrollView
+          style={{ flex: 1, marginLeft: 10, marginRight: 10, marginBottom: 10 }}
+        >
+          <View>
+            <Space height={10} />
             <View
               style={{
-                width: windowWidth / 3,
-                flexDirection: "row",
-              }}
-            >
-              <View
-                style={{
-                  width: windowWidth / 3,
-                  flexDirection: "row",
-                  justifyContent: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  Monday
-                </Text>
-              </View>
-            </View>
-
-            <View
-              style={{
-                width: windowWidth / 3,
-                flexDirection: "row",
-              }}
-            >
-              <View style={{ width: "50%" }}>
-                <Text
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  {mondayOpening.openTime.hour}:{mondayOpening.openTime.min}
-                </Text>
-              </View>
-              <View style={{ width: "50%" }}>
-                <Ionicons
-                  onPress={() => openingMon()}
-                  name="pencil"
-                  size={22}
-                  color="blue"
-                  style={{
-                    alignSelf: "flex-end",
-                    justifyContent: "flex-end",
-                    alignContent: "flex-end",
-                    alignItems: "flex-end",
-                  }}
-                />
-              </View>
-            </View>
-
-            <View
-              style={{
-                width: windowWidth / 3,
-                flexDirection: "row",
-              }}
-            >
-              <View style={{ width: "50%" }}>
-                <Text
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  {mondayClosing.closeTime.hour}:{mondayClosing.closeTime.min}
-                </Text>
-              </View>
-              <View
-                style={{
-                  width: "50%",
-                }}
-              >
-                <Ionicons
-                  onPress={() => clossingMon()}
-                  name="pencil"
-                  size={22}
-                  color="blue"
-                  style={{
-                    alignSelf: "center",
-                  }}
-                />
-              </View>
-            </View>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              height: 30,
-              alignItems: "center",
-            }}
-          >
-            <View
-              style={{
-                width: windowWidth / 3,
+                backgroundColor: "white",
                 flexDirection: "row",
                 justifyContent: "center",
               }}
             >
               <Text
                 style={{
+                  width: windowWidth / 3,
                   textAlign: "center",
+                  fontSize: 20,
                 }}
               >
-                Tuesday
+                Days
+              </Text>
+              <Text
+                style={{
+                  width: windowWidth / 3,
+                  textAlign: "center",
+                  fontSize: 20,
+                }}
+              >
+                Opening Hours
+              </Text>
+              <Text
+                style={{
+                  width: windowWidth / 3,
+                  textAlign: "center",
+                  fontSize: 20,
+                }}
+              >
+                Closing Hours
               </Text>
             </View>
-
+            <Space height={10} />
             <View
               style={{
-                width: windowWidth / 3,
                 flexDirection: "row",
+                height: 30,
+                alignItems: "center",
               }}
             >
-              <View style={{ width: "50%" }}>
-                <Text
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  {tuesdatOpening.openTime.hour}:{tuesdatOpening.openTime.min}
-                </Text>
-              </View>
-              <View style={{ width: "50%" }}>
-                <Ionicons
-                  onPress={() => openingTuesday()}
-                  name="pencil"
-                  size={22}
-                  color="blue"
-                  style={{
-                    alignSelf: "flex-end",
-                    justifyContent: "flex-end",
-                    alignContent: "flex-end",
-                    alignItems: "flex-end",
-                  }}
-                />
-              </View>
-            </View>
-
-            <View
-              style={{
-                width: windowWidth / 3,
-                flexDirection: "row",
-              }}
-            >
-              <View style={{ width: "50%" }}>
-                <Text
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  {tuesdayClosing.closeTime.hour}:{tuesdayClosing.closeTime.min}
-                </Text>
-              </View>
               <View
                 style={{
-                  width: "50%",
+                  width: windowWidth / 3,
+                  flexDirection: "row",
                 }}
               >
-                <Ionicons
-                  onPress={() => clossingTuesday()}
-                  name="pencil"
-                  size={22}
-                  color="blue"
+                <View
                   style={{
-                    alignSelf: "center",
+                    width: windowWidth / 3,
+                    flexDirection: "row",
+                    justifyContent: "center",
                   }}
-                />
+                >
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    Monday
+                  </Text>
+                </View>
+              </View>
+
+              <View
+                style={{
+                  width: windowWidth / 3,
+                  flexDirection: "row",
+                }}
+              >
+                <View style={{ width: "50%" }}>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    {mondayOpening.openTime.hour}:{mondayOpening.openTime.min}
+                  </Text>
+                </View>
+                <View style={{ width: "50%" }}>
+                  <Ionicons
+                    onPress={() => openingMon()}
+                    name="pencil"
+                    size={22}
+                    color="blue"
+                    style={{
+                      alignSelf: "flex-end",
+                      justifyContent: "flex-end",
+                      alignContent: "flex-end",
+                      alignItems: "flex-end",
+                    }}
+                  />
+                </View>
+              </View>
+
+              <View
+                style={{
+                  width: windowWidth / 3,
+                  flexDirection: "row",
+                }}
+              >
+                <View style={{ width: "50%" }}>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    {mondayClosing.closeTime.hour}:{mondayClosing.closeTime.min}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    width: "50%",
+                  }}
+                >
+                  <Ionicons
+                    onPress={() => clossingMon()}
+                    name="pencil"
+                    size={22}
+                    color="blue"
+                    style={{
+                      alignSelf: "center",
+                    }}
+                  />
+                </View>
               </View>
             </View>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              height: 30,
-              alignItems: "center",
-            }}
-          >
             <View
               style={{
-                width: windowWidth / 3,
                 flexDirection: "row",
+                height: 30,
+                alignItems: "center",
               }}
             >
               <View
@@ -772,482 +796,577 @@ const Settings = () => {
                     textAlign: "center",
                   }}
                 >
-                  Wednesday
+                  Tuesday
                 </Text>
               </View>
-            </View>
 
-            <View
-              style={{
-                width: windowWidth / 3,
-                flexDirection: "row",
-              }}
-            >
-              <View style={{ width: "50%" }}>
-                <Text
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  {wednesdayOpening.openTime.hour}:
-                  {wednesdayOpening.openTime.min}
-                </Text>
-              </View>
-              <View style={{ width: "50%" }}>
-                <Ionicons
-                  onPress={() => openingWednesday()}
-                  name="pencil"
-                  size={22}
-                  color="blue"
-                  style={{
-                    alignSelf: "flex-end",
-                    justifyContent: "flex-end",
-                    alignContent: "flex-end",
-                    alignItems: "flex-end",
-                  }}
-                />
-              </View>
-            </View>
-
-            <View
-              style={{
-                width: windowWidth / 3,
-                flexDirection: "row",
-              }}
-            >
-              <View style={{ width: "50%" }}>
-                <Text
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  {wednesdayClosing.closeTime.hour}:
-                  {wednesdayClosing.closeTime.min}
-                </Text>
-              </View>
               <View
                 style={{
-                  width: "50%",
+                  width: windowWidth / 3,
+                  flexDirection: "row",
                 }}
               >
-                <Ionicons
-                  onPress={() => clossingWednesday()}
-                  name="pencil"
-                  size={22}
-                  color="blue"
+                <View style={{ width: "50%" }}>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    {tuesdatOpening.openTime.hour}:{tuesdatOpening.openTime.min}
+                  </Text>
+                </View>
+                <View style={{ width: "50%" }}>
+                  <Ionicons
+                    onPress={() => openingTuesday()}
+                    name="pencil"
+                    size={22}
+                    color="blue"
+                    style={{
+                      alignSelf: "flex-end",
+                      justifyContent: "flex-end",
+                      alignContent: "flex-end",
+                      alignItems: "flex-end",
+                    }}
+                  />
+                </View>
+              </View>
+
+              <View
+                style={{
+                  width: windowWidth / 3,
+                  flexDirection: "row",
+                }}
+              >
+                <View style={{ width: "50%" }}>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    {tuesdayClosing.closeTime.hour}:
+                    {tuesdayClosing.closeTime.min}
+                  </Text>
+                </View>
+                <View
                   style={{
-                    alignSelf: "center",
+                    width: "50%",
                   }}
-                />
+                >
+                  <Ionicons
+                    onPress={() => clossingTuesday()}
+                    name="pencil"
+                    size={22}
+                    color="blue"
+                    style={{
+                      alignSelf: "center",
+                    }}
+                  />
+                </View>
               </View>
             </View>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              height: 30,
-              alignItems: "center",
-            }}
-          >
             <View
               style={{
-                width: windowWidth / 3,
                 flexDirection: "row",
+                height: 30,
+                alignItems: "center",
               }}
             >
               <View
                 style={{
                   width: windowWidth / 3,
                   flexDirection: "row",
-                  justifyContent: "center",
                 }}
               >
-                <Text
+                <View
                   style={{
-                    textAlign: "center",
+                    width: windowWidth / 3,
+                    flexDirection: "row",
+                    justifyContent: "center",
                   }}
                 >
-                  Thursday
-                </Text>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    Wednesday
+                  </Text>
+                </View>
               </View>
-            </View>
 
-            <View
-              style={{
-                width: windowWidth / 3,
-                flexDirection: "row",
-              }}
-            >
-              <View style={{ width: "50%" }}>
-                <Text
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  {thursdayOpening.openTime.hour}:{thursdayOpening.openTime.min}
-                </Text>
-              </View>
-              <View style={{ width: "50%" }}>
-                <Ionicons
-                  onPress={() => openingThurday()}
-                  name="pencil"
-                  size={22}
-                  color="blue"
-                  style={{
-                    alignSelf: "flex-end",
-                    justifyContent: "flex-end",
-                    alignContent: "flex-end",
-                    alignItems: "flex-end",
-                  }}
-                />
-              </View>
-            </View>
-
-            <View
-              style={{
-                width: windowWidth / 3,
-                flexDirection: "row",
-              }}
-            >
-              <View style={{ width: "50%" }}>
-                <Text
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  {thursdayClosing.closeTime.hour}:
-                  {thursdayClosing.closeTime.min}
-                </Text>
-              </View>
               <View
                 style={{
-                  width: "50%",
+                  width: windowWidth / 3,
+                  flexDirection: "row",
                 }}
               >
-                <Ionicons
-                  onPress={() => clossingThursday()}
-                  name="pencil"
-                  size={22}
-                  color="blue"
+                <View style={{ width: "50%" }}>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    {wednesdayOpening.openTime.hour}:
+                    {wednesdayOpening.openTime.min}
+                  </Text>
+                </View>
+                <View style={{ width: "50%" }}>
+                  <Ionicons
+                    onPress={() => openingWednesday()}
+                    name="pencil"
+                    size={22}
+                    color="blue"
+                    style={{
+                      alignSelf: "flex-end",
+                      justifyContent: "flex-end",
+                      alignContent: "flex-end",
+                      alignItems: "flex-end",
+                    }}
+                  />
+                </View>
+              </View>
+
+              <View
+                style={{
+                  width: windowWidth / 3,
+                  flexDirection: "row",
+                }}
+              >
+                <View style={{ width: "50%" }}>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    {wednesdayClosing.closeTime.hour}:
+                    {wednesdayClosing.closeTime.min}
+                  </Text>
+                </View>
+                <View
                   style={{
-                    alignSelf: "center",
+                    width: "50%",
                   }}
-                />
+                >
+                  <Ionicons
+                    onPress={() => clossingWednesday()}
+                    name="pencil"
+                    size={22}
+                    color="blue"
+                    style={{
+                      alignSelf: "center",
+                    }}
+                  />
+                </View>
               </View>
             </View>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              height: 30,
-              alignItems: "center",
-            }}
-          >
             <View
               style={{
-                width: windowWidth / 3,
                 flexDirection: "row",
+                height: 30,
+                alignItems: "center",
               }}
             >
               <View
                 style={{
                   width: windowWidth / 3,
                   flexDirection: "row",
-                  justifyContent: "center",
                 }}
               >
-                <Text
+                <View
                   style={{
-                    textAlign: "center",
+                    width: windowWidth / 3,
+                    flexDirection: "row",
+                    justifyContent: "center",
                   }}
                 >
-                  Friday
-                </Text>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    Thursday
+                  </Text>
+                </View>
               </View>
-            </View>
 
-            <View
-              style={{
-                width: windowWidth / 3,
-                flexDirection: "row",
-              }}
-            >
-              <View style={{ width: "50%" }}>
-                <Text
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  {fridayOpening.openTime.hour}:{fridayOpening.openTime.min}
-                </Text>
-              </View>
-              <View style={{ width: "50%" }}>
-                <Ionicons
-                  onPress={() => openingFriday()}
-                  name="pencil"
-                  size={22}
-                  color="blue"
-                  style={{
-                    alignSelf: "flex-end",
-                    justifyContent: "flex-end",
-                    alignContent: "flex-end",
-                    alignItems: "flex-end",
-                  }}
-                />
-              </View>
-            </View>
-
-            <View
-              style={{
-                width: windowWidth / 3,
-                flexDirection: "row",
-              }}
-            >
-              <View style={{ width: "50%" }}>
-                <Text
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  {fridayClosing.closeTime.hour}:{fridayClosing.closeTime.min}
-                </Text>
-              </View>
               <View
                 style={{
-                  width: "50%",
+                  width: windowWidth / 3,
+                  flexDirection: "row",
                 }}
               >
-                <Ionicons
-                  onPress={() => clossingFriday()}
-                  name="pencil"
-                  size={22}
-                  color="blue"
+                <View style={{ width: "50%" }}>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    {thursdayOpening.openTime.hour}:
+                    {thursdayOpening.openTime.min}
+                  </Text>
+                </View>
+                <View style={{ width: "50%" }}>
+                  <Ionicons
+                    onPress={() => openingThurday()}
+                    name="pencil"
+                    size={22}
+                    color="blue"
+                    style={{
+                      alignSelf: "flex-end",
+                      justifyContent: "flex-end",
+                      alignContent: "flex-end",
+                      alignItems: "flex-end",
+                    }}
+                  />
+                </View>
+              </View>
+
+              <View
+                style={{
+                  width: windowWidth / 3,
+                  flexDirection: "row",
+                }}
+              >
+                <View style={{ width: "50%" }}>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    {thursdayClosing.closeTime.hour}:
+                    {thursdayClosing.closeTime.min}
+                  </Text>
+                </View>
+                <View
                   style={{
-                    alignSelf: "center",
+                    width: "50%",
                   }}
-                />
+                >
+                  <Ionicons
+                    onPress={() => clossingThursday()}
+                    name="pencil"
+                    size={22}
+                    color="blue"
+                    style={{
+                      alignSelf: "center",
+                    }}
+                  />
+                </View>
               </View>
             </View>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              height: 30,
-              alignItems: "center",
-            }}
-          >
             <View
               style={{
-                width: windowWidth / 3,
                 flexDirection: "row",
+                height: 30,
+                alignItems: "center",
               }}
             >
               <View
                 style={{
                   width: windowWidth / 3,
                   flexDirection: "row",
-                  justifyContent: "center",
                 }}
               >
-                <Text
+                <View
                   style={{
-                    textAlign: "center",
+                    width: windowWidth / 3,
+                    flexDirection: "row",
+                    justifyContent: "center",
                   }}
                 >
-                  Saturday
-                </Text>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    Friday
+                  </Text>
+                </View>
               </View>
-            </View>
 
-            <View
-              style={{
-                width: windowWidth / 3,
-                flexDirection: "row",
-              }}
-            >
-              <View style={{ width: "50%" }}>
-                <Text
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  {satOpening.openTime.hour}:{satOpening.openTime.min}
-                </Text>
-              </View>
-              <View style={{ width: "50%" }}>
-                <Ionicons
-                  onPress={() => openingSartuday()}
-                  name="pencil"
-                  size={22}
-                  color="blue"
-                  style={{
-                    alignSelf: "flex-end",
-                    justifyContent: "flex-end",
-                    alignContent: "flex-end",
-                    alignItems: "flex-end",
-                  }}
-                />
-              </View>
-            </View>
-
-            <View
-              style={{
-                width: windowWidth / 3,
-                flexDirection: "row",
-              }}
-            >
-              <View style={{ width: "50%" }}>
-                <Text
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  {satClosing.closeTime.hour}:{satClosing.closeTime.min}
-                </Text>
-              </View>
               <View
                 style={{
-                  width: "50%",
+                  width: windowWidth / 3,
+                  flexDirection: "row",
                 }}
               >
-                <Ionicons
-                  onPress={() => clossingSat()}
-                  name="pencil"
-                  size={22}
-                  color="blue"
+                <View style={{ width: "50%" }}>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    {fridayOpening.openTime.hour}:{fridayOpening.openTime.min}
+                  </Text>
+                </View>
+                <View style={{ width: "50%" }}>
+                  <Ionicons
+                    onPress={() => openingFriday()}
+                    name="pencil"
+                    size={22}
+                    color="blue"
+                    style={{
+                      alignSelf: "flex-end",
+                      justifyContent: "flex-end",
+                      alignContent: "flex-end",
+                      alignItems: "flex-end",
+                    }}
+                  />
+                </View>
+              </View>
+
+              <View
+                style={{
+                  width: windowWidth / 3,
+                  flexDirection: "row",
+                }}
+              >
+                <View style={{ width: "50%" }}>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    {fridayClosing.closeTime.hour}:{fridayClosing.closeTime.min}
+                  </Text>
+                </View>
+                <View
                   style={{
-                    alignSelf: "center",
+                    width: "50%",
                   }}
-                />
+                >
+                  <Ionicons
+                    onPress={() => clossingFriday()}
+                    name="pencil"
+                    size={22}
+                    color="blue"
+                    style={{
+                      alignSelf: "center",
+                    }}
+                  />
+                </View>
               </View>
             </View>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              height: 30,
-              alignItems: "center",
-            }}
-          >
             <View
               style={{
-                width: windowWidth / 3,
                 flexDirection: "row",
+                height: 30,
+                alignItems: "center",
               }}
             >
               <View
                 style={{
                   width: windowWidth / 3,
                   flexDirection: "row",
-                  justifyContent: "center",
                 }}
               >
-                <Text
+                <View
                   style={{
-                    textAlign: "center",
+                    width: windowWidth / 3,
+                    flexDirection: "row",
+                    justifyContent: "center",
                   }}
                 >
-                  Sunday
-                </Text>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    Saturday
+                  </Text>
+                </View>
               </View>
-            </View>
 
-            <View
-              style={{
-                width: windowWidth / 3,
-                flexDirection: "row",
-              }}
-            >
-              <View style={{ width: "50%" }}>
-                <Text
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  {sundayOpening.openTime.hour}:{sundayOpening.openTime.min}
-                </Text>
-              </View>
-              <View style={{ width: "50%" }}>
-                <Ionicons
-                  onPress={() => openingSunday()}
-                  name="pencil"
-                  size={22}
-                  color="blue"
-                  style={{
-                    alignSelf: "flex-end",
-                    justifyContent: "flex-end",
-                    alignContent: "flex-end",
-                    alignItems: "flex-end",
-                  }}
-                />
-              </View>
-            </View>
-
-            <View
-              style={{
-                width: windowWidth / 3,
-                flexDirection: "row",
-              }}
-            >
-              <View style={{ width: "50%" }}>
-                <Text
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  {sundayClosing.closeTime.hour}:{sundayClosing.closeTime.min}
-                </Text>
-              </View>
               <View
                 style={{
-                  width: "50%",
+                  width: windowWidth / 3,
+                  flexDirection: "row",
                 }}
               >
-                <Ionicons
-                  onPress={() => clossingSun()}
-                  name="pencil"
-                  size={22}
-                  color="blue"
+                <View style={{ width: "50%" }}>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    {satOpening.openTime.hour}:{satOpening.openTime.min}
+                  </Text>
+                </View>
+                <View style={{ width: "50%" }}>
+                  <Ionicons
+                    onPress={() => openingSartuday()}
+                    name="pencil"
+                    size={22}
+                    color="blue"
+                    style={{
+                      alignSelf: "flex-end",
+                      justifyContent: "flex-end",
+                      alignContent: "flex-end",
+                      alignItems: "flex-end",
+                    }}
+                  />
+                </View>
+              </View>
+
+              <View
+                style={{
+                  width: windowWidth / 3,
+                  flexDirection: "row",
+                }}
+              >
+                <View style={{ width: "50%" }}>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    {satClosing.closeTime.hour}:{satClosing.closeTime.min}
+                  </Text>
+                </View>
+                <View
                   style={{
-                    alignSelf: "center",
+                    width: "50%",
                   }}
-                />
+                >
+                  <Ionicons
+                    onPress={() => clossingSat()}
+                    name="pencil"
+                    size={22}
+                    color="blue"
+                    style={{
+                      alignSelf: "center",
+                    }}
+                  />
+                </View>
               </View>
             </View>
+            <View
+              style={{
+                flexDirection: "row",
+                height: 30,
+                alignItems: "center",
+              }}
+            >
+              <View
+                style={{
+                  width: windowWidth / 3,
+                  flexDirection: "row",
+                }}
+              >
+                <View
+                  style={{
+                    width: windowWidth / 3,
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    Sunday
+                  </Text>
+                </View>
+              </View>
+
+              <View
+                style={{
+                  width: windowWidth / 3,
+                  flexDirection: "row",
+                }}
+              >
+                <View style={{ width: "50%" }}>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    {sundayOpening.openTime.hour}:{sundayOpening.openTime.min}
+                  </Text>
+                </View>
+                <View style={{ width: "50%" }}>
+                  <Ionicons
+                    onPress={() => openingSunday()}
+                    name="pencil"
+                    size={22}
+                    color="blue"
+                    style={{
+                      alignSelf: "flex-end",
+                      justifyContent: "flex-end",
+                      alignContent: "flex-end",
+                      alignItems: "flex-end",
+                    }}
+                  />
+                </View>
+              </View>
+
+              <View
+                style={{
+                  width: windowWidth / 3,
+                  flexDirection: "row",
+                }}
+              >
+                <View style={{ width: "50%" }}>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    {sundayClosing.closeTime.hour}:{sundayClosing.closeTime.min}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    width: "50%",
+                  }}
+                >
+                  <Ionicons
+                    onPress={() => clossingSun()}
+                    name="pencil"
+                    size={22}
+                    color="blue"
+                    style={{
+                      alignSelf: "center",
+                    }}
+                  />
+                </View>
+              </View>
+            </View>
+            <View style={{ alignItems: "center" }}>
+              <Button
+                type="outline"
+                onPress={() => updateTime()}
+                buttonStyle={{ width: 100 }}
+              >
+                <Text>SAVE</Text>
+              </Button>
+            </View>
           </View>
-          <View style={{ alignItems: "center" }}>
+
+          <View
+            style={{
+              flex: 0.8,
+              alignItems: "flex-start",
+              marginLeft: 13,
+              marginTop: 10,
+            }}
+          >
             <Button
               type="outline"
-              onPress={() => updateTime()}
-              buttonStyle={{ width: 100 }}
+              onPress={() => setPauseModalVisible(true)}
+              buttonStyle={{
+                height: 60,
+                alignItems: "center",
+                justifyContent: "center",
+                alignContent: "center",
+              }}
             >
-              <Text>SAVE</Text>
+              <Icon name="pause" color="rgba(39, 39, 39, 1)" size={30} />
             </Button>
           </View>
-        </View>
-
-        <View
-          style={{
-            flex: 0.8,
-            alignItems: "flex-start",
-            marginLeft: 13,
-            marginTop: 10,
-          }}
-        >
-          <Button
-            type="outline"
-            onPress={() => setPauseModalVisible(true)}
-            buttonStyle={{
-              height: 60,
-              alignItems: "center",
-              justifyContent: "center",
-              alignContent: "center",
-            }}
-          >
-            <Icon name="pause" color="rgba(39, 39, 39, 1)" size={30} />
-          </Button>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )}
 
       <Modal
         animationType="slide"

@@ -26,8 +26,8 @@ import SpecialOffers from "../Settings/SpecialOffers";
 import ItemList from "../Settings/ItemList";
 import Cartegories from "../Settings/Cartegories";
 import CreateNewOffer from "../Settings/CreateNewOffer";
-import ChatScreen from "../Chat";
-import ChartList from "../Chat/ChartList";
+//import ChatScreen from "../Chat";
+//import ChartList from "../Chat/ChartList";
 import { useSelector } from "react-redux";
 import Login from "../Auth/Login";
 import ReadyForPickUpDetailed from "../StackScreens/ReadyForPickUpDetailed";
@@ -53,19 +53,19 @@ function DrawerNav({ navigation }) {
           borderBottomColor: "red",
         },
         headerLeft: false,
-        headerRight: () => (
-          <View style={{ marginRight: 20, marginTop: 20 }}>
-            <TouchableWithoutFeedback
-              onPress={() => navigation.navigate("chartList")}
-            >
-              <Ionicons
-                name="ios-chatbubble-ellipses-sharp"
-                size={20}
-                color="#5cb1ff"
-              />
-            </TouchableWithoutFeedback>
-          </View>
-        ),
+        // headerRight: () => (
+        //   <View style={{ marginRight: 20, marginTop: 20 }}>
+        //     <TouchableWithoutFeedback
+        //       onPress={() => navigation.navigate("chartList")}
+        //     >
+        //       <Ionicons
+        //         name="ios-chatbubble-ellipses-sharp"
+        //         size={20}
+        //         color="#5cb1ff"
+        //       />
+        //     </TouchableWithoutFeedback>
+        //   </View>
+        // ),
 
         drawerType: "permanent",
         drawerPosition: "left",
@@ -459,7 +459,7 @@ export default function StackNav() {
                 title: "Edit",
               }}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
               name="chartList"
               component={ChartList}
               options={{
@@ -467,15 +467,15 @@ export default function StackNav() {
                 animationTypeForReplace: "pop",
                 title: "Messages",
               }}
-            />
-            <Stack.Screen
+            /> */}
+            {/* <Stack.Screen
               name="chatScreen"
               component={ChatScreen}
               options={{
                 animationTypeForReplace: "pop",
                 title: "UsernameProps",
               }}
-            />
+            /> */}
             <Stack.Screen
               name="readyForPickUpDetailed"
               component={ReadyForPickUpDetailed}

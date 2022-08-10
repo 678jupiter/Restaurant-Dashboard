@@ -16,7 +16,7 @@ const ChatScreen = ({ route }) => {
   const [text, setText] = useState("");
   const [messages, setMessages] = useState([]);
 
-  const socket = io("https://socketitisha.herokuapp.com");
+  const socket = io("");
 
   function showRoom() {
     console.log("Joined Room");
@@ -36,9 +36,7 @@ const ChatScreen = ({ route }) => {
   });
   const getMessages = async () => {
     try {
-      const res = await axios.get(
-        `https://msgintisha.herokuapp.com/api/messages/${currentChat._id}`
-      );
+      const res = await axios.get(``);
       setMessages(res.data.reverse());
     } catch (error) {
       console.log("3" + error);
@@ -71,7 +69,7 @@ const ChatScreen = ({ route }) => {
       },
     };
     try {
-      axios.post(`https://msgintisha.herokuapp.com/api/messages`, message);
+      axios.post(``, message);
       let roomName = currentChat._id;
       socket.emit("new_conversation_message", message, roomName, () => {
         console.log("rest emit");
