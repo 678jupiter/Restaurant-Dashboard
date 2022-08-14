@@ -7,15 +7,15 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { ListItem } from "@rneui/themed";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "../Redux/orderActions";
 import { colors } from "../config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { format } from "timeago.js";
 import { useFocusEffect } from "@react-navigation/native";
+import * as Notifications from "expo-notifications";
+
 const NewOrders = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -103,7 +103,7 @@ const NewOrders = ({ navigation }) => {
                     methodofPayment: l.attributes.methodOfPayment,
                     methodofDelivery: l.attributes.methodOfDelivery,
                     verificationMessage: l.attributes.verificationMessage,
-                  })
+                  }) && Notifications.cancelAllScheduledNotificationsAsync()
                 }
                 //onPress={() => console.log(l)}
               >

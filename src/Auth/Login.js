@@ -20,7 +20,7 @@ import { authActions } from "../Redux/authSlice";
 import { userActions } from "../Redux/userSlice";
 import { isEmail } from "../../utils";
 import axios from "axios";
-import { dfhs } from "@env";
+import { WTAYE } from "@env";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -62,10 +62,15 @@ const Login = () => {
     }
     handleMessage("");
     setIsSubmitting(true);
-    axios
-      .post(`${dfhs}auth/local/`, {
-        identifier: identifier,
-        password: password,
+    console.log(JSON.stringify(identifier));
+    console.log(JSON.stringify(password));
+    console.log(`${WTAYE}`);
+    await axios
+      .post(`${WTAYE}`, {
+        // identifier: JSON.stringify(identifier),
+        // password: JSON.stringify(password),
+        identifier: "rest@gmail.com",
+        password: "R121212",
       })
       .then((res) => {
         dispatch(
@@ -95,10 +100,19 @@ const Login = () => {
         setIsSubmitting(false);
       })
       .catch((error) => {
-        console.log(error);
-        handleMessage(() => (
-          <Text style={styles.msgBox}>Invalid email or password!</Text>
-        ));
+        console.log(error.message);
+        if (error.message === "Network Error") {
+          handleMessage(() => (
+            <Text style={styles.msgBox}>
+              Network Error! Check your Internet Connection.
+            </Text>
+          ));
+        } else {
+          handleMessage(() => (
+            <Text style={styles.msgBox}>Invalid email or password!</Text>
+          ));
+        }
+
         setIsSubmitting(false);
       });
   };

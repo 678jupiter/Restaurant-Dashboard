@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import NewOrders from "../HomeScreens/NewOrders";
@@ -28,7 +28,7 @@ import Cartegories from "../Settings/Cartegories";
 import CreateNewOffer from "../Settings/CreateNewOffer";
 //import ChatScreen from "../Chat";
 //import ChartList from "../Chat/ChartList";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Login from "../Auth/Login";
 import ReadyForPickUpDetailed from "../StackScreens/ReadyForPickUpDetailed";
 import Delivering from "../HomeScreens/Delivering";
@@ -41,10 +41,55 @@ import Modifiers from "../Settings/Modifier";
 import EditModifier from "../Settings/EditModifier";
 import NewOfferModifier from "../Settings/OfferModifier";
 import CouriesList from "../Settings/CouriesList";
+import io from "socket.io-client";
+import * as Notifications from "expo-notifications";
+import { fetchOrders } from "../Redux/orderActions";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 
 function DrawerNav({ navigation }) {
+  const user = useSelector((state) => state.user.usermeta);
+  console.log(user.id);
+  const dispatch = useDispatch();
   const windowWidth = Dimensions.get("window").width;
   const Drawer = createDrawerNavigator();
+  const socket = io("https://socketitisha.herokuapp.com");
+  function showRoom() {
+    console.log(`joined room id ${user.id}`);
+  }
+
+  useEffect(() => {
+    let isCancelled = false;
+    const hookup = async () => {
+      const input = `${user.id}`;
+      socket.emit("enter_conversation_space", input, showRoom);
+    };
+    hookup();
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
+  socket.on("welcome", () => {
+    console.log("Welcome");
+  });
+  socket.on("bye", () => {
+    console.log("Rest left ");
+  });
+
+  function addMessage(message) {
+    // console.log(message);
+    console.log("Play Notificationssss");
+
+    schedulePushNotification(); // New order
+    dispatch(fetchOrders());
+  }
+  socket.on("new_conversation_message", addMessage);
   return (
     <Drawer.Navigator
       id="LeftDrawer"
@@ -192,6 +237,17 @@ function DrawerNav({ navigation }) {
       />
     </Drawer.Navigator>
   );
+}
+async function schedulePushNotification() {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "New Order Confimation",
+      body: "You have a new order",
+      data: { data: "goes here" },
+      sound: "notify.wav",
+    },
+    trigger: { seconds: 0, repeats: false },
+  });
 }
 
 export default function StackNav() {
@@ -405,6 +461,7 @@ export default function StackNav() {
               options={{
                 animationTypeForReplace: "pop",
                 title: "Settings",
+                headerShown: false,
               }}
             />
             <Stack.Screen

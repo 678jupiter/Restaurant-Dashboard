@@ -15,12 +15,7 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/splash.png",
-          "color": "#CA2C92",
-          "sounds": [],
-          "androidMode": "default",
-          "androidCollapsedTitle": "Restaurant",
-          "iosDisplayInForeground": true
+          "sounds": ["./assets/audio/notify.wav"]
         }
       ]
     ],
