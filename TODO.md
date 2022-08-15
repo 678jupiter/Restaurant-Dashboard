@@ -2,6 +2,8 @@ MVP
 
 # Setting
 
+after create modifier group refresh
+
 Pause orders
 notification ui
 

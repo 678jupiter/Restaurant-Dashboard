@@ -7,29 +7,24 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "../Redux/orderActions";
 import { colors } from "../config";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { format } from "timeago.js";
-import { useFocusEffect } from "@react-navigation/native";
 import * as Notifications from "expo-notifications";
 
 const NewOrders = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
-  useFocusEffect(
-    React.useCallback(() => {
-      let isActive = true;
-      console.log("UseEffect");
-      dispatch(fetchOrders());
-      return () => {
-        isActive = false;
-      };
-    }, [navigation])
-  );
+  useEffect(() => {
+    let isCancelled = false;
+    dispatch(fetchOrders());
+    return () => {
+      isCancelled = true;
+    };
+  }, [dispatch]);
 
   const restaurantOrders = useSelector(
     (state) => state.orders.restaurantOrders

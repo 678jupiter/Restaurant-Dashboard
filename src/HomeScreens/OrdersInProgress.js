@@ -1,23 +1,19 @@
 import {
   ActivityIndicator,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
-  Touchable,
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { ListItem } from "@rneui/themed";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "../Redux/orderActions";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { format } from "timeago.js";
 
 const OrdersInProgress = ({ navigation }) => {
   const dispatch = useDispatch();
+
   useEffect(() => {
     let isCancelled = false;
     dispatch(fetchOrders());

@@ -101,17 +101,10 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
                 </ListItem.Title>
                 <ListItem.Subtitle>{orderNumber}</ListItem.Subtitle>
               </ListItem.Content>
-              <Pressable onPress={() => navigation.navigate("chartList")}>
-                <Icon
-                  name="chat"
-                  color="black"
-                  size={18}
-                  style={{ marginRight: 10, padding: 6 }}
-                />
-              </Pressable>
+
               <Pressable
                 onPress={() =>
-                  call({ number: `${customermobilenumber}`, prompt: false })
+                  call({ number: `+254${customermobilenumber}`, prompt: false })
                 }
               >
                 <Ionicons
@@ -123,7 +116,7 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
               </Pressable>
 
               <Text style={{ fontFamily: "MontserratSemiBold" }}>
-                {customermobilenumber}
+                +254{customermobilenumber}
               </Text>
               <ListItem.Content>
                 <View
@@ -305,7 +298,7 @@ const ReadyForPickUpDetailed = ({ navigation, route }) => {
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Pressable
               onPress={() =>
-                call({ number: `${customermobilenumber}`, prompt: false })
+                call({ number: `+254${customermobilenumber}`, prompt: false })
               }
             >
               <Ionicons

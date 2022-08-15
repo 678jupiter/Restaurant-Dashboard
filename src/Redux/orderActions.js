@@ -15,9 +15,7 @@ export const fetchOrders = () => {
       dispatch(orderActions.getOrders(restaurantData));
     } catch (error) {
       if (error.message === "Network request failed") {
-        console.log("good error");
-
-        // Alert.alert("Opps. Your device is not connected to the Internet");
+        Alert.alert("Opps. Your device is not connected to the Internet");
       }
     }
   };

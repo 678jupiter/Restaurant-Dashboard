@@ -1,21 +1,22 @@
 {
   "expo": {
-    "name": "restaurantTab",
-    "slug": "restaurantTab",
+    "name": "Restaurant App",
+    "slug": "RestaurantApp",
     "version": "1.0.0",
     "orientation": "landscape",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover",
+      "backgroundColor": "#635BFF"
     },
     "plugins": [
       [
         "expo-notifications",
         {
-          "sounds": ["./assets/audio/notify.wav"]
+          "icon": "./assets/adaptive-icon.png",
+          "color": "#ffffff"
         }
       ]
     ],
@@ -29,8 +30,9 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+        "backgroundColor": "#635BFF"
+      },
+      "package": "com.naivashadev.restaurantTab"
     },
     "web": {
       "favicon": "./assets/favicon.png"

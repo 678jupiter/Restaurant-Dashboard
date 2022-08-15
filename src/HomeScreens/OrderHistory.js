@@ -1,6 +1,6 @@
 import { Dimensions, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect } from "react";
-import { ListItem, Icon } from "@rneui/themed";
+import { ListItem } from "@rneui/themed";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "../Redux/orderActions";
 
@@ -43,7 +43,9 @@ const OrderHistoryScreen = ({ navigation }) => {
           paddingLeft: 10,
         }}
       >
-        <Text>Order History</Text>
+        <Text style={{ fontSize: 20, fontStyle: "normal", fontWeight: "bold" }}>
+          Order History
+        </Text>
       </View>
 
       <View>

@@ -195,7 +195,7 @@ const ReadyForPickUp = ({ navigation }) => {
           ) : (
             <ScrollView
               horizontal
-              contentContainerStyle={{ backgroundColor: "white" }}
+              contentContainerStyle={{ backgroundColor: "black" }}
             >
               {couries?.map((item, i) => (
                 <Pressable
@@ -207,6 +207,8 @@ const ReadyForPickUp = ({ navigation }) => {
                       width: 80,
                       marginLeft: 2,
                       alignItems: "center",
+                      marginRight: 1,
+                      backgroundColor: "white",
                     }}
                   >
                     {item.attributes.active === true ? (
@@ -323,7 +325,7 @@ const ReadyForPickUp = ({ navigation }) => {
                     <Pressable
                       onPress={() =>
                         call({
-                          number: `${featured?.attributes.mobileNumber}`,
+                          number: `+254${featured?.attributes.systemNumber}`,
                           prompt: false,
                         })
                       }
@@ -342,7 +344,7 @@ const ReadyForPickUp = ({ navigation }) => {
                       />
                     </Pressable>
                     <Text style={styles.modalText}>
-                      {featured?.attributes.mobileNumber}
+                      +254{featured?.attributes.systemNumber}
                     </Text>
                   </View>
 

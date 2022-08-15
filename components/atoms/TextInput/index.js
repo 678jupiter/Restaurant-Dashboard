@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { colors } from "../../../config";
 
-const TextInput = ({ label, placeholder, ...props }) => {
+const TextInput = ({ label, placeholder, KeybordType, ...props }) => {
   return (
     <View>
       <Text style={styles.label}>{label}</Text>
@@ -15,6 +15,7 @@ const TextInput = ({ label, placeholder, ...props }) => {
         style={styles.input}
         autoCapitalize="none"
         placeholder={placeholder}
+        keyboardType={KeybordType}
         {...props}
       />
     </View>

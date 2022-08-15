@@ -53,7 +53,7 @@ Notifications.setNotificationHandler({
   }),
 });
 
-function DrawerNav({ navigation }) {
+function DrawerNav() {
   const user = useSelector((state) => state.user.usermeta);
   console.log(user.id);
   const dispatch = useDispatch();
@@ -63,7 +63,6 @@ function DrawerNav({ navigation }) {
   function showRoom() {
     console.log(`joined room id ${user.id}`);
   }
-
   useEffect(() => {
     let isCancelled = false;
     const hookup = async () => {
@@ -82,13 +81,10 @@ function DrawerNav({ navigation }) {
     console.log("Rest left ");
   });
 
-  function addMessage(message) {
-    // console.log(message);
-    console.log("Play Notificationssss");
-
-    schedulePushNotification(); // New order
+  const addMessage = async () => {
+    await schedulePushNotification();
     dispatch(fetchOrders());
-  }
+  };
   socket.on("new_conversation_message", addMessage);
   return (
     <Drawer.Navigator
@@ -241,12 +237,12 @@ function DrawerNav({ navigation }) {
 async function schedulePushNotification() {
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: "New Order Confimation",
-      body: "You have a new order",
+      title: "Delivery",
+      body: "You have a new Order",
       data: { data: "goes here" },
-      sound: "notify.wav",
+      vibrate: true,
     },
-    trigger: { seconds: 0, repeats: false },
+    trigger: { seconds: 1, repeats: false },
   });
 }
 

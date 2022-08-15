@@ -88,14 +88,6 @@ const Login = () => {
         );
         dispatch(authActions.login());
         handleMessage(message);
-        showMessage({
-          message: "Logged in.",
-          type: "success",
-          backgroundColor: secondaryColor,
-          color: "#fff",
-          icon: "success",
-          statusBarHeight: "32",
-        });
         setMessage("");
         setIsSubmitting(false);
       })
@@ -134,7 +126,11 @@ const Login = () => {
             desc="Restaurant admin panel, login first. 🤝"
           />
           <View style={styles.container}>
-            <TextInput label="Email" onChangeText={(text) => setEmail(text)} />
+            <TextInput
+              label="Email"
+              onChangeText={(text) => setEmail(text)}
+              KeybordType="email-address"
+            />
             <Space height={30} />
             <View>
               <Text style={styles.label}>Password</Text>
