@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Card } from "@rneui/base";
 import { ScrollView } from "react-native";
-import { colors } from "./config";
+import { colors } from "../config";
 import { EvilIcons, Ionicons } from "@expo/vector-icons";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;

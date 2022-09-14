@@ -404,7 +404,7 @@ export default function StackNav() {
               options={{
                 headerShown: true,
                 animationTypeForReplace: "pop",
-                title: "Registed Couriers",
+                title: "Registered Couriers",
               }}
             />
             <Stack.Screen
